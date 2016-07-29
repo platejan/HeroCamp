@@ -5,11 +5,13 @@ import HomePage from './components/home/HomePage';
 import AdminPage from './components/admin/AdminPage';
 import ProtectedPage from './components/protected/ProtectedPage';
 import AboutPage from './components/about/AboutPage';
-import ListOfRuns from  './components/listOfRuns/ListOfRunsPage';
 import LoginPage from './components/login/LoginPage'; //eslint-disable-line import/no-named-as-default
 import RegistrationPage from './components/registration/RegistrationPage'; //eslint-disable-line import/no-named-as-default
 import {requireAdmin} from './actions/authActions';
 
+import ChaptersPage from './components/chapters/ChaptersPage';
+import StoriesPage from './components/stories/StoriesPage';
+import HeroesPage from './components/heroes/HeroesPage';
 
 export default function Routes(store) {
 
@@ -23,11 +25,14 @@ export default function Routes(store) {
       <IndexRoute component={HomePage}/>
       <Route path="layout" component={Layout}/>
       <Route path="about" component={AboutPage}/>
-      <Route path="listofruns" component={ListOfRuns}/>
       <Route path="protected" component={ProtectedPage}/>
       <Route path="admin" component={AdminPage} onEnter={checkAdmin}/>
       <Route path="register" component={RegistrationPage}/>
       <Route path="login" component={LoginPage}/>
+
+      <Route path="chapters" component={ChaptersPage}/>
+      <Route path="stories" component={StoriesPage}/>
+      <Route path="heroes" component={HeroesPage}/>
     </Route>
   );
 }
