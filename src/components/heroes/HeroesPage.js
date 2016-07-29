@@ -13,6 +13,7 @@ export class HeroesPage extends React.Component {
       hero: {
         name: "",
         owner: this.props.ownerID,
+        description: "",
         inventory: {}
       }
     };

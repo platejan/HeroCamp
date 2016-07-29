@@ -1,5 +1,6 @@
 import React from 'react';
 import TextInput from '../../common/TextInput';
+import TextareaInput from '../../common/TextareaInput';
 
 const AddHeroForm = ({hero, onSave, onChange}) => {
   return (
@@ -10,6 +11,13 @@ const AddHeroForm = ({hero, onSave, onChange}) => {
         label="Name"
         onChange={onChange}
         value={hero.name}
+        />
+
+      <TextareaInput
+        name="description"
+        label="bio (description)"
+        onChange={onChange}
+        value={hero.description}
         />
 
       <input
