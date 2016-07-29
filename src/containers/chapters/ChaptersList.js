@@ -5,7 +5,7 @@ import * as ChaptersActions from '../../actions/ChaptersActions';
 
 const mapStateToProps = (state) => {
   return {
-    runs: state.runs
+    chapters: state.chapters
   };
 };
 
@@ -24,7 +24,7 @@ class ChaptersList extends Component {
   }
 
   render() {
-    const data = this.props.runs;
+    const data = this.props.chapters;
 
     return (
       <ListOfChapters data={data}/>

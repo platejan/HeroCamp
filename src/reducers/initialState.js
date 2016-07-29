@@ -17,5 +17,7 @@ export default {
     initialized: false
   },
   ajaxCallsInProgress: 0,
-  chapters: {}
+  chapters: {},
+  heroes: {},
+  stories: {}
 };

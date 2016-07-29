@@ -18,6 +18,8 @@ const Header = ({loading, signOut, auth, user}) => {
       {" | "}
       <Link to="/chapters" activeClassName="active">Chapters</Link>
       {" | "}
+      <Link to="/heroes" activeClassName="active">Heroes</Link>
+      {" | "}
       <Link to="/protected" activeClassName="active">Protected</Link>
       {adminLink}
       {" | "}

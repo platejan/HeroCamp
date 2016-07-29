@@ -2,8 +2,8 @@ import React, {Component, PropTypes} from 'react';
 import ListItem from './ListItem'
 
 const ListOfChapters = (data) => {
-  var chapters = data.data;
-  var dataArray = [];
+  const chapters = data.data;
+  let dataArray = [];
   Object.keys(chapters).forEach(function (key, index) {
     // key: the name of the object key
     // index: the ordinal position of the key within the object

@@ -15,3 +15,7 @@ export const USER_IS_ADMIN_SUCCESS = 'USER_IS_ADMIN_SUCCESS';
 // Chapters actions
 export const CHAPTERS_LOAD_CALL = "CHAPTERS_LOAD_CALL";
 export const CHAPTERS_LOAD_SUCCESS = "CHAPTERS_LOAD_SUCCESS";
+
+// Heroes actions
+export const HERO_CREATE_SUCCESS = "HERO_CREATE_SUCCESS";
+export const HERO_CREATE_FAIL = "HERO_CREATE_FAIL";
