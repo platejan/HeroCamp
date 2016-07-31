@@ -1,21 +1,27 @@
 import firebase from 'firebase';
 import * as types from './actionTypes';
 
-export function addHero(character,callback) {
+export function addHero(character, callback) {
   // Get a key for a new Post.
-  let newHeroKey = firebase.database().ref().child('heroes').push().key;
+  return (dispatch, getState) => {
+    let owner = getState().auth.currentUserUID;
+    console.log(owner);
+    let newHeroKey = firebase.database().ref().child('heroes').child(owner).push().key;
 
-  // Write the new heores's data simultaneously in the posts list and the user's post list.
-  let updates = {};
-  updates['/heroes/' + newHeroKey] = character;
-  //updates['/user-posts/' + uid + '/' + newPostKey] = postData;
-  firebase.database().ref().update(updates,callback);
+    // Write the new heores's data simultaneously in the posts list and the user's post list.
+    let updates = {};
+    updates['/heroes/'+owner+'/'+ newHeroKey] = character;
+    //updates['/user-posts/' + uid + '/' + newPostKey] = postData;
+    firebase.database().ref().update(updates, callback);
+  }
 }
 
 export function heroesLoadStart() {
   return (dispatch, getState) => {
+    let owner = getState().auth.currentUserUID;
+    console.log(getState());
     console.log("Loading from Firebase");
-    let ref = firebase.database().ref('/heroes');
+    let ref = firebase.database().ref('/heroes/' + owner);
     ref.on('value', (snapshot) => {
       dispatch(heroesLoadList(snapshot.val()));
     });
