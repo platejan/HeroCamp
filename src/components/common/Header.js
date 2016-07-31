@@ -8,23 +8,14 @@ import AdminLink from './AdminLink';
 const Header = ({loading, signOut, auth, user}) => {
 
   let loginLogoutLink = auth.isLogged ? <LogoutLink signOut={signOut} /> : <LoginLink />;
-  let adminLink = user.isAdmin ? <AdminLink /> : null;
 
   return (
-    <nav>
-      <IndexLink to="/" activeClassName="active">Home</IndexLink>
-      {" | "}
-      <Link to="/about" activeClassName="active">About</Link>
-      {" | "}
-      <Link to="/chapters" activeClassName="active">Chapters</Link>
-      {" | "}
-      <Link to="/heroes" activeClassName="active">Heroes</Link>
-      {" | "}
-      <Link to="/protected" activeClassName="active">Protected</Link>
-      {adminLink}
-      {" | "}
-      {loginLogoutLink}
+    <nav className="navigation-top">
+      <div className="col-xs-12 col-sm-3 col-lg-2 clean-margin-padding logo">
+        <img src="" />
+      </div>
       {loading && <LoadingDots interval={100} dots={20}/>}
+      {loginLogoutLink}
     </nav>
   );
 };
