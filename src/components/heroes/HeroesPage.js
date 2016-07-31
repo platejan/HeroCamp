@@ -1,6 +1,7 @@
 import React from 'react';
 import AddHero from './parts/AddHero'
 import HeroListGenerator from './parts/HeroListGenerator'
+import checkAuth from '../requireAuth';
 
 const HeoresPage = () => {
   return (
@@ -11,4 +12,4 @@ const HeoresPage = () => {
   );
 };
 
-export default HeoresPage;
+export default checkAuth(HeoresPage);

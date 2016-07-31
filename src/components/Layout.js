@@ -24,7 +24,7 @@ class Layout extends React.Component {
           <div className="col-xs-12 col-sm-3 col-lg-2 clean-margin-padding">
             <Navigation auth={auth} user={user}/>
           </div>
-          <div className="col-xs-12 col-sm-9 col-lg-10 ">
+          <div className="col-xs-12 col-sm-9 col-lg-10 layout-content">
             {this.props.children}
           </div>
         </div>

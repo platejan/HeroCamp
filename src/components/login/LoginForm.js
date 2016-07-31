@@ -13,6 +13,7 @@ const LoginForm = ({user, onSave, onChange, saving}) => {
         />
 
       <TextInput
+        type="password"
         name="password"
         label="Password"
         onChange={onChange}

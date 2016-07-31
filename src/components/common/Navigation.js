@@ -5,14 +5,15 @@ import AdminLink from './AdminLink';
 const Navigation = ({auth, user}) => {
 
   let adminLink = user.isAdmin ? <AdminLink /> : null;
+  let heroesLink = auth.isLogged ? <Link to="/heroes" activeClassName="active">Heroes</Link>: null;
+  let storiesLink = auth.isLoggrd ? <Link to="/stories" activeClassName="active">Stories</Link>: null;
 
   return (
     <nav className="navigation-left">
       <IndexLink to="/" activeClassName="active">Home</IndexLink>
       <Link to="/about" activeClassName="active">About</Link>
-      <Link to="/chapters" activeClassName="active">Chapters</Link>
-      <Link to="/heroes" activeClassName="active">Heroes</Link>
-      <Link to="/protected" activeClassName="active">Protected</Link>
+      {heroesLink}
+      {storiesLink}
       {adminLink}
     </nav>
   );

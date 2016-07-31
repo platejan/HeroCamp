@@ -3,6 +3,7 @@ body{
   background-color: whitesmoke;
   font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
   color: #333333;
+  overflow-y: hidden;
 }
 div .clean-margin-padding{
   margin: 0;
@@ -10,6 +11,7 @@ div .clean-margin-padding{
 }
 .navigation-left{
   background-color: #525252;
+  overflow-y: auto;
   color: #f1f1f1;
   height: calc( 100vh - 60px);
 }
@@ -24,7 +26,7 @@ div .clean-margin-padding{
   transition: 0.5s all;
   font-size: 14px;
 }
-.navigation-left a:hover{
+.navigation-left a:hover, .navigation-left a:focus{
   //background-color: dimgray;
   text-decoration: none;
   color: white;
@@ -54,4 +56,18 @@ background-color: #f1a720;
   float: left;
   height: 60px;
   background-color: #525252;
+}
+
+div.layout-content{
+padding-left: 30px;
+  overflow-y: auto;
+  height: calc(100vh - 60px);
+}
+
+body div.layout-content h1:first-child{
+  margin-top:0;
+}
+
+h1{
+  margin-bottom: 20px;
 }

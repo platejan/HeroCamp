@@ -43,12 +43,14 @@ export class RegistrationPage extends React.Component {
 
   render() {
     return (
+      <div className="col-xs-12 col-sm-10 col-lg-6 clean-margin-padding">
       <LoginForm
         onChange={this.updateUserState}
         onSave={this.createUser}
         saving={this.state.saving}
         user={this.state.user}
       />
+        </div>
     );
   }
 }

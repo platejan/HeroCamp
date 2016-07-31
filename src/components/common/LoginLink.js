@@ -3,11 +3,10 @@ import {Link} from 'react-router';
 
 const LoginLink = () => {
   return (
-    <span>
+    <div>
       <Link to="/register" activeClassName="active">Sign Up</Link>
-      {" | "}
       <Link to="/login" activeClassName="active">Login</Link>
-    </span>
+      </div>
   );
 };
 
