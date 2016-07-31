@@ -12,13 +12,20 @@ export function addHero(character,callback) {
   firebase.database().ref().update(updates,callback);
 }
 
-function addHeroSuccess() {
-  return {
-    type: types.HERO_CREATE_SUCCESS
-  }
+export function heroesLoadStart() {
+  return (dispatch, getState) => {
+    console.log("Loading from Firebase");
+    let ref = firebase.database().ref('/heroes');
+    ref.on('value', (snapshot) => {
+      dispatch(heroesLoadList(snapshot.val()));
+    });
+  };
 }
-function addHeroFail() {
+
+export function heroesLoadList(heroes) {
+  console.log(heroes);
   return {
-    type: types.HERO_CREATE_FAIL
-  }
+    type: types.HEROES_LOAD_SUCCESS, heroes
+  };
 }
+

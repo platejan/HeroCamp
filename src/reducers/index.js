@@ -3,7 +3,7 @@ import user from './userReducer';
 import routesPermissions from './routesPermissionsReducer';
 import auth from './authReducer';
 import chapters from './chaptersReducer';
-import heroes from './chaptersReducer';
+import heroes from './heroesReducer';
 import stories from './chaptersReducer';
 
 import ajaxCallsInProgress from './ajaxStatusReducer';
