@@ -58,7 +58,6 @@ export function createUserWithEmailAndPassword(user) {
   return (dispatch) => {
     dispatch(beginAjaxCall());
     firebaseApi.createUserWithEmailAndPassword(user).then(user => {
-      console.log(user);
       // &TODO need save username string to firebase/users/currentuserUID
       dispatch(userCreated(user));
     }).catch(error => {

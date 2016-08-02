@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react';
-import Hero from './Hero'
+import Hero from './Hero';
 
 const HeroList = (data) => {
   const heroes = data.data;
@@ -16,9 +16,10 @@ const HeroList = (data) => {
 
       const itemKey = hero.ItemKey;
       const itemName = hero.ItemContent.name;
+      const itemDescription = hero.ItemContent.description;
 
       return (
-        <Hero ItemKey={itemKey} ItemName={itemName} />
+        <Hero ItemKey={itemKey} ItemName={itemName} ItemDescription={itemDescription} />
       );
     });
   }else{

@@ -5,7 +5,6 @@ export function addHero(character, callback) {
   // Get a key for a new Post.
   return (dispatch, getState) => {
     let owner = getState().auth.currentUserUID;
-    console.log(owner);
     let newHeroKey = firebase.database().ref().child('heroes').child(owner).push().key;
 
     // Write the new heores's data simultaneously in the posts list and the user's post list.
@@ -13,14 +12,12 @@ export function addHero(character, callback) {
     updates['/heroes/'+owner+'/'+ newHeroKey] = character;
     //updates['/user-posts/' + uid + '/' + newPostKey] = postData;
     firebase.database().ref().update(updates, callback);
-  }
+  };
 }
 
 export function heroesLoadStart() {
   return (dispatch, getState) => {
     let owner = getState().auth.currentUserUID;
-    console.log(getState());
-    console.log("Loading from Firebase");
     let ref = firebase.database().ref('/heroes/' + owner);
     ref.on('value', (snapshot) => {
       dispatch(heroesLoadList(snapshot.val()));
@@ -29,7 +26,6 @@ export function heroesLoadStart() {
 }
 
 export function heroesLoadList(heroes) {
-  console.log(heroes);
   return {
     type: types.HEROES_LOAD_SUCCESS, heroes
   };

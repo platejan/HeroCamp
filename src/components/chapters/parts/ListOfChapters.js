@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react';
-import ListItem from './ListItem'
+import ListItem from './ListItem';
 
 const ListOfChapters = (data) => {
   const chapters = data.data;

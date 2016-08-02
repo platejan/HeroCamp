@@ -4,7 +4,7 @@ import routesPermissions from './routesPermissionsReducer';
 import auth from './authReducer';
 import chapters from './chaptersReducer';
 import heroes from './heroesReducer';
-import stories from './chaptersReducer';
+import stories from './storiesReducer';
 
 import ajaxCallsInProgress from './ajaxStatusReducer';
 import { routerReducer } from 'react-router-redux';

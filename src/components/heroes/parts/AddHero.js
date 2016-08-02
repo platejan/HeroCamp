@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {addHero} from '../../../actions/HeroesActions';
 import toastr from 'toastr';
-import AddHeroForm from './AddHeroForm'
+import AddHeroForm from './AddHeroForm';
 
 export class AddHero extends React.Component {
   constructor(props, context) {
@@ -24,7 +24,6 @@ export class AddHero extends React.Component {
 
   addHero(event) {
     event.preventDefault();
-    console.log(this.state.hero.name);
     if (this.state.hero.name != "") {
       this.props.actions.addHero(this.state.hero, (error = null)=> {
         if (error == null) {
@@ -34,11 +33,11 @@ export class AddHero extends React.Component {
           hero["description"] = "";
           this.setState({hero: hero});
         } else {
-          toastr.error("Cannot add your Hero.")
+          toastr.error("Cannot add your Hero.");
         }
       });
     }else{
-      toastr.error("Hero should has name.")
+      toastr.error("Hero should has name.");
     }
   }
 
@@ -61,7 +60,8 @@ export class AddHero extends React.Component {
 }
 
 AddHero.propTypes = {
-  actions: PropTypes.object.isRequired
+  actions: PropTypes.object.isRequired,
+  ownerID: PropTypes.string.isRequired
 };
 
 AddHero.contextTypes = {
