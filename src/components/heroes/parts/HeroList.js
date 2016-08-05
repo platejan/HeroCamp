@@ -17,9 +17,10 @@ const HeroList = (data) => {
       const itemKey = hero.ItemKey;
       const itemName = hero.ItemContent.name;
       const itemDescription = hero.ItemContent.description;
+      const itemInventory = {};
 
       return (
-        <Hero ItemKey={itemKey} ItemName={itemName} ItemDescription={itemDescription} />
+        <Hero heroKey={itemKey} heroName={itemName} heroDescription={itemDescription} heroInventory={itemInventory} />
       );
     });
   }else{

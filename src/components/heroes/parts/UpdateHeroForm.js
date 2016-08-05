@@ -2,10 +2,9 @@ import React from 'react';
 import TextInput from '../../common/TextInput';
 import TextareaInput from '../../common/TextareaInput';
 
-const UpdateHeroForm = ({hero, onSave, onChange}) => {
+const UpdateHeroForm = ({id, hero, onSave, onChange}) => {
   return (
-    <form>
-      <h1>Update Hero</h1>
+    <form id={id} className="hero-update-form collapse">
       <TextInput
         name="name"
         label="Name"
@@ -23,7 +22,7 @@ const UpdateHeroForm = ({hero, onSave, onChange}) => {
       <input
         type="submit"
         disabled={false}
-        value="Add Hero"
+        value="Update Hero"
         className="btn btn-primary"
         onClick={onSave}/>
     </form>
@@ -33,7 +32,9 @@ const UpdateHeroForm = ({hero, onSave, onChange}) => {
 UpdateHeroForm.propTypes = {
   onSave: React.PropTypes.func.isRequired,
   hero: React.PropTypes.object.isRequired,
-  onChange: React.PropTypes.func.isRequired
+  onChange: React.PropTypes.func.isRequired,
+  id: React.PropTypes.string.isRequired
+
 };
 
 export default UpdateHeroForm;

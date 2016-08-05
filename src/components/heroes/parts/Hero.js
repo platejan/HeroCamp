@@ -1,24 +1,103 @@
 import React, {PropTypes} from 'react';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import UpdateHeroForm from './UpdateHeroForm';
+import toastr from 'toastr';
 
-const Hero = ({ItemKey, ItemName, ItemDescription}) => {
-  let click = ()=>{
-    alert("click!");
-  };
-  return (
-    <div className="row" id={ItemKey}>
-      <a className="col-xs-12 hero-top" onClick={click}>{ItemName}</a>
-      <div className="col-xs-12 hero-detail">
-        <h2>{ItemName}</h2>
-        <p>{ItemDescription}</p>
+export class Hero extends React.Component {
+  constructor(props, context) {
+    super(props, context);
+
+    this.state = {
+      hero: {
+        name: this.props.heroName,
+        owner: this.props.ownerID,
+        description: this.props.heroDescription,
+        inventory: this.props.heroInventory
+      },
+      heroKey: this.props.heroKey
+    };
+
+    this.updateHeroState = this.updateHeroState.bind(this);
+    this.updateHero = this.updateHero.bind(this);
+    this.click = this.click.bind(this);
+  }
+
+  updateHero(event) {
+    event.preventDefault();
+    if (this.state.hero.name != "") {
+      console.log("Update hero:");
+      console.log(this.state.hero);
+      // @TODO update hero issue 7
+    }
+    /*this.props.actions.addHero(this.state.hero, (error = null)=> {
+     if (error == null) {
+     toastr.success("Your Hero was added");
+     let hero = this.state.hero;
+     hero["name"] = "";
+     hero["description"] = "";
+     this.setState({hero: hero});
+     } else {
+     toastr.error("Cannot add your Hero.");
+     }
+     });
+     }else{
+     toastr.error("Hero should has name.");
+     }*/
+  }
+
+  updateHeroState(event) {
+    const field = event.target.name;
+    let state = this.state;
+    state.hero[field] = event.target.value;
+    return this.setState(state);
+  }
+
+  click(){
+    const dataTarget = "#"+"hero-update-form-" + this.state.heroKey;
+    document.querySelector(dataTarget).classList.toggle('in');
+  }
+
+  render() {
+    const id = "hero-update-form-" + this.state.heroKey;
+    const dataTarget = "#"+id;
+    return (
+      <div>
+        <button data-toggle="collapse" data-target={dataTarget} onClick={this.click}>{this.state.hero.name}</button>
+        <UpdateHeroForm
+          onChange={this.updateHeroState}
+          onSave={this.updateHero}
+          hero={this.state.hero}
+          id={id}
+        />
       </div>
-    </div>
-  );
-};
+    );
+  }
+}
 
 Hero.propTypes = {
-  ItemKey: PropTypes.string.isRequired,
-  ItemName: PropTypes.string.isRequired,
-  ItemDescription: PropTypes.string.isRequired
+  //actions: PropTypes.object.isRequired,
+  ownerID: PropTypes.string.isRequired,
+  heroKey: PropTypes.string.isRequired,
+  heroName: PropTypes.string.isRequired,
+  heroDescription: PropTypes.string.isRequired,
+  heroInventory: PropTypes.object.isRequired
 };
 
-export default Hero;
+Hero.contextTypes = {
+  router: PropTypes.object
+};
+
+function mapStateToProps(state, ownProps) {
+  return {
+    ownerID: state.auth.currentUserUID
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    //actions: bindActionCreators({addHero}, dispatch)
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Hero);
