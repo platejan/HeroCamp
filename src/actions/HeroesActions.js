@@ -7,6 +7,7 @@ export function addHero(character, callback) {
     let owner = getState().auth.currentUserUID;
     let newHeroKey = firebase.database().ref().child('heroes').child(owner).push().key;
 
+    console.log(newHeroKey);
     // Write the new heores's data simultaneously in the posts list and the user's post list.
     let updates = {};
     updates['/heroes/'+owner+'/'+ newHeroKey] = character;
