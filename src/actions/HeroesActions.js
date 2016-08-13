@@ -1,17 +1,25 @@
 import firebase from 'firebase';
 import * as types from './actionTypes';
 
+export function updateHero(character, characterKey, callback){
+  return (dispatch, getState) => {
+    let owner = getState().auth.currentUserUID;
+    // Write the new heores's data simultaneously in the posts list and the user's post list.
+    let updates = {};
+    updates['/heroes/'+owner+'/'+ characterKey] = character;
+    //updates['/user-posts/' + uid + '/' + newPostKey] = postData;
+    firebase.database().ref().update(updates, callback);
+  };
+
+}
 export function addHero(character, callback) {
   // Get a key for a new Post.
   return (dispatch, getState) => {
     let owner = getState().auth.currentUserUID;
     let newHeroKey = firebase.database().ref().child('heroes').child(owner).push().key;
 
-    // Write the new heores's data simultaneously in the posts list and the user's post list.
-    let updates = {};
-    updates['/heroes/'+owner+'/'+ newHeroKey] = character;
-    //updates['/user-posts/' + uid + '/' + newPostKey] = postData;
-    firebase.database().ref().update(updates, callback);
+    console.log(newHeroKey);
+    dispatch(updateHero(character,newHeroKey,callback));
   };
 }
 

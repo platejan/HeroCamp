@@ -2,6 +2,7 @@ import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import UpdateHeroForm from './UpdateHeroForm';
+import {updateHero} from '../../../actions/HeroesActions';
 import toastr from 'toastr';
 
 export class Hero extends React.Component {
@@ -29,21 +30,14 @@ export class Hero extends React.Component {
       console.log("Update hero:");
       console.log(this.state.hero);
       // @TODO update hero issue 7
+      this.props.actions.updateHero(this.state.hero, this.state.heroKey,(error = null)=> {
+        if (error == null) {
+          toastr.success("Your Hero was updated");
+        } else {
+          toastr.error("Cannot update your Hero.");
+        }
+      });
     }
-    /*this.props.actions.addHero(this.state.hero, (error = null)=> {
-     if (error == null) {
-     toastr.success("Your Hero was added");
-     let hero = this.state.hero;
-     hero["name"] = "";
-     hero["description"] = "";
-     this.setState({hero: hero});
-     } else {
-     toastr.error("Cannot add your Hero.");
-     }
-     });
-     }else{
-     toastr.error("Hero should has name.");
-     }*/
   }
 
   updateHeroState(event) {
@@ -96,7 +90,7 @@ function mapStateToProps(state, ownProps) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    //actions: bindActionCreators({addHero}, dispatch)
+    actions: bindActionCreators({updateHero}, dispatch)
   };
 }
 
