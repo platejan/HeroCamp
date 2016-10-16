@@ -1,5 +1,6 @@
 import React from 'react';
-import logo from '../../images/herocamp_logo.svg';
+//import logo from '../../images/herocamp_logo.svg';
+var logo = require('../../images/herocamp_logo.svg');
 
 const Header = () => {
 

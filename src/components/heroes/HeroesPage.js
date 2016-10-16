@@ -1,14 +1,10 @@
 import React from 'react';
-import AddHero from './parts/AddHero';
-import HeroListGenerator from './parts/HeroListGenerator';
+import HeroesList from '../../containers/heroes/HeroesList'
 import checkAuth from '../requireAuth';
 
 const HeoresPage = () => {
   return (
-    <div>
-      <AddHero />
-      <HeroListGenerator />
-    </div>
+    <HeroesList/>
   );
 };
 

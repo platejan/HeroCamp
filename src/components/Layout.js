@@ -14,14 +14,17 @@ class Layout extends React.Component {
 
   render() {
     const {auth, actions, loading, user} = this.props;
-    const style = {
+    const containerStyle = {
       width: '100%',
       padding: '0',
       margin: '0'
     };
+    const bodyStyle = {
+      margin: '0', marginTop: '-15px'
+    };
 
     return (
-      <div className="container" style={style}>
+      <div className="container" style={containerStyle}>
         <div className="row">
           <Header/>
           <UserMenu signOut={actions.signOut} auth={auth} loading={loading} user={user}/>
@@ -36,7 +39,9 @@ class Layout extends React.Component {
             />
           </div>
         </div>
-        {this.props.children}
+        <div className="row" style={bodyStyle}>
+          {this.props.children}
+        </div>
       </div>
     );
   }
