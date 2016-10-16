@@ -12,7 +12,7 @@ body{overflow: auto;}
   margin:0;
 }
 
-.header-navigation {
+ol.header-navigation {
   font-size: 18px;
 }
 
@@ -30,7 +30,7 @@ body{overflow: auto;}
   margin-left: 10px;
 }
 
-.navigation-part {
+div.navigation-part {
   padding-top: 13px;
 }
 
@@ -48,12 +48,12 @@ body{overflow: auto;}
     padding: 6px 12px;
   }
 
-  .navigation-part {
+  div.navigation-part {
     padding-left: 120px;
     padding-top: 0;
   }
 
-  .header-navigation {
+  ol.header-navigation {
     display: inline-block;
     background-color: transparent;
     font-size: 18px;

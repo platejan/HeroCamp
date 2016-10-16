@@ -25,12 +25,18 @@ class Layout extends React.Component {
         <div className="row">
           <Header/>
           <UserMenu signOut={actions.signOut} auth={auth} loading={loading} user={user}/>
-          <Breadcrumbs
-            routes={this.props.routes}
-            params={this.props.params}
-          />
+          <div
+            className="navigation-part col-xs-12 col-sm-9 col-md-9 col-lg-9 col-sm-pull-3 col-md-pull-3 col-lg-pull-3">
+            <Breadcrumbs
+              separator=""
+              wrapperElement="ol" itemElement="li"
+              wrapperClass="header-navigation breadcrumb"
+              routes={this.props.routes}
+              params={this.props.params}
+            />
           </div>
-          {this.props.children}
+        </div>
+        {this.props.children}
       </div>
     );
   }
