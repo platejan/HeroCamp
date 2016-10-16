@@ -24,6 +24,7 @@ class Layout extends React.Component {
         <div className="row">
           <Header/>
           <UserMenu signOut={actions.signOut} auth={auth} loading={loading} user={user}/>
+          
           </div>
           {this.props.children}
       </div>

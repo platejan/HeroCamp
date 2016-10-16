@@ -1,7 +1,8 @@
 export default {
   routesPermissions: {
     requireAuth: [
-      '/admin'
+      '/admin',
+      '/heroes'
     ],
     routesRequireAdmin: [
       '/admin'
@@ -9,7 +10,8 @@ export default {
   },
   routing: {},
   user: {
-    isAdmin: undefined
+    isAdmin: undefined,
+    email: "unknown"
   },
   auth: {
     isLogged: false,
