@@ -1,3 +1,5 @@
+require('eventsource-polyfill');
+
 // modules
 import {AppContainer} from 'react-hot-loader';
 import React from 'react';
