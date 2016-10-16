@@ -168,8 +168,9 @@ div.hero-part > div {
   cursor: pointer;
 }
 
-.hero-detail-part {
+.overlay-part {
   position: fixed;
+  z-index: 99;
   top: 0;
   left: 0;
   width: 100vw;
@@ -177,12 +178,15 @@ div.hero-part > div {
   overflow-y: auto;
   background-color: rgba(255, 255, 255, 0.8);
 }
+div > div.dont-show{
+  display:none;
+}
 
-.hero-detail-part > div {
+.overlay-part > div {
   padding: 15px;
 }
 
-.hero-detail-part > div > div {
+.overlay-part > div > div {
   height: calc(100vh - 30px);
   background-color: white;
   border-radius: 4px;
@@ -192,11 +196,11 @@ div.hero-part > div {
 }
 
 @media (max-width: 768px) {
-  .hero-detail-part > div {
+  .overlay-part > div {
     padding: 0px;
   }
 
-  .hero-detail-part > div > div {
+  .overlay-part > div > div {
     height: 100vh;
     border-radius: 0;
     box-shadow: none;

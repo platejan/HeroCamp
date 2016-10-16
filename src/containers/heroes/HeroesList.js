@@ -25,6 +25,7 @@ class HeoresList extends Component {
   }
 
   render() {
+    let click = function(){console.log(this);};
     const data = this.props.heores;
     let dataArray = [];
     Object.keys(data).forEach(function (key, index) {
@@ -40,7 +41,7 @@ class HeoresList extends Component {
         const itemContent = hero.ItemContent;
 
         return (
-          <Hero key={index} itemKey={itemKey} itemContent={itemContent}/>
+          <Hero key={index} itemKey={itemKey} itemContent={itemContent} click={click}/>
         );
       });
     }
