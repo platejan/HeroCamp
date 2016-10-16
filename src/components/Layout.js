@@ -1,6 +1,6 @@
 import React from 'react';
 import Header from './common/Header';
-import Navigation from './common/Navigation'
+import UserMenu from './common/UserMenu'
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {signOut} from '../actions/authActions';
@@ -13,21 +13,19 @@ class Layout extends React.Component {
 
   render() {
     const {auth, actions, loading, user} = this.props;
+    const style = {
+      width: '100%',
+      padding: '0',
+      margin: '0'
+    };
+
     return (
-      <div className="container-fluid clean-margin-padding">
-        <div className="row clean-margin-padding">
-          <div className="col-xs-12 text-right clean-margin-padding">
-            <Header signOut={actions.signOut} auth={auth} loading={loading} user={user}/>
+      <div className="container" style={style}>
+        <div className="row">
+          <Header/>
+          <UserMenu signOut={actions.signOut} auth={auth} loading={loading} user={user}/>
           </div>
-        </div>
-        <div className="row clean-margin-padding">
-          <div className="col-xs-12 col-sm-3 col-lg-2 clean-margin-padding">
-            <Navigation auth={auth} user={user}/>
-          </div>
-          <div className="col-xs-12 col-sm-9 col-lg-10 layout-content">
-            {this.props.children}
-          </div>
-        </div>
+          {this.props.children}
       </div>
     );
   }

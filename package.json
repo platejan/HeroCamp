@@ -1,6 +1,6 @@
 {
   "name": "HeroCamp",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "HeroCamp is a project, which in future will be used by Roleplay gamers to store their games online.",
   "scripts": {
     "prestart": "babel-node tools/startMessage.js",
