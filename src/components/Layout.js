@@ -4,6 +4,7 @@ import UserMenu from './common/UserMenu'
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {signOut} from '../actions/authActions';
+var Breadcrumbs = require('react-breadcrumbs');
 
 class Layout extends React.Component {
 
@@ -24,7 +25,10 @@ class Layout extends React.Component {
         <div className="row">
           <Header/>
           <UserMenu signOut={actions.signOut} auth={auth} loading={loading} user={user}/>
-          
+          <Breadcrumbs
+            routes={this.props.routes}
+            params={this.props.params}
+          />
           </div>
           {this.props.children}
       </div>

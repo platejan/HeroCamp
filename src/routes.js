@@ -21,18 +21,18 @@ export default function Routes(store) {
   };
 
   return (
-    <Route path="/" component={Layout}>
-      <IndexRoute component={HomePage}/>
-      <Route path="layout" component={Layout}/>
-      <Route path="about" component={AboutPage}/>
-      <Route path="protected" component={ProtectedPage}/>
-      <Route path="admin" component={AdminPage} onEnter={checkAdmin}/>
-      <Route path="register" component={RegistrationPage}/>
-      <Route path="login" component={LoginPage}/>
+    <Route name="HeroCamp" path="/" component={Layout}>
+      <IndexRoute name="Dashboard" component={HomePage}/>
+      <Route name="Layout" path="layout" component={Layout}/>
+      <Route name="About" path="about" component={AboutPage}/>
+      <Route name="Protected" path="protected" component={ProtectedPage}/>
+      <Route name="Admin" path="admin" component={AdminPage} onEnter={checkAdmin}/>
+      <Route name="Register" path="register" component={RegistrationPage}/>
+      <Route name="Login" path="login" component={LoginPage}/>
 
-      <Route path="chapters" component={ChaptersPage}/>
-      <Route path="stories" component={StoriesPage}/>
-      <Route path="heroes" component={HeroesPage}/>
+      <Route name="Chapters" path="chapters" component={ChaptersPage}/>
+      <Route name="Stories" path="stories" component={StoriesPage}/>
+      <Route name="Heroes" path="heroes" component={HeroesPage}/>
     </Route>
   );
 }
