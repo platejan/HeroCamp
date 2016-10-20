@@ -2,6 +2,7 @@ import {connect} from 'react-redux';
 import React, {Component, PropTypes} from 'react';
 import * as HeroesActions from '../../actions/HeroesActions';
 import Hero from '../../components/heroes/parts/Hero'
+import HeroAdd from '../../components/heroes/parts/HeroAdd'
 
 
 const mapStateToProps = (state) => {
@@ -51,6 +52,7 @@ class HeoresList extends Component {
     return (
       <div className="col-xs-12" style={style}>
         {listHeores}
+        <HeroAdd/>
       </div>
     );
   }

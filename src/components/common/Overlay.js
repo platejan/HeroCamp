@@ -10,9 +10,7 @@ const Overlay = ({click,child,display}) => {
 
   return (
     <div onClick={click} className={className}>
-      <div className="col-xs-12">
-        {child}
-      </div>
+      <child/>
     </div>
   );
 };
