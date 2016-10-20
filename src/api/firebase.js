@@ -6,6 +6,7 @@ class FirebaseApi {
 
   static initAuth() {
     firebase.initializeApp(firebaseConfig);
+    
     return new Promise((resolve, reject) => {
       const unsub = firebase.auth().onAuthStateChanged(
         user => {

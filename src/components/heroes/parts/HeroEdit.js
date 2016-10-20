@@ -3,6 +3,7 @@ import Line from '../../common/Line';
 import Icon from '../../common/Icon';
 import TextInput from '../../common/TextInput';
 import TextareaInput from '../../common/TextareaInput';
+import FileReaderInput from 'react-file-reader-input';
 
 export class HeroEdit extends React.Component {
   constructor(props, context) {
@@ -11,7 +12,6 @@ export class HeroEdit extends React.Component {
   }
 
   render() {
-    const icon = "ikonka.jpg";
     let stop = function (e) {
       e.stopPropagation();
     };
@@ -36,13 +36,14 @@ export class HeroEdit extends React.Component {
       information = "";
     }
 
+    const styleHelp = {maxWidth: '260px'};
     return (
       <div onClick={this.props.click} className={className}>
         <div className="col-xs-12 clickable">
           <div onClick={stop}
                className="hero-detail-form-part col-xs-12 col-sm-10 col-md-8 col-lg-6 col-sm-push-1 col-md-push-2 col-lg-push-3">
             <div className="header-block">
-              <Icon icon={icon}/>
+              <Icon icon={this.props.hero.private.icon}/>
               <div className="edit-general-block">
                 <form>
                   <TextInput
@@ -57,6 +58,15 @@ export class HeroEdit extends React.Component {
                     onChange={this.props.onchange}
                     value={""+this.props.hero.private.age}
                   />
+                  <div className="form-group">
+                    <label htmlFor="hero-edit-form-icon">Icon
+                      <span className="glyphicon glyphicon-info-sign"></span>
+                      <span className="help" style={styleHelp}>Select image (.jpg, .png, .gif) which has side ratio around 1:3 (wide:height).<br />File size is limited up to 500kB.</span>
+                    </label>
+                    <FileReaderInput id="hero-edit-form-icon"
+                                     onChange={this.props.iconchange}>
+                    </FileReaderInput>
+                  </div>
                 </form>
               </div>
             </div>
@@ -99,13 +109,13 @@ export class HeroEdit extends React.Component {
           </div>
         </div>
       </div>
-    );
+  );
   }
-}
+  }
 
-HeroEdit.propTypes = {
-  hero: PropTypes.object.isRequired
-};
+  HeroEdit.propTypes = {
+    hero: PropTypes.object.isRequired
+  };
 
-export default HeroEdit;
+  export default HeroEdit;
 

@@ -38,4 +38,3 @@ export function heroesLoadList(heroes) {
     type: types.HEROES_LOAD_SUCCESS, heroes
   };
 }
-

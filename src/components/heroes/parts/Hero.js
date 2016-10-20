@@ -47,6 +47,7 @@ export class Hero extends React.Component {
     this.updateHero = this.updateHero.bind(this);
     this.publishChanges = this.publishChanges.bind(this);
     this.rejectChanges = this.rejectChanges.bind(this);
+    this.iconchange = this.iconchange.bind(this);
   }
 
   componentDidMount() {
@@ -111,6 +112,14 @@ export class Hero extends React.Component {
     this.updateHero();
   }
 
+  iconchange(e, results){
+    console.log(results);
+    let icon = results[0][0].target.result;
+    let state = this.state;
+    state.hero.private.icon = icon;
+    this.setState(state);
+  }
+
   render() {
     let editButtonStyle = {};
     if (this.state.hero.hasChange) {
@@ -139,7 +148,7 @@ export class Hero extends React.Component {
           <div className="hero-bio-tools-part">
             <span onClick={this.showEditWindow} className="glyphicon glyphicon-pencil" style={editButtonStyle}></span>
           </div>
-          <HeroEdit reject={this.rejectChanges} publish={this.publishChanges} click={this.hideEditWindow}
+          <HeroEdit iconchange={this.iconchange} reject={this.rejectChanges} publish={this.publishChanges} click={this.hideEditWindow}
                     onchange={this.onchange} hero={this.state.hero} display={this.state.editWindowState}/>
 
         </div>
