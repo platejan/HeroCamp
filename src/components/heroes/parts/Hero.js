@@ -14,7 +14,7 @@ export class Hero extends React.Component {
     this.state = {
       hero: {
         public: {
-          icon: "ikonka.jpg",
+          icon: this.props.itemContent.public.icon,
           name: this.props.itemContent.public.name,
           age: this.props.itemContent.public.age,
           species: this.props.itemContent.public.species,
@@ -23,7 +23,7 @@ export class Hero extends React.Component {
           inventory: this.props.itemContent.public.inventory
         },
         private: {
-          icon: "ikonka.jpg",
+          icon: this.props.itemContent.public.icon,
           name: this.props.itemContent.private.name,
           age: this.props.itemContent.private.age,
           species: this.props.itemContent.private.species,
@@ -85,15 +85,14 @@ export class Hero extends React.Component {
   }
 
   updateHero(ok = "saved", error = "Cannot update your Hero") {
-    if (this.state.hero.private.name != "") {
-      this.props.actions.updateHero(this.state.hero, this.state.heroKey, (error = null)=> {
-        if (error == null) {
-          toastr.success(ok, "", {timeOut: 250});
-        } else {
-          toastr.error(error);
-        }
-      });
-    }
+    clearTimeout(this.state.saveTimeout);
+    this.props.actions.updateHero(this.state.hero, this.state.heroKey, (error = null)=> {
+      if (error == null) {
+        toastr.success(ok, "", {timeOut: 250});
+      } else {
+        toastr.error(error);
+      }
+    });
   }
 
   publishChanges() {
@@ -112,12 +111,14 @@ export class Hero extends React.Component {
     this.updateHero();
   }
 
-  iconchange(e, results){
+  iconchange(e, results) {
     console.log(results);
     let icon = results[0][0].target.result;
     let state = this.state;
     state.hero.private.icon = icon;
+    state.hero.hasChange = true;
     this.setState(state);
+    this.updateHero();
   }
 
   render() {
@@ -148,7 +149,8 @@ export class Hero extends React.Component {
           <div className="hero-bio-tools-part">
             <span onClick={this.showEditWindow} className="glyphicon glyphicon-pencil" style={editButtonStyle}></span>
           </div>
-          <HeroEdit iconchange={this.iconchange} reject={this.rejectChanges} publish={this.publishChanges} click={this.hideEditWindow}
+          <HeroEdit iconchange={this.iconchange} reject={this.rejectChanges} publish={this.publishChanges}
+                    click={this.hideEditWindow}
                     onchange={this.onchange} hero={this.state.hero} display={this.state.editWindowState}/>
 
         </div>
