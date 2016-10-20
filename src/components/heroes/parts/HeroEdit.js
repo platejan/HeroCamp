@@ -58,15 +58,13 @@ export class HeroEdit extends React.Component {
                     onChange={this.props.onchange}
                     value={""+this.props.hero.private.age}
                   />
-                  <div className="form-group">
-                    <label htmlFor="hero-edit-form-icon">Icon
-                      <span className="glyphicon glyphicon-info-sign"></span>
-                      <span className="help" style={styleHelp}>Select image (.jpg, .png, .gif) which has side ratio around 1:3 (wide:height).<br />File size is limited up to 500kB.</span>
-                    </label>
-                    <FileReaderInput id="hero-edit-form-icon"
-                                     onChange={this.props.iconchange}>
-                    </FileReaderInput>
-                  </div>
+                  <TextInput
+                    type="file"
+                    name="icon"
+                    label="Icon"
+                    onChange={this.props.iconchange}
+                    value=""
+                  />
                 </form>
               </div>
             </div>

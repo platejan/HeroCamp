@@ -111,14 +111,22 @@ export class Hero extends React.Component {
     this.updateHero();
   }
 
-  iconchange(e, results) {
-    console.log(results);
-    let icon = results[0][0].target.result;
-    let state = this.state;
-    state.hero.private.icon = icon;
-    state.hero.hasChange = true;
-    this.setState(state);
-    this.updateHero();
+  iconchange(event) {
+    const field = event.target.name;
+    let file = event.target.files[0];
+    let reader = new FileReader();
+
+    reader.addEventListener("load", function () {
+      let state = this.state;
+      state.hero.private.icon = reader.result
+      state.hero.hasChange = true;
+      clearTimeout(this.state.saveTimeout);
+      this.setState(state);
+    }.bind(this), false);
+
+    if (file) {
+      reader.readAsDataURL(file);
+    }
   }
 
   render() {
