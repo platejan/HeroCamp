@@ -53,7 +53,7 @@ Layout.propTypes = {
   auth: React.PropTypes.object.isRequired,
   user: React.PropTypes.object.isRequired,
   loading: React.PropTypes.bool.isRequired,
-  routes: React.PropTypes.object,
+  routes: React.PropTypes.array,
   params: React.PropTypes.object
 };
 

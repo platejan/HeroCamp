@@ -7,7 +7,31 @@ import TextareaInput from '../../common/TextareaInput';
 class HeroEdit extends React.Component {
   constructor(props, context) {
     super(props, context);
+    this.state = {
+      showBiography: true,
+      showBehavior: false,
+      showInventory: false
+    };
+    this.showTab = this.showTab.bind(this);
+    this.activeTabAnchor = this.activeTabAnchor.bind(this);
+    this.activeTab = this.activeTab.bind(this);
+  }
 
+  showTab(event) {
+    let state = this.state;
+    state.showBiography = false;
+    state.showBehavior = false;
+    state.showInventory = false;
+    state[event.target.name] = true;
+    this.setState(state);
+  }
+
+  activeTabAnchor(name) {
+    if (this.state[name])return "active"; else return "";
+  }
+
+  activeTab(name) {
+    if (this.state[name])return {display: 'block'}; else return {display: 'none'};
   }
 
   render() {
@@ -36,6 +60,7 @@ class HeroEdit extends React.Component {
     }
 
     const styleHelp = {maxWidth: '260px'};
+
     return (
       <div onClick={this.props.click} className={className}>
         <div className="col-xs-12 clickable">
@@ -62,7 +87,7 @@ class HeroEdit extends React.Component {
                     name="icon"
                     label="Icon"
                     onChange={this.props.iconchange}
-                    value=""
+                    value="" 
                   />
                 </form>
               </div>
@@ -72,28 +97,17 @@ class HeroEdit extends React.Component {
             <div className="content-block">
               <form>
                 <ul className="nav nav-tabs">
-                  <li role="presentation" className="active"><a id="hero-edit-biography-tab-anchor"
-                                                                href="#">Biography</a></li>
-                  <li role="presentation"><a id="hero-edit-behavior-tab-anchor" href="#">Behavior</a></li>
-                  <li role="presentation"><a id="hero-edit-inventory-tab-anchor" href="#">Inventory</a></li>
+                  <li role="presentation" className={this.activeTabAnchor("showBiography")}><a onClick={this.showTab}
+                                                                                               name="showBiography">Biography</a>
+                  </li>
+                  <li role="presentation" className={this.activeTabAnchor("showBehavior")}><a onClick={this.showTab}
+                                                                                              name="showBehavior">Behavior</a>
+                  </li>
+                  <li role="presentation" className={this.activeTabAnchor("showInventory")}><a onClick={this.showTab}
+                                                                                               name="showInventory">Inventory</a>
+                  </li>
                 </ul>
-                <div id="hero-edit-biography-tab">
-                  <TextareaInput
-                    name="biography"
-                    label="Biography"
-                    onChange={this.props.onchange}
-                    value={this.props.hero.private.biography}
-                  />
-                </div>
-                <div id="hero-edit-behavior-tab">
-                  <TextareaInput
-                    name="behavior"
-                    label="Behavior"
-                    onChange={this.props.onchange}
-                    value={this.props.hero.private.behavior}
-                  />
-                </div>
-                <div id="hero-edit-inventory-tab">
+                <div style={this.activeTab("showInventory")}>
                   <TextareaInput
                     name="inventory"
                     label="Inventory"
@@ -101,24 +115,40 @@ class HeroEdit extends React.Component {
                     value={this.props.hero.private.inventory}
                   />
                 </div>
+                <div style={this.activeTab("showBehavior")}>
+                  <TextareaInput
+                    name="behavior"
+                    label="Behavior"
+                    onChange={this.props.onchange}
+                    value={this.props.hero.private.behavior}
+                  />
+                </div>
+                <div style={this.activeTab("showBiography")}>
+                  <TextareaInput
+                    name="biography"
+                    label="Biography"
+                    onChange={this.props.onchange}
+                    value={this.props.hero.private.biography}
+                  />
+                </div>
               </form>
             </div>
           </div>
         </div>
       </div>
-  );
+    );
   }
-  }
+}
 
-  HeroEdit.propTypes = {
-    hero: PropTypes.object.isRequired,
-    onchange: PropTypes.func.isRequired,
-    iconchange: PropTypes.func.isRequired,
-    reject: PropTypes.func.isRequired,
-    publish: PropTypes.func.isRequired,
-    click: PropTypes.func.isRequired,
-    display: PropTypes.bool.isRequired
-  };
+HeroEdit.propTypes = {
+  hero: PropTypes.object.isRequired,
+  onchange: PropTypes.func.isRequired,
+  iconchange: PropTypes.func.isRequired,
+  reject: PropTypes.func.isRequired,
+  publish: PropTypes.func.isRequired,
+  click: PropTypes.func.isRequired,
+  display: PropTypes.bool.isRequired
+};
 
-  export default HeroEdit;
+export default HeroEdit;
 
