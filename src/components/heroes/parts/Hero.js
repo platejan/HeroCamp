@@ -2,12 +2,11 @@ import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {updateHero} from '../../../actions/HeroesActions';
-import Overlay from '../../common/Overlay';
 import HeroEdit from './HeroEdit';
 import Icon from '../../common/Icon';
 import toastr from 'toastr';
 
-export class Hero extends React.Component {
+class Hero extends React.Component {
   constructor(props, context) {
     super(props, context);
 
@@ -118,7 +117,7 @@ export class Hero extends React.Component {
 
     reader.addEventListener("load", function () {
       let state = this.state;
-      state.hero.private.icon = reader.result
+      state.hero.private.icon = reader.result;
       state.hero.hasChange = true;
       clearTimeout(this.state.saveTimeout);
       this.setState(state);
@@ -170,7 +169,9 @@ export class Hero extends React.Component {
 
 Hero.propTypes = {
   itemContent: PropTypes.object.isRequired,
-  itemKey: PropTypes.string.isRequired
+  itemKey: PropTypes.string.isRequired,
+  actions: PropTypes.object.isRequired,
+  ownerID: PropTypes.string.isRequired
 };
 
 Hero.contextTypes = {

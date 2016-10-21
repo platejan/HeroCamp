@@ -1,10 +1,10 @@
 import React from 'react';
 import Header from './common/Header';
-import UserMenu from './common/UserMenu'
+import UserMenu from './common/UserMenu';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {signOut} from '../actions/authActions';
-var Breadcrumbs = require('react-breadcrumbs');
+let Breadcrumbs = require('react-breadcrumbs');
 
 class Layout extends React.Component {
 
@@ -52,7 +52,9 @@ Layout.propTypes = {
   actions: React.PropTypes.object.isRequired,
   auth: React.PropTypes.object.isRequired,
   user: React.PropTypes.object.isRequired,
-  loading: React.PropTypes.bool.isRequired
+  loading: React.PropTypes.bool.isRequired,
+  routes: React.PropTypes.object,
+  params: React.PropTypes.object
 };
 
 function mapStateToProps(state, ownProps) {

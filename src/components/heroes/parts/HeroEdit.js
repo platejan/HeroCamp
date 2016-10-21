@@ -3,9 +3,8 @@ import Line from '../../common/Line';
 import Icon from '../../common/Icon';
 import TextInput from '../../common/TextInput';
 import TextareaInput from '../../common/TextareaInput';
-import FileReaderInput from 'react-file-reader-input';
 
-export class HeroEdit extends React.Component {
+class HeroEdit extends React.Component {
   constructor(props, context) {
     super(props, context);
 
@@ -112,7 +111,13 @@ export class HeroEdit extends React.Component {
   }
 
   HeroEdit.propTypes = {
-    hero: PropTypes.object.isRequired
+    hero: PropTypes.object.isRequired,
+    onchange: PropTypes.func.isRequired,
+    iconchange: PropTypes.func.isRequired,
+    reject: PropTypes.func.isRequired,
+    publish: PropTypes.func.isRequired,
+    click: PropTypes.func.isRequired,
+    display: PropTypes.bool.isRequired
   };
 
   export default HeroEdit;

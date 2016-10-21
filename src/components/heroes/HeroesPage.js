@@ -1,5 +1,5 @@
 import React from 'react';
-import HeroesList from '../../containers/heroes/HeroesList'
+import HeroesList from '../../containers/heroes/HeroesList';
 import checkAuth from '../requireAuth';
 
 const HeoresPage = () => {

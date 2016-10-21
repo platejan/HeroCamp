@@ -1,13 +1,13 @@
 import {connect} from 'react-redux';
 import React, {Component, PropTypes} from 'react';
 import * as HeroesActions from '../../actions/HeroesActions';
-import Hero from '../../components/heroes/parts/Hero'
-import HeroAdd from '../../components/heroes/parts/HeroAdd'
+import Hero from '../../components/heroes/parts/Hero';
+import HeroAdd from '../../components/heroes/parts/HeroAdd';
 
 
 const mapStateToProps = (state) => {
   return {
-    heores: state.heroes
+    heroes: state.heroes
   };
 };
 
@@ -26,8 +26,7 @@ class HeoresList extends Component {
   }
 
   render() {
-    let click = function(){console.log(this);};
-    const data = this.props.heores;
+    const data = this.props.heroes;
     let dataArray = [];
     Object.keys(data).forEach(function (key, index) {
       // key: the name of the object key
@@ -42,13 +41,13 @@ class HeoresList extends Component {
         const itemContent = hero.ItemContent;
 
         return (
-          <Hero key={index} itemKey={itemKey} itemContent={itemContent} click={click}/>
+          <Hero key={index} itemKey={itemKey} itemContent={itemContent}/>
         );
       });
     }
     const style={
       padding: '7.5px'
-    }
+    };
     return (
       <div className="col-xs-12" style={style}>
         {listHeores}
@@ -57,6 +56,11 @@ class HeoresList extends Component {
     );
   }
 }
+
+HeoresList.propTypes = {
+  onMount: PropTypes.func.isRequired,
+  heroes: PropTypes.object.isRequired
+};
 
 export default connect(
   mapStateToProps,

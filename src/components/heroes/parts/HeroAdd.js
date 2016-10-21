@@ -4,7 +4,7 @@ import {bindActionCreators} from 'redux';
 import {addHero} from '../../../actions/HeroesActions';
 import toastr from 'toastr';
 
-export class HeroAdd extends React.Component {
+class HeroAdd extends React.Component {
   constructor(props, context) {
     super(props, context);
 
@@ -32,7 +32,7 @@ export class HeroAdd extends React.Component {
         owner: this.props.ownerID,
         inGame: false
       },
-      heroKey: this.props.itemKey,
+      heroKey: null,
       editWindowState: false
     };
 
@@ -63,6 +63,12 @@ export class HeroAdd extends React.Component {
     );
   }
 }
+
+HeroAdd.propTypes = {
+  actions: PropTypes.object.isRequired,
+  ownerID: PropTypes.string.isRequired
+};
+
 
 function mapStateToProps(state, ownProps) {
   return {
