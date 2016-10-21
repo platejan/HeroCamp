@@ -4,6 +4,7 @@ import {bindActionCreators} from 'redux';
 import {createUserWithEmailAndPassword} from '../../actions/authActions';
 import RegistrationForm from './RegistrationForm';
 import toastr from 'toastr';
+import {LinkContainer} from 'react-router-bootstrap';
 
 export class RegistrationPage extends React.Component {
   constructor(props, context) {
@@ -44,14 +45,25 @@ export class RegistrationPage extends React.Component {
 
   render() {
     return (
-      <div className="col-xs-12 col-sm-10 col-lg-6 clean-margin-padding">
-        <RegistrationForm
-          onChange={this.updateUserState}
-          onSave={this.createUser}
-          saving={this.state.saving}
-          user={this.state.user}
-        />
+    <div className="col-xs-12">
+      <div className="row">
+        <div className="col-xs-12">
+          <RegistrationForm
+            onChange={this.updateUserState}
+            onSave={this.createUser}
+            saving={this.state.saving}
+            user={this.state.user}
+          />
+        </div>
       </div>
+      <LinkContainer to="/login">
+        <div className="row">
+          <div className="col-xs-12" style={{marginTop: '30px'}}>
+            <button className="btn btn-default btn-success">Have an acount?</button>
+          </div>
+        </div>
+      </LinkContainer>
+    </div>
     );
   }
 }
