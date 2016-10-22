@@ -47,26 +47,17 @@ export class RegistrationPage extends React.Component {
 
   render() {
     return (
-      <div className="col-xs-12">
-        <div className="row">
-          <div className="col-xs-12">
-            <RegistrationForm
-              onChange={this.updateUserState}
-              onSave={this.createUser}
-              saving={this.state.saving}
-              user={this.state.user}
-            />
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-xs-12" style={{marginTop: '30px'}}>
-            <LinkContainer to="/login">
-              <ButtonToolbar>
-                <Button bsStyle="success">Have an acount? Login here</Button>
-              </ButtonToolbar>
-            </LinkContainer>
-          </div>
-        </div>
+      <div className="login-part col-xs-12 col-sm-6 col-md-4 col-lg-4 col-sm-push-3 col-md-push-4 col-lg-push-4">
+        <div className="login-background"></div>
+        <RegistrationForm
+          onChange={this.updateUserState}
+          onSave={this.createUser}
+          saving={this.state.saving}
+          user={this.state.user}
+        />
+        <LinkContainer to="/login">
+          <button className="btn btn-default btn-danger">Have an acount? Login here</button>
+        </LinkContainer>
       </div>
     );
   }

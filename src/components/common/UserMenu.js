@@ -28,7 +28,7 @@ const UserMenu = ({loading, signOut, auth, user}) => {
     );
   } else {
     return (
-      <div></div>
+      <div className="usermenu-part col-xs-12 col-sm-3 col-md-3 col-lg-3 col-sm-push-9 col-md-push-9 col-lg-push-9"></div>
     );
   }
 };

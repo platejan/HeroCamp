@@ -27,12 +27,14 @@ const RegistrationForm = ({user, onSave, onChange, saving}) => {
         value={user.password}
         />
 
+      <div className="form-group">
       <input
         type="submit"
         disabled={saving}
         value={saving ? 'Signing up...' : 'Sign Up'}
         className="btn btn-primary"
         onClick={onSave}/>
+        </div>
     </form>
   );
 };

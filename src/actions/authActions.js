@@ -84,6 +84,20 @@ export function signInWithEmailAndPassword(user) {
   };
 }
 
+export function signInWithGoogle(user) {
+  return (dispatch) => {
+    dispatch(beginAjaxCall());
+    return firebaseApi.signInWithGoogle(user)
+      .then(
+        user => {
+          dispatch(authLoggedIn(user.uid));
+        })
+      .catch(error => {
+        console.log(error)
+          dispatch(ajaxCallError(error));
+      });
+  };
+}
 export function signOut() {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());

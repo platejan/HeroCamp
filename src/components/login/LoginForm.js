@@ -1,7 +1,7 @@
 import React from 'react';
 import TextInput from '../common/TextInput';
 
-const LoginForm = ({user, onSave, onChange, saving}) => {
+const LoginForm = ({user, onSave, onChange, saving, onClickGoogle}) => {
   return (
     <form>
       <h1>Login</h1>
@@ -19,13 +19,20 @@ const LoginForm = ({user, onSave, onChange, saving}) => {
         onChange={onChange}
         value={user.password}
         />
-
+      <div className="form-group">
       <input
         type="submit"
         disabled={saving}
-        value={saving ? 'Logining in...' : 'Login'}
+        value={'Login'}
         className="btn btn-primary"
         onClick={onSave}/>
+      <input
+        type="submit"
+        disabled={saving}
+        value={'Sign in with your Google Account'}
+        className="btn btn-primary"
+        onClick={onClickGoogle}/>
+        </div>
     </form>
   );
 };

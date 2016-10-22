@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {signInWithEmailAndPassword} from '../../actions/authActions';
+import {signInWithEmailAndPassword, signInWithGoogle} from '../../actions/authActions';
 import LoginForm from './LoginForm';
 import toastr from 'toastr';
 import {LinkContainer} from 'react-router-bootstrap';
@@ -20,8 +20,20 @@ export class RegistrationPage extends React.Component {
 
     this.updateUserState = this.updateUserState.bind(this);
     this.createUser = this.createUser.bind(this);
+    this.googleLogin = this.googleLogin.bind(this);
   }
 
+  googleLogin(event){
+    event.preventDefault;
+    this.setState({saving: true});
+
+    this.props.actions2.signInWithGoogle(this.state.user)
+      .then(user => toastr.success('You are logged in'))
+      .catch(error => {
+        toastr.error(error.message);
+        this.setState({saving: false});
+      });
+  }
   updateUserState(event) {
     const field = event.target.name;
     let user = this.state.user;
@@ -43,23 +55,19 @@ export class RegistrationPage extends React.Component {
   }
 
   render() {
+    const loginBackground ={
+    };
     return (
-      <div className="col-xs-12">
-        <div className="row">
-          <div className="col-xs-12">
+      <div className="login-part col-xs-12 col-sm-6 col-md-4 col-lg-4 col-sm-push-3 col-md-push-4 col-lg-push-4">
+        <div className="login-background" style={loginBackground}></div>
             <LoginForm
               onChange={this.updateUserState}
               onSave={this.createUser}
               saving={this.state.saving}
               user={this.state.user}
-            /></div>
-        </div>
+              onClickGoogle={this.googleLogin}/>
         <LinkContainer to="/register">
-          <div className="row">
-            <div className="col-xs-12" style={{marginTop: '30px'}}>
               <button className="btn btn-default btn-danger">Register now</button>
-            </div>
-          </div>
         </LinkContainer>
       </div>
     );
@@ -80,7 +88,8 @@ function mapStateToProps(state, ownProps) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators({signInWithEmailAndPassword}, dispatch)
+    actions: bindActionCreators({signInWithEmailAndPassword}, dispatch),
+    actions2: bindActionCreators({signInWithGoogle}, dispatch)
   };
 }
 

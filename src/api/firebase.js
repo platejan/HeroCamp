@@ -6,7 +6,7 @@ class FirebaseApi {
 
   static initAuth() {
     firebase.initializeApp(firebaseConfig);
-    
+
     return new Promise((resolve, reject) => {
       const unsub = firebase.auth().onAuthStateChanged(
         user => {
@@ -23,7 +23,37 @@ class FirebaseApi {
   }
 
   static signInWithEmailAndPassword(user) {
-    return firebase.auth().signInWithEmailAndPassword(user.email, user.password);
+    let result = firebase.auth().signInWithEmailAndPassword(user.email, user.password);
+     console.log(result);
+    return result;
+  }
+
+  static signInWithGoogle(user) {
+    let google = new Promise(
+      (resolve,reject) =>{
+        let provider = new firebase.auth.GoogleAuthProvider();
+        firebase.auth().signInWithPopup(provider).then(function(result) {
+          // This gives you a Google Access Token. You can use it to access the Google API.
+          let token = result.credential.accessToken;
+          // The signed-in user info.
+          let user = result.user;
+          resolve(result.user);
+          // ...
+        }).catch(function(error) {
+          // Handle Errors here.
+          let errorCode = error.code;
+          let errorMessage = error.message;
+          // The email of the user's account used.
+          let email = error.email;
+          // The firebase.auth.AuthCredential type that was used.
+          let credential = error.credential;
+          // ...
+          reject(error);
+        });
+      }
+    );
+
+    return google;
   }
 
   static authSignOut(){

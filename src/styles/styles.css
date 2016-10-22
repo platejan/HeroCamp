@@ -1,15 +1,19 @@
 * {
   font-family: 'Ubuntu', sans-serif;
 }
-body{overflow: auto;}
+
+body {
+  overflow: auto;
+}
 
 .container {
   width: 100%;
   margin: 0;
   padding: 0;
 }
-.container>div.row{
-  margin:0;
+
+.container > div.row {
+  margin: 0;
 }
 
 ol.header-navigation {
@@ -21,12 +25,14 @@ ol.header-navigation {
   margin: 0;
   position: absolute;
 }
-.header-part>h1{
+
+.header-part > h1 {
   display: none;
 }
-.header-part>img{
-  width:100px;
-  margin:4px;
+
+.header-part > img {
+  width: 100px;
+  margin: 4px;
   margin-left: 10px;
 }
 
@@ -34,9 +40,9 @@ div.navigation-part {
   padding-top: 13px;
 }
 
-.usermenu-part{
+.usermenu-part {
   padding-top: 15px;
-  height:65px;
+  height: 65px;
 }
 
 #usermenu {
@@ -178,25 +184,28 @@ div.hero-part > div {
   overflow-y: auto;
   background-color: rgba(255, 255, 255, 0.8);
 }
-.overlay-click{
+
+.overlay-click {
   position: fixed;
   height: 100vh;
   width: 100vw;
   top: 0;
   left: 0;
 }
-.overlay-section-part{
+
+.overlay-section-part {
   position: fixed;
   z-index: 98;
   top: 0;
-  left:0;
+  left: 0;
   width: 100vw;
   height: 100vh;
   overflow-y: auto;
   background-color: rgba(255, 255, 255, 0.8);
 }
-div > div.dont-show{
-  display:none;
+
+div > div.dont-show {
+  display: none;
 }
 
 .overlay-section-part > div:last-child {
@@ -213,25 +222,27 @@ div > div.dont-show{
   display: flex;
   flex-direction: column;
 }
-.content-block{
-  height:100%;
-  display: flex;
-  flex-direction: column;
-}
 
-.content-block > form{
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-.content-block >form div{
+.content-block {
   height: 100%;
   display: flex;
   flex-direction: column;
 }
 
-.content-block > form > div textarea{
-  height:100%;
+.content-block > form {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.content-block > form div {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.content-block > form > div textarea {
+  height: 100%;
   display: flex;
   flex-direction: column;
 }
@@ -248,7 +259,8 @@ div > div.dont-show{
     padding: 15px;
     padding-top: 0;
   }
-  .hero-detail-form-part > .header-block > .hero-bio-icon-part{
+
+  .hero-detail-form-part > .header-block > .hero-bio-icon-part {
     border-top-left-radius: 0;
   }
 }
@@ -267,7 +279,8 @@ div > div.dont-show{
   margin-left: 75px;
   padding-top: 15px;
 }
-.hero-detail-form-part > .header-block > .edit-general-block .form-group{
+
+.hero-detail-form-part > .header-block > .edit-general-block .form-group {
   margin-bottom: 10px;
 }
 
@@ -276,51 +289,83 @@ div > div.dont-show{
   font-weight: normal;
 }
 
-.hero-detail-form-part > .content-block{
+.hero-detail-form-part > .content-block {
   padding-top: 15px;
 }
-.hero-detail-form-part > .content-block ul{
-  margin-top:10px;
+
+.hero-detail-form-part > .content-block ul {
+  margin-top: 10px;
   margin-left: -15px;
   margin-right: -15px;
-  padding-left:15px;
+  padding-left: 15px;
 }
 
-.hero-detail-form-part > .change-block{
+.hero-detail-form-part > .change-block {
   background-color: #337ab7;
-  margin:0;
-  margin-left:-15px;
-  margin-right:-15px;
-  padding:10px 15px;
+  margin: 0;
+  margin-left: -15px;
+  margin-right: -15px;
+  padding: 10px 15px;
   color: white;
 }
-.hero-detail-form-part > .change-block span{
+
+.hero-detail-form-part > .change-block span {
   display: inline-block;
   margin-right: 10px;
 }
-.hero-detail-form-part > .change-block a{
+
+.hero-detail-form-part > .change-block a {
   display: inline-block;
   text-align: center;
-  padding-left:5px;
-  padding-right:5px;
+  padding-left: 5px;
+  padding-right: 5px;
   text-decoration: underline;
-  color:white;
+  color: white;
 }
-.hero-detail-form-part > .change-block a:nth-child(3){
-  border:1px solid white;
-  text-decoration:none;
-  border-radius:2px;
+
+.hero-detail-form-part > .change-block a:nth-child(3) {
+  border: 1px solid white;
+  text-decoration: none;
+  border-radius: 2px;
   margin-left: 10px;
 
 }
-.clickable{
-  cursor:pointer;
+
+.login-part {
+  padding: 15px;
+  background-color: white;
+  border-radius: 5px;
 }
-div.clickable > *{
+
+.login-part h1 {
+  margin: 0;
+  padding: 0;
+}
+.login-part form input[type=submit]{
+  margin-right: 15px;
+}
+
+@media (min-width: 768px) {
+  .login-background {
+    position: fixed;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    background-color: #eeeeee;
+    width: 100vw;
+    height: 100vh;
+  }
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+div.clickable > * {
   cursor: auto;
 }
 
-label > .help,div > .help,span > .help,p > .help {
+label > .help, div > .help, span > .help, p > .help {
   display: none;
   position: absolute;
   background-color: white;
@@ -331,13 +376,15 @@ label > .help,div > .help,span > .help,p > .help {
   box-shadow: 0px 0px 5px 0px #ccc;
 }
 
-label:hover>.help,div:hover>.help,span:hover>.help,p:hover>.help{
+label:hover > .help, div:hover > .help, span:hover > .help, p:hover > .help {
   display: block;
 }
-span.glyphicon-info-sign{
+
+span.glyphicon-info-sign {
   cursor: help;
 }
-hr{
+
+hr {
   border: 1.5px solid #ccc
 }
 

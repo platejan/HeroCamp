@@ -51,7 +51,7 @@ class HeroEdit extends React.Component {
       information = (
         <div className="change-block">
           <span>You update some information. After finish publish changes to world.</span> <a
-          onClick={this.props.reject}>reject</a> <a
+          onClick={this.props.reject}>Delete draft</a> <a
           onClick={this.props.publish}>Publish</a>
         </div>
       );
@@ -87,7 +87,7 @@ class HeroEdit extends React.Component {
                     name="icon"
                     label="Icon"
                     onChange={this.props.iconchange}
-                    value="" 
+                    value=""
                   />
                 </form>
               </div>
