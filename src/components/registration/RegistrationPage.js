@@ -5,6 +5,8 @@ import {createUserWithEmailAndPassword} from '../../actions/authActions';
 import RegistrationForm from './RegistrationForm';
 import toastr from 'toastr';
 import {LinkContainer} from 'react-router-bootstrap';
+import Button from 'react-bootstrap/lib/Button';
+import ButtonToolbar from 'react-bootstrap/lib/ButtonToolbar';
 
 export class RegistrationPage extends React.Component {
   constructor(props, context) {
@@ -45,25 +47,27 @@ export class RegistrationPage extends React.Component {
 
   render() {
     return (
-    <div className="col-xs-12">
-      <div className="row">
-        <div className="col-xs-12">
-          <RegistrationForm
-            onChange={this.updateUserState}
-            onSave={this.createUser}
-            saving={this.state.saving}
-            user={this.state.user}
-          />
-        </div>
-      </div>
-      <LinkContainer to="/login">
+      <div className="col-xs-12">
         <div className="row">
-          <div className="col-xs-12" style={{marginTop: '30px'}}>
-            <button className="btn btn-default btn-success">Have an acount?</button>
+          <div className="col-xs-12">
+            <RegistrationForm
+              onChange={this.updateUserState}
+              onSave={this.createUser}
+              saving={this.state.saving}
+              user={this.state.user}
+            />
           </div>
         </div>
-      </LinkContainer>
-    </div>
+        <div className="row">
+          <div className="col-xs-12" style={{marginTop: '30px'}}>
+            <LinkContainer to="/login">
+              <ButtonToolbar>
+                <Button bsStyle="success">Have an acount? Login here</Button>
+              </ButtonToolbar>
+            </LinkContainer>
+          </div>
+        </div>
+      </div>
     );
   }
 }

@@ -22,6 +22,7 @@ export function addHero(character, callback) {
 export function heroesLoadStart() {
   return (dispatch, getState) => {
     let owner = getState().auth.currentUserUID;
+    console.log(owner);
     let ref = firebase.database().ref('/heroes/' + owner);
     ref.on('value', (snapshot) => {
       dispatch(heroesLoadList(snapshot.val()));
@@ -30,6 +31,7 @@ export function heroesLoadStart() {
 }
 
 export function heroesLoadList(heroes) {
+  console.log(heroes)
   return {
     type: types.HEROES_LOAD_SUCCESS, heroes
   };
