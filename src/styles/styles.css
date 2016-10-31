@@ -242,9 +242,6 @@ div > div.dont-show {
 }
 
 .content-block > form > div textarea {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
 }
 
 @media (max-width: 768px) {
@@ -276,6 +273,7 @@ div > div.dont-show {
 }
 
 .hero-detail-form-part > .header-block > .edit-general-block {
+  height: 200px;
   margin-left: 75px;
   padding-top: 15px;
 }

@@ -147,10 +147,6 @@ class Hero extends React.Component {
           <div className="hero-bio-part">
             <span className="info-label">Name:</span>
             <span className="">{this.state.hero.public.name}</span>
-            <span className="info-label">Species:</span>
-            <span className="">{this.state.hero.public.species}</span>
-            <span className="info-label">Age:</span>
-            <span className="">{this.state.hero.public.age}</span>
           </div>
           {inGame}
           <div className="hero-bio-tools-part">
