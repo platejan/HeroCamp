@@ -3,6 +3,7 @@ import Line from '../../common/Line';
 import Icon from '../../common/Icon';
 import TextInput from '../../common/TextInput';
 import TextareaInput from '../../common/TextareaInput';
+import Textarea from 'react-textarea-autosize';
 
 class HeroEdit extends React.Component {
   constructor(props, context) {
@@ -77,12 +78,6 @@ class HeroEdit extends React.Component {
                     value={this.props.hero.private.name}
                   />
                   <TextInput
-                    name="age"
-                    label="Age"
-                    onChange={this.props.onchange}
-                    value={""+this.props.hero.private.age}
-                  />
-                  <TextInput
                     type="file"
                     name="icon"
                     label="Icon"
@@ -100,36 +95,20 @@ class HeroEdit extends React.Component {
                   <li role="presentation" className={this.activeTabAnchor("showBiography")}><a onClick={this.showTab}
                                                                                                name="showBiography">Biography</a>
                   </li>
-                  <li role="presentation" className={this.activeTabAnchor("showBehavior")}><a onClick={this.showTab}
-                                                                                              name="showBehavior">Behavior</a>
-                  </li>
-                  <li role="presentation" className={this.activeTabAnchor("showInventory")}><a onClick={this.showTab}
-                                                                                               name="showInventory">Inventory</a>
-                  </li>
                 </ul>
-                <div style={this.activeTab("showInventory")}>
-                  <TextareaInput
-                    name="inventory"
-                    label="Inventory"
-                    onChange={this.props.onchange}
-                    value={this.props.hero.private.inventory}
-                  />
-                </div>
-                <div style={this.activeTab("showBehavior")}>
-                  <TextareaInput
-                    name="behavior"
-                    label="Behavior"
-                    onChange={this.props.onchange}
-                    value={this.props.hero.private.behavior}
-                  />
-                </div>
                 <div style={this.activeTab("showBiography")}>
-                  <TextareaInput
+                  <div className="form-group">
+                    <label htmlFor="biography">Biography</label>
+                    <div className="field">
+                  <Textarea
+                    className="form-control"
                     name="biography"
                     label="Biography"
                     onChange={this.props.onchange}
                     value={this.props.hero.private.biography}
                   />
+                    </div>
+                  </div>
                 </div>
               </form>
             </div>
