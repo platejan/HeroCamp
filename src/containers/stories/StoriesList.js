@@ -2,7 +2,7 @@ import {connect} from 'react-redux';
 import React, {Component, PropTypes} from 'react';
 import * as StoriesActions from '../../actions/StoriesActions';
 import Story from '../../components/stories/parts/Story';
-import HeroAdd from '../../components/heroes/parts/HeroAdd';
+import StoryToolbar from '../../components/stories/parts/StoryToolbar';
 
 
 const mapStateToProps = (state) => {
@@ -14,6 +14,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     onMount: () => {
+      console.log("mount!");
       dispatch(StoriesActions.storiesLoadStart());
     }
   };
@@ -50,6 +51,7 @@ class StoriesList extends Component {
     };
     return (
       <div className="col-xs-12" style={style}>
+        <StoryToolbar />
         {listStories}
       </div>
     );

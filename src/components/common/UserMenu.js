@@ -18,6 +18,9 @@ const UserMenu = ({loading, signOut, auth, user}) => {
             <LinkContainer to="/heroes">
               <MenuItem eventKey="3"><span className="glyphicon glyphicon-tent"></span> <span>Heroes</span></MenuItem>
             </LinkContainer>
+            <LinkContainer to="/stories">
+              <MenuItem eventKey="3"><span className="glyphicon glyphicon-book"></span> <span>Stories</span></MenuItem>
+            </LinkContainer>
             <MenuItem eventKey="3"><span className="glyphicon glyphicon-star"></span> <span>Bookmarks</span></MenuItem>
             <MenuItem divider/>
             <MenuItem eventKey="4" onClick={signOut}><span className="glyphicon glyphicon-log-out"></span>

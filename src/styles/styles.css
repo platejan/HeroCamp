@@ -390,6 +390,8 @@ hr {
   background-image: none;
 }
 
+.btn > span.glyphicon {padding-right: 10px;}
+
 .dropdown-menu > li > a:focus, .dropdown-menu > li > a:hover {
   background-image: none;
 }
