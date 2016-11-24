@@ -13,6 +13,7 @@ export function addStory(story, callback) {
   // Get a key for a new Post.
   return (dispatch, getState) => {
     let owner = getState().auth.currentUserUID;
+    story.owner = owner;
     let newStoryKey = firebase.database().ref().child('stories').push().key;
     dispatch(updateStory(story,newStoryKey,callback));
   };
