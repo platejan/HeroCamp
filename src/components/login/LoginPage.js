@@ -58,13 +58,13 @@ export class RegistrationPage extends React.Component {
 
   componentDidMount() {
     let login = document.querySelector("div.bkgBlurred");
-    if (login && window.innerWidth > 768) {
+    if (login && window.innerWidth >= 768) {
       login.style.marginTop = "calc( -" + login.offsetHeight + "px / 2 )";
     }
     window.addEventListener("resize", function (e) {
       let login = document.querySelector("div.bkgBlurred");
       if (login) {
-        if (window.innerWidth > 768) {
+        if (window.innerWidth >= 768) {
           login.style.marginTop = "calc( -" + login.offsetHeight + "px / 2 )";
         } else {
           login.style.marginTop = "auto";

@@ -13,7 +13,9 @@ export default function authReducer(state = initialState.auth, action) {
       });
 
     case types.AUTH_LOGGED_OUT_SUCCESS:
-      return Object.assign({}, state, {});
+      return Object.assign({}, state, {
+        isLogged: false
+      });
     default:
       return state;
   }

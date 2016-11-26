@@ -39,16 +39,15 @@ export function authLoggedIn(userUID) {
   return (dispatch) => {
     dispatch(authLoggedInSuccess(userUID));
     dispatch(beginAjaxCall());
+    dispatch(push('/'));
     firebaseApi.GetChildAddedByKeyOnce('/users', userUID)
       .then(
         user => {
           dispatch(userLoadedSuccess(user.val()));
-          dispatch(push('/'));
         })
       .catch(
         error => {
           dispatch(beginAjaxCall());
-          // @TODO better error handling
           throw(error);
         });
   };
@@ -93,7 +92,6 @@ export function signInWithGoogle(user) {
           dispatch(authLoggedIn(user.uid));
         })
       .catch(error => {
-        console.log(error)
           dispatch(ajaxCallError(error));
       });
   };

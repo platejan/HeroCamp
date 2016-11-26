@@ -27,7 +27,7 @@ const RegistrationForm = ({user, onSave, onChange, saving}) => {
         value={user.password}
         />
 
-      <div className="form-group">
+      <div className="form-group button-part">
       <input
         type="submit"
         disabled={saving}
