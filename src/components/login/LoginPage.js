@@ -5,6 +5,7 @@ import {signInWithEmailAndPassword, signInWithGoogle} from '../../actions/authAc
 import LoginForm from './LoginForm';
 import toastr from 'toastr';
 import {LinkContainer} from 'react-router-bootstrap';
+const logoWhite = require('../../images/herocamp_logo_white.svg');
 
 export class RegistrationPage extends React.Component {
   constructor(props, context) {
@@ -23,7 +24,7 @@ export class RegistrationPage extends React.Component {
     this.googleLogin = this.googleLogin.bind(this);
   }
 
-  googleLogin(event){
+  googleLogin(event) {
     event.preventDefault;
     this.setState({saving: true});
 
@@ -34,6 +35,7 @@ export class RegistrationPage extends React.Component {
         this.setState({saving: false});
       });
   }
+
   updateUserState(event) {
     const field = event.target.name;
     let user = this.state.user;
@@ -54,21 +56,44 @@ export class RegistrationPage extends React.Component {
       });
   }
 
+  componentDidMount() {
+    let login = document.querySelector("div.bkgBlurred");
+    if (login && window.innerWidth > 768) {
+      login.style.marginTop = "calc( -" + login.offsetHeight + "px / 2 )";
+    }
+    window.addEventListener("resize", function (e) {
+      let login = document.querySelector("div.bkgBlurred");
+      if (login) {
+        if (window.innerWidth > 768) {
+          login.style.marginTop = "calc( -" + login.offsetHeight + "px / 2 )";
+        } else {
+          login.style.marginTop = "auto";
+        }
+      }
+    });
+  }
+
   render() {
-    const loginBackground ={
-    };
     return (
-      <div className="login-part col-xs-12 col-sm-6 col-md-4 col-lg-4 col-sm-push-3 col-md-push-4 col-lg-push-4">
-        <div className="login-background" style={loginBackground}></div>
-            <LoginForm
-              onChange={this.updateUserState}
-              onSave={this.createUser}
-              saving={this.state.saving}
-              user={this.state.user}
-              onClickGoogle={this.googleLogin}/>
-        <LinkContainer to="/register">
-              <button className="btn btn-default btn-danger">Register now</button>
-        </LinkContainer>
+      <div className="">
+        <div className="login-background bkg">
+          <img className="logo" src={logoWhite}/>
+          <div className="autor">
+            <a href="http://deligaris.deviantart.com/">image by Deligaris</a>
+            <a href="https://creativecommons.org/licenses/by-nc-nd/3.0/">(license)</a>
+          </div>
+        </div>
+        <div className="bkgBlurred login-part col-xs-12">
+          <LoginForm
+            onChange={this.updateUserState}
+            onSave={this.createUser}
+            saving={this.state.saving}
+            user={this.state.user}
+            onClickGoogle={this.googleLogin}/>
+          <LinkContainer to="/register">
+            <button className="btn btn-default btn-danger">Register now</button>
+          </LinkContainer>
+        </div>
       </div>
     );
   }

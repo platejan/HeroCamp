@@ -43,7 +43,7 @@ export function authLoggedIn(userUID) {
       .then(
         user => {
           dispatch(userLoadedSuccess(user.val()));
-          //dispatch(push('/'));
+          dispatch(push('/'));
         })
       .catch(
         error => {
@@ -107,7 +107,7 @@ export function signOut() {
           dispatch(authLoggedOutSuccess());
           if (getState().routesPermissions.requireAuth
               .filter(route => route === getState().routing.locationBeforeTransitions.pathname).toString()) {
-            dispatch(push('/'));
+            dispatch(push('/login'));
           }
         })
       .catch(error => {

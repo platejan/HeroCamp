@@ -1,4 +1,5 @@
 import React from 'react';
+import checkAuth from '../requireAuth';
 
 
 class StoryPage extends React.Component {
@@ -32,4 +33,4 @@ class StoryPage extends React.Component {
   }
 }
 
-export default StoryPage;
+export default checkAuth(StoryPage);

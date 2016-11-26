@@ -7,6 +7,7 @@ import toastr from 'toastr';
 import {LinkContainer} from 'react-router-bootstrap';
 import Button from 'react-bootstrap/lib/Button';
 import ButtonToolbar from 'react-bootstrap/lib/ButtonToolbar';
+const logoWhite = require('../../images/herocamp_logo_white.svg');
 
 export class RegistrationPage extends React.Component {
   constructor(props, context) {
@@ -45,10 +46,34 @@ export class RegistrationPage extends React.Component {
       });
   }
 
+  componentDidMount() {
+    let login = document.querySelector("div.bkgBlurred");
+    if (login && window.innerWidth > 768) {
+      login.style.marginTop = "calc( -" + login.offsetHeight + "px / 2 )";
+    }
+    window.addEventListener("resize", function (e) {
+      let login = document.querySelector("div.bkgBlurred");
+      if (login) {
+        if (window.innerWidth > 768) {
+          login.style.marginTop = "calc( -" + login.offsetHeight + "px / 2 )";
+        } else {
+          login.style.marginTop = "auto";
+        }
+      }
+    });
+  }
+
   render() {
     return (
-      <div className="login-part col-xs-12 col-sm-6 col-md-4 col-lg-4 col-sm-push-3 col-md-push-4 col-lg-push-4">
-        <div className="login-background"></div>
+      <div className="">
+        <div className="login-background bkg">
+          <img className="logo" src={logoWhite}/>
+          <div className="autor">
+            <a href="http://deligaris.deviantart.com/">image by Deligaris</a>
+            <a href="https://creativecommons.org/licenses/by-nc-nd/3.0/">(license)</a>
+          </div>
+        </div>
+        <div className="bkgBlurred login-part col-xs-12">
         <RegistrationForm
           onChange={this.updateUserState}
           onSave={this.createUser}
@@ -58,6 +83,7 @@ export class RegistrationPage extends React.Component {
         <LinkContainer to="/login">
           <button className="btn btn-default btn-danger">Have an acount? Login here</button>
         </LinkContainer>
+        </div>
       </div>
     );
   }

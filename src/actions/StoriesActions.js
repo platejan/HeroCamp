@@ -1,5 +1,6 @@
 import firebase from 'firebase';
 import * as types from './actionTypes';
+import {push} from 'react-router-redux';
 
 export function updateStory(story, storyKey, callback){
   return (dispatch, getState) => {
@@ -16,14 +17,13 @@ export function addStory(story, callback) {
     story.owner = owner;
     let newStoryKey = firebase.database().ref().child('stories').push().key;
     dispatch(updateStory(story,newStoryKey,callback));
+    dispatch(push('/stories/'+newStoryKey));
   };
 }
 
 export function storiesLoadStart() {
   return (dispatch, getState) => {
     let owner = getState().auth.currentUserUID;
-    console.log(owner);
-    console.log("loading stories");
     let ref = firebase.database().ref('/stories');
     ref.on('value', (snapshot) => {
       dispatch(storiesLoadList(snapshot.val()));
@@ -32,8 +32,6 @@ export function storiesLoadStart() {
 }
 
 export function storiesLoadList(stories) {
-  console.log("Stories load success!");
-  console.log(stories)
   return {
     type: types.STORIES_LOAD_SUCCESS, stories
   };

@@ -2,6 +2,7 @@ import React from 'react';
 import StoriesList from '../../containers/stories/StoriesList';
 import StoryAdd from './parts/StoryToolbar';
 import Story from './../story/StoryPage';
+import checkAuth from '../requireAuth';
 
 class StoriesPage extends React.Component {
   constructor(props, context) {
@@ -21,4 +22,4 @@ class StoriesPage extends React.Component {
   }
 }
 
-export default StoriesPage;
+export default checkAuth(StoriesPage);

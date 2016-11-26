@@ -1,6 +1,7 @@
 export default {
   routesPermissions: {
     requireAuth: [
+      '/',
       '/admin',
       '/heroes',
       '/stories'
