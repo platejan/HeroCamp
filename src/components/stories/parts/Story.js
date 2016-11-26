@@ -1,6 +1,7 @@
 import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
+import {LinkContainer} from 'react-router-bootstrap';
 
 class Story extends React.Component {
   constructor(props, context) {
@@ -16,20 +17,24 @@ class Story extends React.Component {
     };
   }
 
+
   render() {
+    let linkTo = "/stories/"+this.state.storyKey;
     return (
-      <div className="story-part col-xs-12 col-lg-6">
-        <div className="">
-          <div className="story-part-icon-part">
-          </div>
-          <div className="story-part-info">
-            <span className="info-label">Name:</span>
-            <span className="">{this.state.story.name}</span>
-            <span className="info-label">Owner:</span>
-            <span className="">{this.state.story.owner}</span>
+      <LinkContainer to={linkTo}>
+        <div className="story-part col-xs-12 col-lg-6">
+          <div className="">
+            <div className="story-part-icon-part">
+            </div>
+            <div className="story-part-info">
+              <span className="info-label">Name:</span>
+              <span className="">{this.state.story.name}</span>
+              <span className="info-label">Owner:</span>
+              <span className="">{this.state.story.owner}</span>
+            </div>
           </div>
         </div>
-      </div>
+      </LinkContainer>
     );
   }
 }
@@ -51,8 +56,7 @@ function mapStateToProps(state, ownProps) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return {
-  };
+  return {};
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Story);
