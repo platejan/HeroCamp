@@ -12,6 +12,7 @@ import {requireAdmin} from './actions/authActions';
 import ChaptersPage from './components/chapters/ChaptersPage';
 import StoriesPage from './components/stories/StoriesPage';
 import HeroesPage from './components/heroes/HeroesPage';
+import StoryPage from './components/story/StoryPage';
 
 export default function Routes(store) {
 
@@ -31,7 +32,10 @@ export default function Routes(store) {
       <Route name="Login" path="login" component={LoginPage}/>
 
       <Route name="Chapters" path="chapters" component={ChaptersPage}/>
-      <Route name="Stories" path="stories" component={StoriesPage}/>
+      <Route name="Stories" path="stories" component={StoriesPage}>
+        <Route name="Story" staticName={true} path=":storyId" component={StoryPage}/>
+      </Route>
+
       <Route name="Heroes" path="heroes" component={HeroesPage}/>
     </Route>
   );
