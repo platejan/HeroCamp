@@ -65,7 +65,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "d354eb0b3fcda4527f89"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "6adba55d7e6a6ab2951d"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -37783,12 +37783,11 @@
 	  return function (dispatch) {
 	    dispatch(authLoggedInSuccess(userUID));
 	    dispatch((0, _ajaxStatusActions.beginAjaxCall)());
+	    dispatch((0, _reactRouterRedux.push)('/'));
 	    _firebase2.default.GetChildAddedByKeyOnce('/users', userUID).then(function (user) {
 	      dispatch((0, _userActions.userLoadedSuccess)(user.val()));
-	      dispatch((0, _reactRouterRedux.push)('/'));
 	    }).catch(function (error) {
 	      dispatch((0, _ajaxStatusActions.beginAjaxCall)());
-	      // @TODO better error handling
 	      throw error;
 	    });
 	  };
@@ -37827,7 +37826,6 @@
 	    return _firebase2.default.signInWithGoogle(user).then(function (user) {
 	      dispatch(authLoggedIn(user.uid));
 	    }).catch(function (error) {
-	      console.log(error);
 	      dispatch((0, _ajaxStatusActions.ajaxCallError)(error));
 	    });
 	  };
@@ -49062,6 +49060,9 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	exports.UserMenu = undefined;
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
 	var _react = __webpack_require__(6);
 	
@@ -49069,115 +49070,135 @@
 	
 	var _reactRouterBootstrap = __webpack_require__(441);
 	
+	var _redux = __webpack_require__(346);
+	
+	var _reactRedux = __webpack_require__(339);
+	
 	var _LoadingDots = __webpack_require__(444);
 	
 	var _LoadingDots2 = _interopRequireDefault(_LoadingDots);
 	
 	var _reactBootstrap = __webpack_require__(445);
 	
+	var _authActions = __webpack_require__(428);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var UserMenu = function UserMenu(_ref) {
-	  var loading = _ref.loading;
-	  var signOut = _ref.signOut;
-	  var auth = _ref.auth;
-	  var user = _ref.user;
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 	
-	  if (auth.isLogged) {
-	    var username = user.email;
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	    return _react2.default.createElement(
-	      'div',
-	      { className: 'usermenu-part col-xs-12 col-sm-3 col-md-3 col-lg-3 col-sm-push-9 col-md-push-9 col-lg-push-9' },
-	      _react2.default.createElement(
-	        'div',
-	        { className: 'dropdown text-right' },
-	        _react2.default.createElement(
-	          _reactBootstrap.DropdownButton,
-	          { title: username, pullRight: true, id: 'usermenu' },
+	var UserMenu = exports.UserMenu = function (_React$Component) {
+	  _inherits(UserMenu, _React$Component);
+	
+	  function UserMenu(props, context) {
+	    _classCallCheck(this, UserMenu);
+	
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(UserMenu).call(this, props, context));
+	  }
+	
+	  _createClass(UserMenu, [{
+	    key: 'render',
+	    value: function render() {
+	      if (this.props.authenticated) {
+	        var username = this.props.email;
+	
+	        return _react2.default.createElement(
+	          'div',
+	          { className: 'usermenu-part col-xs-12 col-sm-3 col-md-3 col-lg-3 col-sm-push-9 col-md-push-9 col-lg-push-9' },
 	          _react2.default.createElement(
-	            _reactBootstrap.MenuItem,
-	            { eventKey: '1' },
-	            _react2.default.createElement('span', { className: 'glyphicon glyphicon-user' }),
-	            ' ',
+	            'div',
+	            { className: 'dropdown text-right' },
 	            _react2.default.createElement(
-	              'span',
-	              null,
-	              'Profile'
-	            )
-	          ),
-	          _react2.default.createElement(
-	            _reactBootstrap.MenuItem,
-	            { eventKey: '2' },
-	            _react2.default.createElement('span', { className: 'glyphicon glyphicon-cog' }),
-	            ' ',
-	            _react2.default.createElement(
-	              'span',
-	              null,
-	              'Settings'
-	            )
-	          ),
-	          _react2.default.createElement(_reactBootstrap.MenuItem, { divider: true }),
-	          _react2.default.createElement(
-	            _reactRouterBootstrap.LinkContainer,
-	            { to: '/heroes' },
-	            _react2.default.createElement(
-	              _reactBootstrap.MenuItem,
-	              { eventKey: '3' },
-	              _react2.default.createElement('span', { className: 'glyphicon glyphicon-tent' }),
-	              ' ',
+	              _reactBootstrap.DropdownButton,
+	              { title: username, pullRight: true, id: 'usermenu' },
 	              _react2.default.createElement(
-	                'span',
-	                null,
-	                'Heroes'
-	              )
-	            )
-	          ),
-	          _react2.default.createElement(
-	            _reactRouterBootstrap.LinkContainer,
-	            { to: '/stories' },
-	            _react2.default.createElement(
-	              _reactBootstrap.MenuItem,
-	              { eventKey: '3' },
-	              _react2.default.createElement('span', { className: 'glyphicon glyphicon-book' }),
-	              ' ',
+	                _reactBootstrap.MenuItem,
+	                { eventKey: '1' },
+	                _react2.default.createElement('span', { className: 'glyphicon glyphicon-user' }),
+	                ' ',
+	                _react2.default.createElement(
+	                  'span',
+	                  null,
+	                  'Profile'
+	                )
+	              ),
 	              _react2.default.createElement(
-	                'span',
-	                null,
-	                'Stories'
+	                _reactBootstrap.MenuItem,
+	                { eventKey: '2' },
+	                _react2.default.createElement('span', { className: 'glyphicon glyphicon-cog' }),
+	                ' ',
+	                _react2.default.createElement(
+	                  'span',
+	                  null,
+	                  'Settings'
+	                )
+	              ),
+	              _react2.default.createElement(_reactBootstrap.MenuItem, { divider: true }),
+	              _react2.default.createElement(
+	                _reactRouterBootstrap.LinkContainer,
+	                { to: '/heroes' },
+	                _react2.default.createElement(
+	                  _reactBootstrap.MenuItem,
+	                  { eventKey: '3' },
+	                  _react2.default.createElement('span', { className: 'glyphicon glyphicon-tent' }),
+	                  ' ',
+	                  _react2.default.createElement(
+	                    'span',
+	                    null,
+	                    'Heroes'
+	                  )
+	                )
+	              ),
+	              _react2.default.createElement(
+	                _reactRouterBootstrap.LinkContainer,
+	                { to: '/stories' },
+	                _react2.default.createElement(
+	                  _reactBootstrap.MenuItem,
+	                  { eventKey: '3' },
+	                  _react2.default.createElement('span', { className: 'glyphicon glyphicon-book' }),
+	                  _react2.default.createElement(
+	                    'span',
+	                    null,
+	                    'Stories'
+	                  )
+	                )
+	              ),
+	              _react2.default.createElement(
+	                _reactBootstrap.MenuItem,
+	                { eventKey: '3' },
+	                _react2.default.createElement('span', { className: 'glyphicon glyphicon-star' }),
+	                _react2.default.createElement(
+	                  'span',
+	                  null,
+	                  'Bookmarks'
+	                )
+	              ),
+	              _react2.default.createElement(_reactBootstrap.MenuItem, { divider: true }),
+	              _react2.default.createElement(
+	                _reactBootstrap.MenuItem,
+	                { eventKey: '4', onClick: this.props.actions.signOut },
+	                _react2.default.createElement('span', { className: 'glyphicon glyphicon-log-out' }),
+	                _react2.default.createElement(
+	                  'span',
+	                  null,
+	                  'Log out'
+	                )
 	              )
-	            )
-	          ),
-	          _react2.default.createElement(
-	            _reactBootstrap.MenuItem,
-	            { eventKey: '3' },
-	            _react2.default.createElement('span', { className: 'glyphicon glyphicon-star' }),
-	            ' ',
-	            _react2.default.createElement(
-	              'span',
-	              null,
-	              'Bookmarks'
-	            )
-	          ),
-	          _react2.default.createElement(_reactBootstrap.MenuItem, { divider: true }),
-	          _react2.default.createElement(
-	            _reactBootstrap.MenuItem,
-	            { eventKey: '4', onClick: signOut },
-	            _react2.default.createElement('span', { className: 'glyphicon glyphicon-log-out' }),
-	            _react2.default.createElement(
-	              'span',
-	              null,
-	              'Log out'
 	            )
 	          )
-	        )
-	      )
-	    );
-	  } else {
-	    return _react2.default.createElement('div', { className: 'usermenu-part col-xs-12 col-sm-3 col-md-3 col-lg-3 col-sm-push-9 col-md-push-9 col-lg-push-9' });
-	  }
-	};
+	        );
+	      } else {
+	        return _react2.default.createElement('div', {
+	          className: 'usermenu-part col-xs-12 col-sm-3 col-md-3 col-lg-3 col-sm-push-9 col-md-push-9 col-lg-push-9' });
+	      }
+	    }
+	  }]);
+	
+	  return UserMenu;
+	}(_react2.default.Component);
 	
 	UserMenu.propTypes = {
 	  signOut: _react2.default.PropTypes.func.isRequired,
@@ -49185,8 +49206,20 @@
 	  user: _react2.default.PropTypes.object.isRequired,
 	  loading: _react.PropTypes.bool.isRequired
 	};
+	function mapStateToProps(state, ownProps) {
+	  return {
+	    authenticated: state.auth.isLogged,
+	    email: state.user.email
+	  };
+	}
+	function mapDispatchToProps(dispatch) {
+	  return {
+	    actions: (0, _redux.bindActionCreators)({ signOut: _authActions.signOut }, dispatch)
+	  };
+	}
 	
-	var _default = UserMenu;
+	var _default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(UserMenu);
+	
 	exports.default = _default;
 	;
 	
@@ -49196,6 +49229,10 @@
 	  }
 	
 	  __REACT_HOT_LOADER__.register(UserMenu, 'UserMenu', 'D:/_DATA/CVUT/HeroCamp/src/components/common/UserMenu.js');
+	
+	  __REACT_HOT_LOADER__.register(mapStateToProps, 'mapStateToProps', 'D:/_DATA/CVUT/HeroCamp/src/components/common/UserMenu.js');
+	
+	  __REACT_HOT_LOADER__.register(mapDispatchToProps, 'mapDispatchToProps', 'D:/_DATA/CVUT/HeroCamp/src/components/common/UserMenu.js');
 	
 	  __REACT_HOT_LOADER__.register(_default, 'default', 'D:/_DATA/CVUT/HeroCamp/src/components/common/UserMenu.js');
 	})();
@@ -68372,13 +68409,13 @@
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
 	      var login = document.querySelector("div.bkgBlurred");
-	      if (login && window.innerWidth > 768) {
+	      if (login && window.innerWidth >= 768) {
 	        login.style.marginTop = "calc( -" + login.offsetHeight + "px / 2 )";
 	      }
 	      window.addEventListener("resize", function (e) {
 	        var login = document.querySelector("div.bkgBlurred");
 	        if (login) {
-	          if (window.innerWidth > 768) {
+	          if (window.innerWidth >= 768) {
 	            login.style.marginTop = "calc( -" + login.offsetHeight + "px / 2 )";
 	          } else {
 	            login.style.marginTop = "auto";
@@ -68527,7 +68564,7 @@
 	    }),
 	    _react2.default.createElement(
 	      'div',
-	      { className: 'form-group' },
+	      { className: 'form-group button-part' },
 	      _react2.default.createElement('input', {
 	        type: 'submit',
 	        disabled: saving,
@@ -69018,13 +69055,13 @@
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
 	      var login = document.querySelector("div.bkgBlurred");
-	      if (login && window.innerWidth > 768) {
+	      if (login && window.innerWidth >= 768) {
 	        login.style.marginTop = "calc( -" + login.offsetHeight + "px / 2 )";
 	      }
 	      window.addEventListener("resize", function (e) {
 	        var login = document.querySelector("div.bkgBlurred");
 	        if (login) {
-	          if (window.innerWidth > 768) {
+	          if (window.innerWidth >= 768) {
 	            login.style.marginTop = "calc( -" + login.offsetHeight + "px / 2 )";
 	          } else {
 	            login.style.marginTop = "auto";
@@ -69177,7 +69214,7 @@
 	    }),
 	    _react2.default.createElement(
 	      'div',
-	      { className: 'form-group' },
+	      { className: 'form-group button-part' },
 	      _react2.default.createElement('input', {
 	        type: 'submit',
 	        disabled: saving,
@@ -69950,13 +69987,13 @@
 	    return;
 	  }
 	
-	  __REACT_HOT_LOADER__.register(Story, 'Story', 'D:/_DATA/CVUT/HeroCamp/src/components/stories/parts/Story.js');
+	  __REACT_HOT_LOADER__.register(Story, 'Story', 'D:/_DATA/CVUT/HeroCamp/src/components/stories/parts/story.js');
 	
-	  __REACT_HOT_LOADER__.register(mapStateToProps, 'mapStateToProps', 'D:/_DATA/CVUT/HeroCamp/src/components/stories/parts/Story.js');
+	  __REACT_HOT_LOADER__.register(mapStateToProps, 'mapStateToProps', 'D:/_DATA/CVUT/HeroCamp/src/components/stories/parts/story.js');
 	
-	  __REACT_HOT_LOADER__.register(mapDispatchToProps, 'mapDispatchToProps', 'D:/_DATA/CVUT/HeroCamp/src/components/stories/parts/Story.js');
+	  __REACT_HOT_LOADER__.register(mapDispatchToProps, 'mapDispatchToProps', 'D:/_DATA/CVUT/HeroCamp/src/components/stories/parts/story.js');
 	
-	  __REACT_HOT_LOADER__.register(_default, 'default', 'D:/_DATA/CVUT/HeroCamp/src/components/stories/parts/Story.js');
+	  __REACT_HOT_LOADER__.register(_default, 'default', 'D:/_DATA/CVUT/HeroCamp/src/components/stories/parts/story.js');
 	})();
 
 	;
@@ -70049,13 +70086,13 @@
 	          var error = arguments.length <= 0 || arguments[0] === undefined ? null : arguments[0];
 	
 	          if (error == null) {
-	            _toastr2.default.success("Story added", { timeOut: 250 });
+	            _toastr2.default.success("story added", { timeOut: 250 });
 	          } else {
 	            _toastr2.default.error(error);
 	          }
 	        });
 	      } else {
-	        _toastr2.default.error("Story must have a name.");
+	        _toastr2.default.error("story must have a name.");
 	      }
 	    }
 	  }, {
@@ -72095,7 +72132,9 @@
 	      });
 	
 	    case types.AUTH_LOGGED_OUT_SUCCESS:
-	      return Object.assign({}, state, {});
+	      return Object.assign({}, state, {
+	        isLogged: false
+	      });
 	    default:
 	      return state;
 	  }
@@ -73000,7 +73039,7 @@
 	
 	
 	// module
-	exports.push([module.id, "\n.bkgBlurred {\n  border-radius: 5px;\n  display: block;\n}\n.bkg > *{\n  display: none;\n}\n\n@media (min-width: 768px) {\n  .bkg {\n    width: 100vw;\n    height: 100vh;\n    left: 0;\n    top: 0;\n    position: fixed;\n    display: block;\n    background-image: url(\"https://herocamp.tk/images/old_tree_wallpaper_by_deligaris-d6q8la1.jpg\");\n    background-repeat: no-repeat;\n    background-size: cover;\n    background-attachment: fixed;\n    z-index: 0;\n  }\n\n  .bkg > .logo{\n    margin-left: 20px;\n    margin-top:20px;\n    display: block;\n  }\n  .bkg > .autor{\n    display:block;\n    position: fixed;\n    left:20px;\n    bottom: 20px;\n  }\n  .bkg > .autor > a{\n    color:white;\n    opacity: 0.5;\n    text-decoration: none;\n    padding-right: 10px;\n  }\n\n  div.bkgBlurred {\n    width: 400px;\n    left: calc((100vw - 400px) / 2);\n\n    background-repeat: no-repeat;\n    background-size: cover;\n    background-attachment: fixed;\n    background-image: linear-gradient(0deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6)), url(\"https://herocamp.tk/images/old_tree_wallpaper_by_deligaris-d6q8la1_blur.jpg\");\n\n    position: fixed;\n    top: 50vh;\n  }\n}\n\n.box {\n}\n", ""]);
+	exports.push([module.id, "\nac.bkgBlurred {\n  border-radius: 5px;\n  display: block;\n}\n.bkg > *{\n  display: none;\n}\n\n@media (min-width: 768px) {\n  .bkg {\n    width: 100vw;\n    height: 100vh;\n    left: 0;\n    top: 0;\n    position: fixed;\n    display: block;\n    background-image: url(\"https://herocamp.tk/images/old_tree_wallpaper_by_deligaris-d6q8la1.jpg\");\n    background-repeat: no-repeat;\n    background-size: cover;\n    background-attachment: fixed;\n    background-position: center center;\n    z-index: 0;\n  }\n\n  .bkg > .logo{\n    margin-left: 20px;\n    margin-top:20px;\n    opacity: 0.6;\n    display: block;\n  }\n  .bkg > .autor{\n    display:block;\n    position: fixed;\n    left:20px;\n    bottom: 20px;\n  }\n  .bkg > .autor > a{\n    color:white;\n    opacity: 0.5;\n    text-decoration: none;\n    padding-right: 10px;\n  }\n\n  div.bkgBlurred {\n    width: 400px;\n    left: calc((100vw - 400px) / 2);\n\n    background-repeat: no-repeat;\n    background-size: cover;\n    background-attachment: fixed;\n    background-position: center center;\n    background-image: linear-gradient(0deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)), url(\"https://herocamp.tk/images/old_tree_wallpaper_by_deligaris-d6q8la1_blur.jpg\");\n\n    position: fixed;\n    top: 50vh;\n  }\n\n  div.login-part form h1{\n    color: rgba(255,255,255,0.75);\n    margin-bottom: 15px;\n  }\n\n  div.login-part form div.form-group label{\n    color: rgba(255,255,255,0.5);\n  }\n\n  div.login-part form div.form-group div input{\n    color:white;\n    background-color:rgba(255,255,255,0.3);\n    border: 2px solid rgba(255,222,255,0.3);\n  }\n\n  div.login-part form  div.button-part{\n    margin-top: 30px;\n  }\n}\n\n.box {\n}\n", ""]);
 	
 	// exports
 

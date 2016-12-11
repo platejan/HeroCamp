@@ -26,14 +26,11 @@ export class UserMenu extends React.Component {
                 <MenuItem eventKey="3"><span className="glyphicon glyphicon-tent"></span> <span>Heroes</span></MenuItem>
               </LinkContainer>
               <LinkContainer to="/stories">
-                <MenuItem eventKey="3"><span className="glyphicon glyphicon-book"></span>
-                  <span>Stories</span></MenuItem>
+                <MenuItem eventKey="3"><span className="glyphicon glyphicon-book"></span> <span>Stories</span></MenuItem>
               </LinkContainer>
-              <MenuItem eventKey="3"><span className="glyphicon glyphicon-star"></span>
-                <span>Bookmarks</span></MenuItem>
+              <MenuItem eventKey="3"><span className="glyphicon glyphicon-star"></span> <span>Bookmarks</span></MenuItem>
               <MenuItem divider/>
-              <MenuItem eventKey="4" onClick={this.props.actions.signOut}><span className="glyphicon glyphicon-log-out"></span>
-                <span>Log out</span></MenuItem>
+              <MenuItem eventKey="4" onClick={this.props.actions.signOut}><span className="glyphicon glyphicon-log-out"></span> <span>Log out</span></MenuItem>
             </DropdownButton>
           </div>
         </div>

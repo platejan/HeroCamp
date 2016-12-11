@@ -45,13 +45,13 @@ class StoryToolbar extends React.Component {
     if(this.state.story.name!=""){
       this.props.actions.addStory(this.state.story, (error = null)=> {
         if (error == null) {
-          toastr.success("Story added", {timeOut: 250});
+          toastr.success("story added", {timeOut: 250});
         } else {
           toastr.error(error);
         }
       });
     }else{
-      toastr.error("Story must have a name.");
+      toastr.error("story must have a name.");
     }
   }
 
