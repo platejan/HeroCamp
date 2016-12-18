@@ -36,3 +36,13 @@ export function storiesLoadList(stories) {
     type: types.STORIES_LOAD_SUCCESS, stories
   };
 }
+
+
+export function getStoryOwner(key,callback) {
+  return (dispatch, getState) => {
+    let ref = firebase.database().ref('/stories/' + key + '/owner');
+    ref.on('value', (snapshot) => {
+      callback(snapshot.val());
+    });
+  };
+}

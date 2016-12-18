@@ -33,3 +33,14 @@ export function chaptersLoadList(chapters) {
     type: types.CHAPTERS_LOAD_SUCCESS, chapters
   };
 }
+
+export function switchChapter(chapterKey) {
+  return {
+    type: types.CHAPTER_SWITCH, chapterKey
+  };
+}
+export function clearChapters() {
+  return {
+    type: types.CHAPTER_CLEAR_STATE
+  };
+}

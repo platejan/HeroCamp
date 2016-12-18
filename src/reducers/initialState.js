@@ -21,7 +21,10 @@ export default {
     initialized: false
   },
   ajaxCallsInProgress: 0,
-  chapters: {},
+  chapters: {
+    current: null,
+    all: {}
+  },
   heroes: {},
   stories: {}
 };

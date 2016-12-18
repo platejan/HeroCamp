@@ -2,11 +2,24 @@ import * as types from '../actions/actionTypes';
 import initialState from './initialState';
 
 export default function chaptersReducer(state = initialState.chapters, action) {
+  let newChapters;
   switch (action.type) {
     case types.CHAPTERS_LOAD_SUCCESS:
-      console.log(action);
-      return Object.assign({}, state, action.chapters);
+      newChapters = Object.assign({}, initialState.chapters, {});
+      newChapters.current = state.current;
+      newChapters.all = action.chapters;
+      if(newChapters.current==null){
+        newChapters.current = Object.keys(newChapters.all)[0];
+      }
+      return Object.assign({}, initialState.chapters, newChapters);
+    case types.CHAPTER_SWITCH:
+      newChapters = Object.assign({}, initialState.chapters, {});
+      newChapters.all = state.all;
+      newChapters.current = action.chapterKey;
+      return Object.assign({}, initialState.chapters, newChapters);
     case types.AUTH_LOGGED_OUT_SUCCESS:
+      return initialState.chapters;
+    case types.CHAPTER_CLEAR_STATE:
       return initialState.chapters;
     default:
       return state;

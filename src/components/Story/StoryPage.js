@@ -3,7 +3,9 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import checkAuth from '../requireAuth';
 import ChapterToolbar from './parts/ChapterToolbar';
-import {loadChapters} from '../../actions/ChaptersActions';
+import ChapterDetail from './parts/ChapterDetail';
+import {loadChapters,switchChapter,clearChapters} from '../../actions/ChaptersActions';
+import {getStoryOwner} from '../../actions/StoriesActions';
 
 class StoryPage extends React.Component {
   constructor(props, context) {
@@ -12,23 +14,24 @@ class StoryPage extends React.Component {
     this.state = {
       story: {
         id: props.params.storyId
-      },
-      displayChapter: {
-        key: null
       }
     };
-    this.switchChapter = this.switchChapter.bind(this);
+
+    this.setOwner = this.setOwner.bind(this);
   }
 
-  componentDidMount() {
-    this.props.onMount(this.state.story.id);
+  componentWillMount(){
+    this.props.beforeMount(this.state.story.id);
   }
 
-  switchChapter(chapterKey) {
+  componentDidMount(){
+    this.props.actions.getStoryOwner(this.state.story.id,this.setOwner);
+  }
+
+  setOwner(owner){
     let state = this.state;
-    state.displayChapter = {key: chapterKey};
-    console.log("switch!");
-    this.setState(state);
+    state.story.owner = owner;
+    return this.setState(state);
   }
 
   render() {
@@ -36,8 +39,8 @@ class StoryPage extends React.Component {
     if (this.state.story.id) {
       return (
         <div>
-          <p>Story {this.state.story.id}</p>
-          <ChapterToolbar chapters={this.props.chapters} storyKey={this.state.story.id} switch={this.switchChapter}/>
+          <ChapterToolbar chapters={this.props.chapters} storyOwner={this.state.story.owner} storyKey={this.state.story.id} switch={this.switchChapter}/>
+          <ChapterDetail/>
         </div>
       )
     }
@@ -51,15 +54,18 @@ StoryPage.contextTypes = {
 
 function mapStateToProps(state, ownProps) {
   return {
-    chapters: state.chapters
+    chapters: state.chapters.all
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    onMount: (storyKey) => {
+    beforeMount: (storyKey) => {
+      dispatch(clearChapters());
       dispatch(loadChapters(storyKey));
-    }
+    },
+    actions: bindActionCreators({getStoryOwner}, dispatch)
+
   };
 }
 
