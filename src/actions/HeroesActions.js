@@ -36,3 +36,31 @@ export function heroesLoadList(heroes) {
     type: types.HEROES_LOAD_SUCCESS, heroes
   };
 }
+
+export function recruitHero(heroKey,storyKey){
+  return (dispatch, getState) => {
+    let owner = getState().auth.currentUserUID;
+    let updates = {};
+    updates['/heroes/'+owner+'/'+ heroKey+'/ingame'] = storyKey;
+    updates['/crossTables/recruit/'+storyKey+'/'+ heroKey] = owner;
+    firebase.database().ref().update(updates);
+  };
+}
+
+export function acceptRecruitHero(heroKey,heroOwnerKey,storyKey){
+  return (dispatch, getState) => {
+    let updates = {};
+    updates['/crossTables/acteptedRecruit/'+storyKey+'/'+ heroKey] = heroOwnerKey;
+    firebase.database().ref().update(updates);
+  };
+}
+
+export function LoadPotentialRecruits(storyKey){
+  return (dispatch, getState) => {
+    let ref = firebase.database().ref('/crossTables/recruit/' + storyKey);
+    ref.on('value', (snapshot) => {
+      console.log(snapshot.val());
+      //dispatch(heroesLoadList(snapshot.val()));
+    });
+  };
+}

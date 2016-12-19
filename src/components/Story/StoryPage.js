@@ -4,7 +4,8 @@ import {bindActionCreators} from 'redux';
 import checkAuth from '../requireAuth';
 import ChapterToolbar from './parts/ChapterToolbar';
 import ChapterDetail from './parts/ChapterDetail';
-import {loadChapters,switchChapter,clearChapters} from '../../actions/ChaptersActions';
+import Recruit from './parts/Recruit';
+import {loadChapters, switchChapter, clearChapters} from '../../actions/ChaptersActions';
 import {getStoryOwner} from '../../actions/StoriesActions';
 
 class StoryPage extends React.Component {
@@ -20,15 +21,15 @@ class StoryPage extends React.Component {
     this.setOwner = this.setOwner.bind(this);
   }
 
-  componentWillMount(){
+  componentWillMount() {
     this.props.beforeMount(this.state.story.id);
   }
 
-  componentDidMount(){
-    this.props.actions.getStoryOwner(this.state.story.id,this.setOwner);
+  componentDidMount() {
+    this.props.actions.getStoryOwner(this.state.story.id, this.setOwner);
   }
 
-  setOwner(owner){
+  setOwner(owner) {
     let state = this.state;
     state.story.owner = owner;
     return this.setState(state);
@@ -39,18 +40,22 @@ class StoryPage extends React.Component {
     if (this.state.story.id) {
       return (
         <div>
-          <ChapterToolbar chapters={this.props.chapters} storyOwner={this.state.story.owner} storyKey={this.state.story.id} switch={this.switchChapter}/>
-          <ChapterDetail/>
+          <ChapterToolbar chapters={this.props.chapters} storyOwner={this.state.story.owner}
+                          storyKey={this.state.story.id} switch={this.switchChapter}/>
+
+          <div className="col-xs-12 col-sm-9 col-lg-10">
+            <Recruit storyKey={this.state.story.id}/>
+            <Ac storyKey={this.state.story.id}/>
+            <ChapterDetail/>
+          </div>
         </div>
       )
     }
   }
 }
-StoryPage.propTypes = {
-};
+StoryPage.propTypes = {};
 
-StoryPage.contextTypes = {
-};
+StoryPage.contextTypes = {};
 
 function mapStateToProps(state, ownProps) {
   return {

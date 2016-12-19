@@ -18,7 +18,7 @@ class ChapterDetail extends React.Component {
   render() {
     console.log(this.props.chapter);
     return (
-      <div className="col-xs-12 col-sm-3 col-lg-2">
+      <div className="col-xs-12">
         <h1>Key: {this.props.chapter}</h1>
       </div>
     );

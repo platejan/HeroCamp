@@ -140,8 +140,15 @@ class Hero extends React.Component {
       inGame = (<div className="hero-bio-flag-part"><span>in game</span></div>);
     }
 
+    let onClicAction = "";
+    let style= {};
+    if(this.props.onClicAction != undefined){
+      onClicAction = this.props.onClicAction;
+      style = {cursor: "pointer"};
+    }
+
     return (
-      <div className="hero-part col-xs-12 col-sm-6 col-md-4 col-lg-3">
+      <div onClick={onClicAction} style={style} className="hero-part col-xs-12 col-sm-6 col-md-4 col-lg-3">
         <div className="col-xs-12">
           <Icon icon={this.state.hero.public.icon}/>
           <div className="hero-bio-part">
