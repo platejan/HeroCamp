@@ -5,6 +5,7 @@ import checkAuth from '../requireAuth';
 import ChapterToolbar from './parts/ChapterToolbar';
 import ChapterDetail from './parts/ChapterDetail';
 import Recruit from './parts/Recruit';
+import AcceptRecruit from './parts/AcceptRecruit';
 import {loadChapters, switchChapter, clearChapters} from '../../actions/ChaptersActions';
 import {getStoryOwner} from '../../actions/StoriesActions';
 
@@ -45,7 +46,7 @@ class StoryPage extends React.Component {
 
           <div className="col-xs-12 col-sm-9 col-lg-10">
             <Recruit storyKey={this.state.story.id}/>
-            <Ac storyKey={this.state.story.id}/>
+            <AcceptRecruit storyKey={this.state.story.id}/>
             <ChapterDetail/>
           </div>
         </div>

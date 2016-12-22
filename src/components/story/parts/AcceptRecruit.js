@@ -18,10 +18,10 @@ class AcceptRecruit extends React.Component {
   }
 
   componentDidMount(){
-    this.props.onMount();
+    this.props.onMount(this.props.storyKey);
   }
 
-  aceptRecruitHero(heroKey){
+  acceptRecruitHero(heroKey){
     console.log(heroKey);
     this.props.actions.acceptRecruitHero(heroKey,this.props.storyKey, (error = null)=> {
       if (error == null) {
@@ -81,8 +81,8 @@ function mapStateToProps(state, ownProps) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    onMount: () => {
-      dispatch(HeroesActions.LoadPotentialRecruits());
+    onMount: (storyKey) => {
+      dispatch(HeroesActions.LoadPotentialRecruits(storyKey));
     },
     actions: bindActionCreators({acceptRecruitHero}, dispatch)
   };

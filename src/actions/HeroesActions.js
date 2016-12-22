@@ -1,11 +1,11 @@
 import firebase from 'firebase';
 import * as types from './actionTypes';
 
-export function updateHero(character, characterKey, callback){
+export function updateHero(character, characterKey, callback) {
   return (dispatch, getState) => {
     let owner = getState().auth.currentUserUID;
     let updates = {};
-    updates['/heroes/'+owner+'/'+ characterKey] = character;
+    updates['/heroes/' + owner + '/' + characterKey] = character;
     firebase.database().ref().update(updates, callback);
   };
 
@@ -15,7 +15,7 @@ export function addHero(character, callback) {
   return (dispatch, getState) => {
     let owner = getState().auth.currentUserUID;
     let newHeroKey = firebase.database().ref().child('heroes').child(owner).push().key;
-    dispatch(updateHero(character,newHeroKey,callback));
+    dispatch(updateHero(character, newHeroKey, callback));
   };
 }
 
@@ -37,30 +37,28 @@ export function heroesLoadList(heroes) {
   };
 }
 
-export function recruitHero(heroKey,storyKey){
+export function recruitHero(heroKey, storyKey) {
   return (dispatch, getState) => {
     let owner = getState().auth.currentUserUID;
     let updates = {};
-    updates['/heroes/'+owner+'/'+ heroKey+'/ingame'] = storyKey;
-    updates['/crossTables/recruit/'+storyKey+'/'+ heroKey] = owner;
+    updates['/heroes/' + owner + '/' + heroKey + '/ingame'] = storyKey;
+    updates['/crossTables/recruit/' + storyKey + '/' + heroKey] = owner;
     firebase.database().ref().update(updates);
   };
 }
 
-export function acceptRecruitHero(heroKey,heroOwnerKey,storyKey){
+export function acceptRecruitHero(heroKey, heroOwnerKey, storyKey) {
   return (dispatch, getState) => {
     let updates = {};
-    updates['/crossTables/acteptedRecruit/'+storyKey+'/'+ heroKey] = heroOwnerKey;
+    updates['/crossTables/acceptedRecruit/' + storyKey + '/' + heroKey] = heroOwnerKey;
     firebase.database().ref().update(updates);
   };
 }
 
-export function LoadPotentialRecruits(storyKey){
-  return (dispatch, getState) => {
-    let ref = firebase.database().ref('/crossTables/recruit/' + storyKey);
-    ref.on('value', (snapshot) => {
-      console.log(snapshot.val());
-      //dispatch(heroesLoadList(snapshot.val()));
-    });
-  };
+export function LoadPotentialRecruits(storyKey) {
+  let ref = firebase.database().ref('/crossTables/recruit/' + storyKey);
+  ref.on('value', (snapshot) => {
+    console.log("loading recruits");
+    //NEW CODE:
+  });
 }
