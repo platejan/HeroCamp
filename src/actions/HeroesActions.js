@@ -56,9 +56,34 @@ export function acceptRecruitHero(heroKey, heroOwnerKey, storyKey) {
 }
 
 export function LoadPotentialRecruits(storyKey) {
-  let ref = firebase.database().ref('/crossTables/recruit/' + storyKey);
-  ref.on('value', (snapshot) => {
-    console.log("loading recruits");
-    //NEW CODE:
-  });
+  return (dispatch, getState) => {
+    let ref = firebase.database().ref('/crossTables/recruit/' + storyKey);
+    ref.on('value', (snapshot) => {
+      console.log("loading recruits");
+      let data = snapshot.val();
+      Object.keys(data).forEach(function (key, index) {
+        console.log("loading hero!"+key);
+        dispatch(LoadPotentialRecruit(data[key],key));
+      });
+    });
+  };
+}
+
+export function LoadPotentialRecruit(userKey,heroKey){
+  return (dispatch, getState) => {
+    let ref = firebase.database().ref('/heroes/' + userKey + '/' +heroKey +'/public');
+    ref.on('value', (snapshot) => {
+      let hero = {};
+      hero.owner = userKey;
+      hero.public = snapshot.val();
+      hero.ingame = false;
+      dispatch(PotentialRecruitLoaded(hero,heroKey));
+    });
+  };
+}
+
+export function PotentialRecruitLoaded(obj,heroKey){
+  return {
+    type: types.CURRENT_STORY_POTENTIAL_RECRUIT_LOAD, data: obj,key: heroKey
+  };
 }

@@ -25,6 +25,9 @@ export default {
     current: null,
     all: {}
   },
+  currentStory:{
+    potentialRecruits: {}
+  },
   heroes: {},
   stories: {}
 };

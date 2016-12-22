@@ -34,7 +34,7 @@ class AcceptRecruit extends React.Component {
 
   }
   render() {
-    const data = this.props.heroes;
+    const data = this.props.potentialHeroes;
     let dataArray = [];
     Object.keys(data).forEach(function (key, index) {
       // key: the name of the object key
@@ -75,7 +75,7 @@ AcceptRecruit.contextTypes = {
 function mapStateToProps(state, ownProps) {
   return {
     userID: state.auth.currentUserUID,
-    heroes: state.heroes
+    potentialHeroes: state.currentStory.potentialRecruits
   };
 }
 

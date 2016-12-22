@@ -21,23 +21,28 @@ class Hero extends React.Component {
           behavior: this.props.itemContent.public.behavior,
           inventory: this.props.itemContent.public.inventory
         },
-        private: {
-          icon: this.props.itemContent.public.icon,
-          name: this.props.itemContent.private.name,
-          age: this.props.itemContent.private.age,
-          species: this.props.itemContent.private.species,
-          biography: this.props.itemContent.private.biography,
-          behavior: this.props.itemContent.private.behavior,
-          inventory: this.props.itemContent.private.inventory
-        },
-        hasChange: this.props.itemContent.hasChange,
+        private:{},
         owner: this.props.ownerID,
         inGame: this.props.itemContent.inGame
       },
       heroKey: this.props.itemKey,
       editWindowState: false,
-      saveTimeout: null
+      saveTimeout: null,
+      onlyPublic : true
     };
+    if(this.props.itemContent.private !== undefined){
+      this.state.hero.private = {
+        icon: this.props.itemContent.public.icon,
+        name: this.props.itemContent.private.name,
+        age: this.props.itemContent.private.age,
+        species: this.props.itemContent.private.species,
+        biography: this.props.itemContent.private.biography,
+        behavior: this.props.itemContent.private.behavior,
+        inventory: this.props.itemContent.private.inventory
+      };
+      this.state.hero.hasChange = this.props.itemContent.hasChange;
+      this.state.onlyPublic = false;
+    }
 
     this.showEditWindow = this.showEditWindow.bind(this);
     this.hideEditWindow = this.hideEditWindow.bind(this);
@@ -130,13 +135,13 @@ class Hero extends React.Component {
 
   render() {
     let editButtonStyle = {};
-    if (this.state.hero.hasChange) {
+    if (this.state.hero.hasChange && !this.state.onlyPublic) {
       editButtonStyle = {
         color: 'red'
       };
     }
     let inGame = "";
-    if (this.state.hero.inGame) {
+    if (this.state.hero.ingame) {
       inGame = (<div className="hero-bio-flag-part"><span>in game</span></div>);
     }
 
@@ -147,6 +152,14 @@ class Hero extends React.Component {
       style = {cursor: "pointer"};
     }
 
+    let editPart = "";
+    let editTool = "";
+    if(!this.state.onlyPublic){
+      editPart = (<HeroEdit iconchange={this.iconchange} reject={this.rejectChanges} publish={this.publishChanges}
+                            click={this.hideEditWindow}
+                            onchange={this.onchange} hero={this.state.hero} display={this.state.editWindowState}/>);
+      editTool =  (<span onClick={this.showEditWindow} className="glyphicon glyphicon-pencil" style={editButtonStyle}></span>);
+    }
     return (
       <div onClick={onClicAction} style={style} className="hero-part col-xs-12 col-sm-6 col-md-4 col-lg-3">
         <div className="col-xs-12">
@@ -157,11 +170,9 @@ class Hero extends React.Component {
           </div>
           {inGame}
           <div className="hero-bio-tools-part">
-            <span onClick={this.showEditWindow} className="glyphicon glyphicon-pencil" style={editButtonStyle}></span>
+            {editTool}
           </div>
-          <HeroEdit iconchange={this.iconchange} reject={this.rejectChanges} publish={this.publishChanges}
-                    click={this.hideEditWindow}
-                    onchange={this.onchange} hero={this.state.hero} display={this.state.editWindowState}/>
+          {editPart}
 
         </div>
 

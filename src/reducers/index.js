@@ -5,6 +5,7 @@ import auth from './authReducer';
 import chapters from './chaptersReducer';
 import heroes from './heroesReducer';
 import stories from './storiesReducer';
+import currentStory from './currentStoryReducer'
 
 import ajaxCallsInProgress from './ajaxStatusReducer';
 import { routerReducer } from 'react-router-redux';
@@ -18,6 +19,7 @@ const rootReducer = combineReducers({
   ajaxCallsInProgress,
   chapters,
   stories,
+  currentStory,
   heroes
 });
 
