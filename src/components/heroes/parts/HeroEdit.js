@@ -60,10 +60,16 @@ class HeroEdit extends React.Component {
       information = "";
     }
 
+    let closeMe = this.props.click;
+    let close = function(e){
+      e.stopPropagation();
+      closeMe();
+    };
+
     const styleHelp = {maxWidth: '260px'};
 
     return (
-      <div onClick={this.props.click} className={className}>
+      <div onClick={close} className={className}>
         <div className="col-xs-12 clickable">
           <div onClick={stop}
                className="hero-detail-form-part col-xs-12 col-sm-10 col-md-8 col-lg-6 col-sm-push-1 col-md-push-2 col-lg-push-3">

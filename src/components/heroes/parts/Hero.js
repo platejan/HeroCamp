@@ -133,7 +133,7 @@ class Hero extends React.Component {
     }
   }
 
-  render() { 
+  render() {
     let stop = function (e) {
       e.stopPropagation();
     };
