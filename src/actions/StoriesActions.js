@@ -46,3 +46,9 @@ export function getStoryOwner(key,callback) {
     });
   };
 }
+
+export function CurrentStoryClear(){
+  return {
+    type: types.CURRENT_STORY_CLEAR
+  };
+}

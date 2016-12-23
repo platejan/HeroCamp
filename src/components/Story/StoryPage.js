@@ -37,8 +37,11 @@ class StoryPage extends React.Component {
   }
 
   render() {
-    console.log(this.state);
     if (this.state.story.id) {
+      let acceptRecruit = "";
+      if(this.state.story.owner==this.props.currentUID){
+        acceptRecruit=(<AcceptRecruit storyKey={this.state.story.id}/>);
+      }
       return (
         <div>
           <ChapterToolbar chapters={this.props.chapters} storyOwner={this.state.story.owner}
@@ -46,7 +49,7 @@ class StoryPage extends React.Component {
 
           <div className="col-xs-12 col-sm-9 col-lg-10">
             <Recruit storyKey={this.state.story.id}/>
-            <AcceptRecruit storyKey={this.state.story.id}/>
+            {acceptRecruit}
             <ChapterDetail/>
           </div>
         </div>
@@ -60,7 +63,8 @@ StoryPage.contextTypes = {};
 
 function mapStateToProps(state, ownProps) {
   return {
-    chapters: state.chapters.all
+    chapters: state.chapters.all,
+    currentUID: state.auth.currentUserUID
   };
 }
 

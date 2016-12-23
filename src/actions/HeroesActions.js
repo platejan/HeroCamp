@@ -22,7 +22,6 @@ export function addHero(character, callback) {
 export function heroesLoadStart() {
   return (dispatch, getState) => {
     let owner = getState().auth.currentUserUID;
-    console.log(owner);
     let ref = firebase.database().ref('/heroes/' + owner);
     ref.on('value', (snapshot) => {
       dispatch(heroesLoadList(snapshot.val()));
@@ -31,7 +30,6 @@ export function heroesLoadStart() {
 }
 
 export function heroesLoadList(heroes) {
-  console.log(heroes)
   return {
     type: types.HEROES_LOAD_SUCCESS, heroes
   };
@@ -41,7 +39,7 @@ export function recruitHero(heroKey, storyKey) {
   return (dispatch, getState) => {
     let owner = getState().auth.currentUserUID;
     let updates = {};
-    updates['/heroes/' + owner + '/' + heroKey + '/ingame'] = storyKey;
+    updates['/heroes/' + owner + '/' + heroKey + '/inGame'] = storyKey;
     updates['/crossTables/recruit/' + storyKey + '/' + heroKey] = owner;
     firebase.database().ref().update(updates);
   };
@@ -50,7 +48,16 @@ export function recruitHero(heroKey, storyKey) {
 export function acceptRecruitHero(heroKey, heroOwnerKey, storyKey) {
   return (dispatch, getState) => {
     let updates = {};
+    firebase.database().ref('/crossTables/recruit/' + storyKey + '/' + heroKey).remove();
     updates['/crossTables/acceptedRecruit/' + storyKey + '/' + heroKey] = heroOwnerKey;
+    firebase.database().ref().update(updates);
+  };
+}
+export function rejectRecruitHero(heroKey, heroOwnerKey, storyKey) {
+  return (dispatch, getState) => {
+    let updates = {};
+    firebase.database().ref('/crossTables/recruit/' + storyKey + '/' + heroKey).remove();
+    updates['/heroes/' + heroOwnerKey + '/' + heroKey + '/inGame'] = false;
     firebase.database().ref().update(updates);
   };
 }
@@ -59,31 +66,39 @@ export function LoadPotentialRecruits(storyKey) {
   return (dispatch, getState) => {
     let ref = firebase.database().ref('/crossTables/recruit/' + storyKey);
     ref.on('value', (snapshot) => {
-      console.log("loading recruits");
       let data = snapshot.val();
-      Object.keys(data).forEach(function (key, index) {
-        console.log("loading hero!"+key);
-        dispatch(LoadPotentialRecruit(data[key],key));
-      });
+      console.log(data);
+      dispatch(PotentialRecruitClear());
+      if (data){
+        Object.keys(data).forEach(function (key, index) {
+          if (data && data[key])
+            dispatch(LoadPotentialRecruit(data[key], key));
+        });
+      }
     });
   };
 }
 
-export function LoadPotentialRecruit(userKey,heroKey){
+export function LoadPotentialRecruit(userKey, heroKey) {
   return (dispatch, getState) => {
-    let ref = firebase.database().ref('/heroes/' + userKey + '/' +heroKey +'/public');
+    let ref = firebase.database().ref('/heroes/' + userKey + '/' + heroKey + '/public');
     ref.on('value', (snapshot) => {
       let hero = {};
       hero.owner = userKey;
       hero.public = snapshot.val();
-      hero.ingame = false;
-      dispatch(PotentialRecruitLoaded(hero,heroKey));
+      hero.inGame = false;
+      dispatch(PotentialRecruitLoaded(hero, heroKey));
     });
   };
 }
 
-export function PotentialRecruitLoaded(obj,heroKey){
+export function PotentialRecruitLoaded(obj, heroKey) {
   return {
-    type: types.CURRENT_STORY_POTENTIAL_RECRUIT_LOAD, data: obj,key: heroKey
+    type: types.CURRENT_STORY_POTENTIAL_RECRUIT_LOAD, data: obj, key: heroKey
+  };
+}
+export function PotentialRecruitClear() {
+  return {
+    type: types.CURRENT_STORY_POTENTIAL_RECRUIT_CLEAR
   };
 }

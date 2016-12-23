@@ -48,7 +48,7 @@ class Recruit extends React.Component {
         const itemKey = hero.ItemKey;
         const itemContent = hero.ItemContent;
 
-        if(!itemContent.ingame) {
+        if(!itemContent.inGame) {
           return (
             <Hero key={index} onClicAction={this.recruitHero.bind(this,itemKey)} itemKey={itemKey}
                   itemContent={itemContent}/>

@@ -24,6 +24,7 @@ import configureStore from './store/configureStore'; //eslint-disable-line impor
 
 // styles
 import './styles/styles.css'; //Webpack can import CSS files too!
+import './styles/HeroStyle.css'; //Webpack can import CSS files too!
 import './styles/StoriesStyle.css'; //Webpack can import CSS files too!
 import './styles/LoginStyle.css'; //Webpack can import CSS files too!
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';

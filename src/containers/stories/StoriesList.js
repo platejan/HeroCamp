@@ -14,7 +14,6 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     onMount: () => {
-      console.log("mount!");
       dispatch(StoriesActions.storiesLoadStart());
     }
   };

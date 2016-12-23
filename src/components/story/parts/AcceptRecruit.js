@@ -4,7 +4,8 @@ import {bindActionCreators} from 'redux';
 import checkAuth from '../../requireAuth';
 import toastr from 'toastr';
 import * as HeroesActions from '../../../actions/HeroesActions';
-import {acceptRecruitHero} from '../../../actions/HeroesActions';
+import {acceptRecruitHero,rejectRecruitHero} from '../../../actions/HeroesActions';
+import {CurrentStoryClear} from '../../../actions/StoriesActions';
 import Hero from '../../../components/heroes/parts/Hero';
 
 
@@ -21,18 +22,31 @@ class AcceptRecruit extends React.Component {
     this.props.onMount(this.props.storyKey);
   }
 
+  componentWillUnmount(){
+    this.props.actions.CurrentStoryClear();
+  }
+
   acceptRecruitHero(heroKey){
     console.log(heroKey);
-    this.props.actions.acceptRecruitHero(heroKey,this.props.storyKey, (error = null)=> {
+    this.props.actions.acceptRecruitHero(heroKey,this.props.potentialHeroes[heroKey].owner,this.props.storyKey, (error = null)=> {
       if (error == null) {
         toastr.success("ok");
       } else {
         toastr.error(error);
       }
     });
-
-
   }
+
+  rejectRecruitHero(heroKey){
+    this.props.actions.rejectRecruitHero(heroKey,this.props.potentialHeroes[heroKey].owner,this.props.storyKey, (error = null)=> {
+      if (error == null) {
+        toastr.success("ok");
+      } else {
+        toastr.error(error);
+      }
+    });
+  }
+
   render() {
     const data = this.props.potentialHeroes;
     let dataArray = [];
@@ -48,9 +62,9 @@ class AcceptRecruit extends React.Component {
         const itemKey = hero.ItemKey;
         const itemContent = hero.ItemContent;
 
-        if(!itemContent.ingame) {
+        if(!itemContent.inGame) {
           return (
-            <Hero key={index} onClicAction={this.acceptRecruitHero.bind(this,itemKey)} itemKey={itemKey}
+            <Hero key={index} accept={this.acceptRecruitHero.bind(this,itemKey)} reject={this.rejectRecruitHero.bind(this,itemKey)} itemKey={itemKey}
                   itemContent={itemContent}/>
           );
         }
@@ -84,7 +98,7 @@ function mapDispatchToProps(dispatch) {
     onMount: (storyKey) => {
       dispatch(HeroesActions.LoadPotentialRecruits(storyKey));
     },
-    actions: bindActionCreators({acceptRecruitHero}, dispatch)
+    actions: bindActionCreators({acceptRecruitHero,rejectRecruitHero,CurrentStoryClear}, dispatch)
   };
 }
 

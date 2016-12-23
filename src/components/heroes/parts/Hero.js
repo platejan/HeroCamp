@@ -133,7 +133,10 @@ class Hero extends React.Component {
     }
   }
 
-  render() {
+  render() { 
+    let stop = function (e) {
+      e.stopPropagation();
+    };
     let editButtonStyle = {};
     if (this.state.hero.hasChange && !this.state.onlyPublic) {
       editButtonStyle = {
@@ -160,6 +163,18 @@ class Hero extends React.Component {
                             onchange={this.onchange} hero={this.state.hero} display={this.state.editWindowState}/>);
       editTool =  (<span onClick={this.showEditWindow} className="glyphicon glyphicon-pencil" style={editButtonStyle}></span>);
     }
+
+    let acceptButton = "";
+    if(this.props.accept)
+    {
+      acceptButton = (<button onClick={this.props.accept} className="btn btn-success btn-sm">Accept</button>);
+    }
+    let rejectButton = "";
+    if(this.props.reject)
+    {
+      rejectButton = (<button onClick={this.props.reject} className="btn btn-danger btn-sm">Reject</button>);
+    }
+
     return (
       <div onClick={onClicAction} style={style} className="hero-part col-xs-12 col-sm-6 col-md-4 col-lg-3">
         <div className="col-xs-12">
@@ -169,8 +184,8 @@ class Hero extends React.Component {
             <span className="">{this.state.hero.public.name}</span>
           </div>
           {inGame}
-          <div className="hero-bio-tools-part">
-            {editTool}
+          <div onClick={stop} className="hero-bio-tools-part">
+            {acceptButton}{rejectButton}{editTool}
           </div>
           {editPart}
 
