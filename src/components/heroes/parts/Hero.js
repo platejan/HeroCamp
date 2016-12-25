@@ -154,7 +154,7 @@ class Hero extends React.Component {
       };
     }
     let inGame = "";
-    if (this.state.hero.ingame) {
+    if (this.state.hero.inGame && this.props.showFlag) {
       inGame = (<div className="hero-bio-flag-part"><span>in game</span></div>);
     }
 
