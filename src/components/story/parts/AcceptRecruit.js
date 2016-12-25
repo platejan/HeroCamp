@@ -18,7 +18,7 @@ class AcceptRecruit extends React.Component {
     this.acceptRecruitHero = this.acceptRecruitHero.bind(this);
   }
 
-  componentDidMount(){
+  componentWillMount(){
     this.props.onMount(this.props.storyKey);
   }
 
@@ -61,11 +61,12 @@ class AcceptRecruit extends React.Component {
 
         const itemKey = hero.ItemKey;
         const itemContent = hero.ItemContent;
+        const itemIndex = index+itemKey;
 
         if(!itemContent.inGame) {
           return (
-            <Hero key={index} accept={this.acceptRecruitHero.bind(this,itemKey)} reject={this.rejectRecruitHero.bind(this,itemKey)} itemKey={itemKey}
-                  itemContent={itemContent}/>
+            <Hero key={itemIndex} accept={this.acceptRecruitHero.bind(this,itemKey)} reject={this.rejectRecruitHero.bind(this,itemKey)} itemKey={itemKey}
+                  itemContent={itemContent} itemSize="col-sm-6 col-lg-4"/>
           );
         }
       });

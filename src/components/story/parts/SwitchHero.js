@@ -4,87 +4,91 @@ import {bindActionCreators} from 'redux';
 import checkAuth from '../../requireAuth';
 import toastr from 'toastr';
 import * as HeroesActions from '../../../actions/HeroesActions';
-import {recruitHero} from '../../../actions/HeroesActions';
+import {setHero} from '../../../actions/HeroesActions';
+import {CurrentStoryClear} from '../../../actions/StoriesActions';
 import Hero from '../../../components/heroes/parts/Hero';
 
 
-class Recruit extends React.Component {
+class SwitchHero extends React.Component {
   constructor(props, context) {
     super(props, context);
 
-    this.state = {
-    };
-    this.recruitHero = this.recruitHero.bind(this);
+    this.state = {};
+    this.setHero = this.setHero.bind(this);
   }
 
-  componentDidMount(){
-    this.props.onMount();
+  componentWillMount() {
+    if (Object.keys(this.props.heroes).length < 1)
+      this.props.onMount(this.props.storyKey);
+
   }
 
-  recruitHero(heroKey){
-    this.props.actions.recruitHero(heroKey,this.props.storyKey, (error = null)=> {
+  componentWillUnmount() {
+  }
+
+  setHero(heroKey) {
+    this.props.actions.setHero(heroKey, (error = null)=> {
       if (error == null) {
         toastr.success("ok");
       } else {
         toastr.error(error);
       }
     });
-
-
   }
+
   render() {
     const data = this.props.heroes;
     let dataArray = [];
     Object.keys(data).forEach(function (key, index) {
-      // key: the name of the object key
-      // index: the ordinal position of the key within the object
       dataArray.push({ItemKey: key, ItemContent: data[key]});
     });
     let listHeores = "";
     if (dataArray.length > 0) {
-      listHeores = dataArray.map((hero,index) => {
+      listHeores = dataArray.map((hero, index) => {
 
         const itemKey = hero.ItemKey;
         const itemContent = hero.ItemContent;
+        const itemIndex = index+itemKey;
 
-        if(!itemContent.inGame) {
+        if (itemContent.owner == this.props.userID) {
+          this.props.actions.setHero(itemKey);
           return (
-            <Hero key={index} onClicAction={this.recruitHero.bind(this,itemKey)} itemKey={itemKey}
-                  itemContent={itemContent}  itemSize="col-sm-6 col-lg-4"/>
+            <Hero key={itemIndex} itemKey={itemKey} onClicAction={this.setHero.bind(this,itemKey)}
+                  itemContent={itemContent} itemSize="col-sm-6 col-lg-4"/>
           );
         }
+        return;
       });
     }
     return (
       <div className="col-xs-12">
-        <h1>Recruit</h1>
+        <h1>Switch Hero</h1>
         {listHeores}
       </div>
     );
   }
 }
 
-Recruit.propTypes = {
+SwitchHero.propTypes = {
   userID: PropTypes.string.isRequired
 };
 
-Recruit.contextTypes = {
-};
+SwitchHero.contextTypes = {};
 
 function mapStateToProps(state, ownProps) {
   return {
     userID: state.auth.currentUserUID,
-    heroes: state.heroes
+    heroes: state.currentStory.heroes
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    onMount: () => {
-      dispatch(HeroesActions.heroesLoadStart());
+    onMount: (storyKey) => {
+      dispatch(HeroesActions.LoadStoryHeroes(storyKey));
     },
-    actions: bindActionCreators({recruitHero}, dispatch)
+    actions: bindActionCreators({setHero}, dispatch)
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Recruit);
+export default connect(mapStateToProps, mapDispatchToProps)(SwitchHero);

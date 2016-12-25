@@ -26,7 +26,9 @@ export default {
     all: {}
   },
   currentStory:{
-    potentialRecruits: {}
+    potentialRecruits: {},
+    heroes:{},
+    selectedHero: null
   },
   heroes: {},
   stories: {}

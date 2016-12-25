@@ -16,7 +16,6 @@ class ChapterDetail extends React.Component {
   }
 
   render() {
-    console.log(this.props.chapter);
     return (
       <div className="col-xs-12">
         <h1>Key: {this.props.chapter}</h1>

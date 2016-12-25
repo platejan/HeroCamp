@@ -54,6 +54,16 @@ class Hero extends React.Component {
     this.iconchange = this.iconchange.bind(this);
   }
 
+  componentDidUpdate() {
+    if(this.state.heroKey!=this.props.itemKey){
+    let newState = this.state;
+    newState.hero.public = this.props.itemContent.public;
+    newState.hero.owner =  this.props.itemContent.owner;
+    newState.hero.inGame = this.props.itemContent.inGame;
+    newState.heroKey = this.props.itemKey;
+    this.setState(newState);}
+  }
+
   componentDidMount() {
     document.addEventListener("keydown", this.ESCkey, false);
   }
@@ -174,9 +184,18 @@ class Hero extends React.Component {
     {
       rejectButton = (<button onClick={this.props.reject} className="btn btn-danger btn-sm">Reject</button>);
     }
-
+    let fireButton = "";
+    if(this.props.fire)
+    {
+      fireButton = (<button onClick={this.props.fire} className="btn btn-danger btn-sm">Fire</button>);
+    }
+    let heroPartSize="hero-part col-xs-12";
+    if(this.props.itemSize)
+    {
+      heroPartSize = heroPartSize+" "+this.props.itemSize;
+    }
     return (
-      <div onClick={onClicAction} style={style} className="hero-part col-xs-12 col-sm-6 col-md-4 col-lg-3">
+      <div onClick={onClicAction} style={style} className={heroPartSize}>
         <div className="col-xs-12">
           <Icon icon={this.state.hero.public.icon}/>
           <div className="hero-bio-part">
@@ -185,7 +204,7 @@ class Hero extends React.Component {
           </div>
           {inGame}
           <div onClick={stop} className="hero-bio-tools-part">
-            {acceptButton}{rejectButton}{editTool}
+            {acceptButton}{rejectButton}{fireButton}{editTool}
           </div>
           {editPart}
 

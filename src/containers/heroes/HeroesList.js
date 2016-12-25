@@ -41,7 +41,7 @@ class HeoresList extends Component {
         const itemContent = hero.ItemContent;
 
         return (
-          <Hero key={index} itemKey={itemKey} itemContent={itemContent}/>
+          <Hero key={index} itemKey={itemKey} itemContent={itemContent} itemSize="col-sm-4 col-lg-3"/>
         );
       });
     }

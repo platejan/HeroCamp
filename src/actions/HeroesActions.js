@@ -62,32 +62,59 @@ export function rejectRecruitHero(heroKey, heroOwnerKey, storyKey) {
   };
 }
 
+export function fireHero(heroKey, heroOwnerKey, storyKey) {
+  return (dispatch, getState) => {
+    let updates = {};
+    firebase.database().ref('/crossTables/acceptedRecruit/' + storyKey + '/' + heroKey).remove();
+    updates['/heroes/' + heroOwnerKey + '/' + heroKey + '/inGame'] = false;
+    firebase.database().ref().update(updates);
+  };
+}
 export function LoadPotentialRecruits(storyKey) {
   return (dispatch, getState) => {
     let ref = firebase.database().ref('/crossTables/recruit/' + storyKey);
     ref.on('value', (snapshot) => {
       let data = snapshot.val();
-      console.log(data);
       dispatch(PotentialRecruitClear());
-      if (data){
+      if (data) {
         Object.keys(data).forEach(function (key, index) {
           if (data && data[key])
-            dispatch(LoadPotentialRecruit(data[key], key));
+            dispatch(LoadHeroPublic(data[key], key, "recruit"));
         });
       }
     });
   };
 }
-
-export function LoadPotentialRecruit(userKey, heroKey) {
+export function LoadStoryHeroes(storyKey) {
+  return (dispatch, getState) => {
+    let ref = firebase.database().ref('/crossTables/acceptedRecruit/' + storyKey);
+    ref.on('value', (snapshot) => {
+      let data = snapshot.val();
+      dispatch(StoryHeroesClear());
+      if (data) {
+        Object.keys(data).forEach(function (key, index) {
+          if (data && data[key])
+            dispatch(LoadHeroPublic(data[key], key, "hero"));
+        });
+      }
+    });
+  };
+}
+export function LoadHeroPublic(userKey, heroKey, type) {
   return (dispatch, getState) => {
     let ref = firebase.database().ref('/heroes/' + userKey + '/' + heroKey + '/public');
     ref.on('value', (snapshot) => {
       let hero = {};
       hero.owner = userKey;
       hero.public = snapshot.val();
-      hero.inGame = false;
-      dispatch(PotentialRecruitLoaded(hero, heroKey));
+      if(type=="hero")
+        hero.inGame = true;
+      else
+        hero.inGame = false;
+      if (type == "hero")
+        dispatch(HeroLoaded(hero, heroKey));
+      else
+        dispatch(PotentialRecruitLoaded(hero, heroKey));
     });
   };
 }
@@ -97,8 +124,23 @@ export function PotentialRecruitLoaded(obj, heroKey) {
     type: types.CURRENT_STORY_POTENTIAL_RECRUIT_LOAD, data: obj, key: heroKey
   };
 }
+export function HeroLoaded(obj, heroKey) {
+  return {
+    type: types.CURRENT_STORY_HERO_LOAD, data: obj, key: heroKey
+  };
+}
 export function PotentialRecruitClear() {
   return {
     type: types.CURRENT_STORY_POTENTIAL_RECRUIT_CLEAR
+  };
+}
+export function StoryHeroesClear() {
+  return {
+    type: types.CURRENT_STORY_HEROES_CLEAR
+  };
+}
+export function setHero(heroKey) {
+  return {
+    type: types.CURRENT_STORY_SET_HERO, key: heroKey
   };
 }

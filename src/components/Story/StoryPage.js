@@ -6,6 +6,9 @@ import ChapterToolbar from './parts/ChapterToolbar';
 import ChapterDetail from './parts/ChapterDetail';
 import Recruit from './parts/Recruit';
 import AcceptRecruit from './parts/AcceptRecruit';
+import StoryHeroes from './parts/StoryHeroes';
+import SwitchHero from './parts/SwitchHero';
+import CurrentHero from './parts/CurrentHero';
 import {loadChapters, switchChapter, clearChapters} from '../../actions/ChaptersActions';
 import {getStoryOwner} from '../../actions/StoriesActions';
 
@@ -44,12 +47,17 @@ class StoryPage extends React.Component {
       }
       return (
         <div>
+          <div className="col-xs-12 col-sm-4 col-lg-3">
+            <CurrentHero/>
           <ChapterToolbar chapters={this.props.chapters} storyOwner={this.state.story.owner}
                           storyKey={this.state.story.id} switch={this.switchChapter}/>
 
-          <div className="col-xs-12 col-sm-9 col-lg-10">
+            </div>
+          <div className="col-xs-12 col-sm-8 col-lg-9">
+            <SwitchHero storyKey={this.state.story.id} />
             <Recruit storyKey={this.state.story.id}/>
             {acceptRecruit}
+            <StoryHeroes storyKey={this.state.story.id} storyOwner={this.state.story.owner} />
             <ChapterDetail/>
           </div>
         </div>

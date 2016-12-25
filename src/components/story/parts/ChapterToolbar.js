@@ -97,7 +97,7 @@ class ChapterToolbar extends React.Component {
     }
 
     return (
-      <div className="col-xs-12 col-sm-3 col-lg-2">
+      <div>
         {buttonsChapters}
         <br/>
         {createForm}
