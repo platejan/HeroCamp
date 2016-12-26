@@ -4,11 +4,18 @@ import initialState from './initialState';
 export default function chaptersReducer(state = initialState.chapters, action) {
   let newChapters;
   switch (action.type) {
+    case types.POSTS_LOAD_LIST:
+      newChapters = Object.assign({}, initialState.chapters, {});
+      newChapters.all = state.all;
+      newChapters.current = state.current;
+      newChapters.all =  Object.assign({}, newChapters.all, {[action.chapterKey]:{"posts":action.posts}});
+      console.log(newChapters);
+      return Object.assign({}, initialState.chapters, newChapters);
     case types.CHAPTERS_LOAD_SUCCESS:
       newChapters = Object.assign({}, initialState.chapters, {});
       newChapters.current = state.current;
       newChapters.all = action.chapters;
-      if(newChapters.current==null){
+      if (newChapters.current == null) {
         newChapters.current = Object.keys(newChapters.all)[0];
       }
       return Object.assign({}, initialState.chapters, newChapters);

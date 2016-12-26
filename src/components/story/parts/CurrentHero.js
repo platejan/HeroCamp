@@ -21,7 +21,7 @@ class CurrentHero extends React.Component {
 
   render() {
     let heroKey = this.props.hero;
-    if (heroKey != null)
+    if (heroKey != null && this.props.heroes[heroKey])
       return (
         <Hero itemKey={heroKey} itemContent={this.props.heroes[heroKey]} itemSize=""/>
       );

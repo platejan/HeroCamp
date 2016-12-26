@@ -58,7 +58,7 @@ class StoryPage extends React.Component {
             <Recruit storyKey={this.state.story.id}/>
             {acceptRecruit}
             <StoryHeroes storyKey={this.state.story.id} storyOwner={this.state.story.owner} />
-            <ChapterDetail/>
+            <ChapterDetail chapters={this.props.chapters}/>
           </div>
         </div>
       )

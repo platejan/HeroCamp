@@ -1,9 +1,9 @@
 import React, {PropTypes} from 'react';
 import Line from '../../common/Line';
 import Icon from '../../common/Icon';
-import TextInput from '../../common/TextInput';
+ import TextInput from '../../common/TextInput';
+// import Textarea from 'react-textarea-autosize';
 import TextareaInput from '../../common/TextareaInput';
-import Textarea from 'react-textarea-autosize';
 
 class HeroEdit extends React.Component {
   constructor(props, context) {
@@ -106,7 +106,7 @@ class HeroEdit extends React.Component {
                   <div className="form-group">
                     <label htmlFor="biography">Biography</label>
                     <div className="field">
-                  <Textarea
+                  <TextareaInput
                     className="form-control"
                     name="biography"
                     label="Biography"
