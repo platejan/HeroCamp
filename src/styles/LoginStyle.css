@@ -15,7 +15,7 @@ ac.bkgBlurred {
     top: 0;
     position: fixed;
     display: block;
-    background-image: url("https://herocamp.tk/images/old_tree_wallpaper_by_deligaris-d6q8la1.jpg");
+    background-image: url("https://herocamp-db3a7.firebaseapp.com/images/old_tree_wallpaper_by_deligaris-d6q8la1.jpg");
     background-repeat: no-repeat;
     background-size: cover;
     background-attachment: fixed;
@@ -50,7 +50,7 @@ ac.bkgBlurred {
     background-size: cover;
     background-attachment: fixed;
     background-position: center center;
-    background-image: linear-gradient(0deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)), url("https://herocamp.tk/images/old_tree_wallpaper_by_deligaris-d6q8la1_blur.jpg");
+    background-image: linear-gradient(0deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)), url("https://herocamp-db3a7.firebaseapp.com/images/old_tree_wallpaper_by_deligaris-d6q8la1_blur.jpg");
 
     position: fixed;
     top: 50vh;

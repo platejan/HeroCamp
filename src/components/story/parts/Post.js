@@ -15,9 +15,13 @@ class Post extends React.Component {
     let style={
       backgroundColor:"#fafafa"
     };
+    let name = "undefined";
+    if(this.props.heroes[this.props.itemContent.autor]){
+      name = this.props.heroes[this.props.itemContent.autor].public.name;
+    }
     return (
       <div className="col-xs-12" style={style}>
-        <h1>{this.props.heroes[this.props.itemContent.autor].public.name}</h1>
+        <h1>{name}</h1>
         <p>{this.props.itemContent.text}</p>
       </div>
     );

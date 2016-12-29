@@ -19,8 +19,6 @@ class CreatePost extends React.Component {
 
 
   createPost(){
-    console.log("sending post");
-    console.log(this.state);
     this.props.actions.createPost(this.state,this.props.currentHero,this.props.chapterKey, (error = null)=> {
       if (error == null) {
         toastr.success("sent");
@@ -34,7 +32,6 @@ class CreatePost extends React.Component {
     const field = event.target.name;
     let state = this.state;
     state[field] = event.target.value;
-    console.log(event.target.value);
     return this.setState(state);
   }
 

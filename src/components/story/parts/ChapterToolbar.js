@@ -5,6 +5,7 @@ import checkAuth from '../../requireAuth';
 import TextInput from '../../common/TextInput';
 import toastr from 'toastr';
 import {addChapter, loadChapters, switchChapter} from '../../../actions/ChaptersActions';
+import {loadPosts} from '../../../actions/PostsActions';
 
 
 class ChapterToolbar extends React.Component {
@@ -24,6 +25,7 @@ class ChapterToolbar extends React.Component {
   }
 
   switch(key) {
+    this.props.actions.loadPosts(key);
     this.props.actions.switchChapter(key);
   }
 
@@ -120,7 +122,7 @@ function mapStateToProps(state, ownProps) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators({addChapter, switchChapter}, dispatch)
+    actions: bindActionCreators({addChapter, switchChapter, loadPosts}, dispatch)
   };
 }
 

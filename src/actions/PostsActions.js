@@ -20,6 +20,7 @@ export function updatePost(chapterKey, newPost,newPostKey, callback){
   };
 }
 export function loadPosts(chapterKey) {
+  console.log("loading posts"+chapterKey);
   return (dispatch, getState) => {
     let ref = firebase.database().ref('/posts/'+chapterKey+'/');
     ref.on('value', (snapshot) => {

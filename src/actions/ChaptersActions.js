@@ -29,6 +29,7 @@ export function loadChapters(storyKey) {
 }
 
 export function chaptersLoadList(chapters) {
+  console.log(chapters);
   return {
     type: types.CHAPTERS_LOAD_SUCCESS, chapters
   };
