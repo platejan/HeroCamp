@@ -45,7 +45,6 @@ class StoryPage extends React.Component {
       if(this.state.story.owner==this.props.currentUID){
         acceptRecruit=(<AcceptRecruit storyKey={this.state.story.id}/>);
       }
-      console.log(this.props.chapters);
       return (
         <div>
           <div className="col-xs-12 col-sm-4 col-lg-3">

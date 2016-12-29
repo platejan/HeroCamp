@@ -20,7 +20,6 @@ class Posts extends React.Component {
   }
 
   render() {
-    console.log(this.props.chapterContent);
     const data = this.props.chapterContent.posts;
     let dataArray = [];
     let listPosts = "";
