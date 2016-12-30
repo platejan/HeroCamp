@@ -34,7 +34,7 @@ export function userCreated(user) {
     firebaseApi.databaseSet('/users/' + user.uid, extractUserProperties(user))
       .then(
         () => {
-          dispatch(authLoggedIn(user.uid));
+          dispatch(authLoggedIn(user.uid),true);
           dispatch(userCreatedSuccess());
         })
       .catch(

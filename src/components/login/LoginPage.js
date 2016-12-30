@@ -28,8 +28,10 @@ export class RegistrationPage extends React.Component {
     event.preventDefault;
     this.setState({saving: true});
 
-    this.props.actions2.signInWithGoogle(this.state.user)
-      .then(user => toastr.success('You are logged in'))
+    this.props.actions2.signInWithGoogle(this.state.user, true)
+      .then(function (user) {
+        toastr.success('You are logged in');
+      })
       .catch(error => {
         toastr.error(error.message);
         this.setState({saving: false});
@@ -48,7 +50,7 @@ export class RegistrationPage extends React.Component {
 
     this.setState({saving: true});
 
-    this.props.actions.signInWithEmailAndPassword(this.state.user)
+    this.props.actions.signInWithEmailAndPassword(this.state.user, true)
       .then(user => toastr.success('You are logged in'))
       .catch(error => {
         toastr.error(error.message);

@@ -39,7 +39,6 @@ export function authLoggedIn(userUID) {
   return (dispatch) => {
     dispatch(authLoggedInSuccess(userUID));
     dispatch(beginAjaxCall());
-    dispatch(push('/'));
     firebaseApi.GetChildAddedByKeyOnce('/users', userUID)
       .then(
         user => {
@@ -67,13 +66,16 @@ export function createUserWithEmailAndPassword(user) {
   };
 }
 
-export function signInWithEmailAndPassword(user) {
+export function signInWithEmailAndPassword(user,pushMe = false) {
   return (dispatch) => {
     dispatch(beginAjaxCall());
     return firebaseApi.signInWithEmailAndPassword(user)
       .then(
         user => {
           dispatch(authLoggedIn(user.uid));
+          if(pushMe){
+            dispatch(push('/'));
+          }
         })
       .catch(error => {
         dispatch(ajaxCallError(error));
@@ -83,16 +85,19 @@ export function signInWithEmailAndPassword(user) {
   };
 }
 
-export function signInWithGoogle(user) {
+export function signInWithGoogle(user, pushMe = false) {
   return (dispatch) => {
     dispatch(beginAjaxCall());
     return firebaseApi.signInWithGoogle(user)
       .then(
         user => {
           dispatch(authLoggedIn(user.uid));
+          if(pushMe){
+            dispatch(push('/'));
+          }
         })
       .catch(error => {
-          dispatch(ajaxCallError(error));
+        dispatch(ajaxCallError(error));
       });
   };
 }
