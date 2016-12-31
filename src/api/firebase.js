@@ -24,7 +24,6 @@ class FirebaseApi {
 
   static signInWithEmailAndPassword(user) {
     let result = firebase.auth().signInWithEmailAndPassword(user.email, user.password);
-     console.log(result);
     return result;
   }
 

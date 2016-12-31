@@ -9,17 +9,19 @@ export default function chaptersReducer(state = initialState.chapters, action) {
       newChapters = Object.assign({}, initialState.chapters, {});
       newChapters.current = state.current;
       temp = Object.assign({}, initialState.chapters.all, state.all);
-      temp[action.chapterKey] = Object.assign({}, state.all[action.chapterKey],{['posts']:action.posts});
+      temp[action.chapterKey] = Object.assign({}, state.all[action.chapterKey], {['posts']: action.posts});
       newChapters.all = Object.assign({}, initialState.chapters.all, temp);
       return Object.assign({}, initialState.chapters, newChapters);
     case types.CHAPTERS_LOAD_SUCCESS:
       newChapters = Object.assign({}, initialState.chapters, {});
       newChapters.current = state.current;
       newChapters.all = action.chapters;
-      if (newChapters.current == null) {
-        newChapters.current = Object.keys(newChapters.all)[0];
-      }
-      console.log(newChapters);
+      temp = 0;
+      if (newChapters.all)
+        while (newChapters.current == null && temp < Object.keys(newChapters.all).length) {
+          newChapters.current = Object.keys(newChapters.all)[temp];
+          temp++;
+        }
       return Object.assign({}, initialState.chapters, newChapters);
     case types.CHAPTER_SWITCH:
       newChapters = Object.assign({}, initialState.chapters, {});

@@ -35,17 +35,19 @@ class HeoresList extends Component {
     });
     let listHeores = "";
     if (dataArray.length > 0) {
-      listHeores = dataArray.map((hero,index) => {
+      listHeores = dataArray.map((hero, index) => {
 
         const itemKey = hero.ItemKey;
         const itemContent = hero.ItemContent;
 
-        return (
-          <Hero key={index} itemKey={itemKey} itemContent={itemContent} showFlag={true} itemSize="col-sm-4 col-lg-3"/>
-        );
+        if (!hero.ItemContent.delete) {
+          return (
+            <Hero key={index} itemKey={itemKey} itemContent={itemContent} showFlag={true} itemSize="col-sm-4 col-lg-3"/>
+          );
+        }
       });
     }
-    const style={
+    const style = {
       padding: '7.5px'
     };
     return (

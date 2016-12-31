@@ -35,17 +35,18 @@ class StoriesList extends Component {
     });
     let listStories = "";
     if (dataArray.length > 0) {
-      listStories = dataArray.map((story,index) => {
+      listStories = dataArray.map((story, index) => {
 
         const itemKey = story.ItemKey;
         const itemContent = story.ItemContent;
 
-        return (
-          <Story key={index} itemKey={itemKey} itemContent={itemContent}/>
-        );
+        if (!itemContent.delete)
+          return (
+            <Story key={index} itemKey={itemKey} itemContent={itemContent}/>
+          );
       });
     }
-    const style={
+    const style = {
       padding: '7.5px'
     };
     return (

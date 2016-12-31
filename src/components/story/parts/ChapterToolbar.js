@@ -4,7 +4,7 @@ import {bindActionCreators} from 'redux';
 import checkAuth from '../../requireAuth';
 import TextInput from '../../common/TextInput';
 import toastr from 'toastr';
-import {addChapter, loadChapters, switchChapter} from '../../../actions/ChaptersActions';
+import {addChapter, loadChapters, switchChapter, deleteChapter} from '../../../actions/ChaptersActions';
 import {loadPosts} from '../../../actions/PostsActions';
 
 
@@ -22,6 +22,7 @@ class ChapterToolbar extends React.Component {
     this.onchange = this.onchange.bind(this);
     this.switch = this.switch.bind(this);
     this.createChapter = this.createChapter.bind(this);
+    this.deleteChapter = this.deleteChapter.bind(this);
   }
 
   switch(key) {
@@ -34,6 +35,18 @@ class ChapterToolbar extends React.Component {
     let state = this.state;
     state.newChapter[field] = event.target.value;
     return this.setState(state);
+  }
+
+  deleteChapter(chapterKey) {
+    if (this.props.storyOwner == this.props.currentUID) {
+      this.props.actions.deleteChapter(this.state.storyKey, chapterKey, (error = null)=> {
+        if (error == null) {
+          toastr.success("deleted");
+        } else {
+          toastr.error(error);
+        }
+      });
+    }
   }
 
   createChapter() {
@@ -57,23 +70,38 @@ class ChapterToolbar extends React.Component {
   render() {
     const data = this.props.chapters;
     let dataArray = [];
-    Object.keys(data).forEach(function (key, index) {
-      // key: the name of the object key
-      // index: the ordinal position of the key within the object
-      dataArray.push({ItemKey: key, ItemContent: data[key]});
-    });
+    if(data) {
+      Object.keys(data).forEach(function (key, index) {
+        // key: the name of the object key
+        // index: the ordinal position of the key within the object
+        dataArray.push({ItemKey: key, ItemContent: data[key]});
+      });
+    }
     let buttonsChapters = "";
     if (dataArray.length > 0) {
       buttonsChapters = dataArray.map((chapter, index) => {
 
         const itemKey = chapter.ItemKey;
         const itemContent = chapter.ItemContent;
+        const deleteKey = "delete"+itemKey;
+        let trash = "";
+        if(!chapter.ItemContent.delete){
+        if (this.props.storyOwner == this.props.currentUID) {
+          trash = (
+            <button className="btn btn-danger col-xs-2" key={deleteKey} onClick={this.deleteChapter.bind(this,itemKey)}>
+              <span className="glyphicon glyphicon-trash"></span>
+            </button>);
+        }
         return (
-          <button onClick={this.switch.bind(this,itemKey)} key={itemKey} type="button"
-                  className="btn btn-success col-xs-12">
-            {itemContent.name}
-          </button>
+          <div className="col-xs-12">
+            <button onClick={this.switch.bind(this,itemKey)} key={itemKey} type="button"
+                    className="btn btn-success col-xs-10">
+              {itemContent.name}
+            </button>
+            {trash}
+          </div>
         );
+        }
       });
     }
 
@@ -122,7 +150,7 @@ function mapStateToProps(state, ownProps) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators({addChapter, switchChapter, loadPosts}, dispatch)
+    actions: bindActionCreators({addChapter, switchChapter, loadPosts, deleteChapter}, dispatch)
   };
 }
 

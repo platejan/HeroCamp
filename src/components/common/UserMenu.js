@@ -5,15 +5,42 @@ import {connect} from 'react-redux';
 import LoadingDots from './LoadingDots';
 import {DropdownButton, MenuItem} from 'react-bootstrap';
 import {signOut} from '../../actions/authActions';
+import {setUsername,loadUsername} from  '../../actions/userActions';
+import toastr from 'toastr';
 
-export class UserMenu extends React.Component {
+class UserMenu extends React.Component {
   constructor(props, context) {
     super(props, context);
+
+    this.state={
+      usernameDefined: false
+    }
+  }
+
+  componentWillReceiveProps() {
+    if(this.props.authenticated){
+    let username = this.props.displayName;
+    console.log(this.props.displayName);
+    if ((!username || username == "")&& this.props.displayNameLoaded && !this.state.usernameDefined) {
+      this.setState({usernameDefined:true});
+      while (!username || username == "") {
+        username = prompt("Please enter your username", this.props.email);
+        console.log(username);
+      }
+      this.props.actions.setUsername(username, (error = null)=> {
+        if (error == null) {
+          toastr.success("Username is set.");
+        } else {
+          toastr.error(error);
+        }
+      });
+    }
+    }
   }
 
   render() {
     if (this.props.authenticated) {
-      let username = this.props.email;
+      let username = this.props.displayName;
 
       return (
         <div className="usermenu-part col-xs-12 col-sm-3 col-md-3 col-lg-3 col-sm-push-9 col-md-push-9 col-lg-push-9">
@@ -26,11 +53,14 @@ export class UserMenu extends React.Component {
                 <MenuItem eventKey="3"><span className="glyphicon glyphicon-tent"></span> <span>Heroes</span></MenuItem>
               </LinkContainer>
               <LinkContainer to="/stories">
-                <MenuItem eventKey="3"><span className="glyphicon glyphicon-book"></span> <span>Stories</span></MenuItem>
+                <MenuItem eventKey="3"><span className="glyphicon glyphicon-book"></span>
+                  <span>Stories</span></MenuItem>
               </LinkContainer>
-              <MenuItem eventKey="3"><span className="glyphicon glyphicon-star"></span> <span>Bookmarks</span></MenuItem>
+              <MenuItem eventKey="3"><span className="glyphicon glyphicon-star"></span>
+                <span>Bookmarks</span></MenuItem>
               <MenuItem divider/>
-              <MenuItem eventKey="4" onClick={this.props.actions.signOut}><span className="glyphicon glyphicon-log-out"></span> <span>Log out</span></MenuItem>
+              <MenuItem eventKey="4" onClick={this.props.actions.signOut}><span
+                className="glyphicon glyphicon-log-out"></span> <span>Log out</span></MenuItem>
             </DropdownButton>
           </div>
         </div>
@@ -53,12 +83,14 @@ UserMenu.propTypes = {
 function mapStateToProps(state, ownProps) {
   return {
     authenticated: state.auth.isLogged,
-    email: state.user.email
+    email: state.user.email,
+    displayName: state.user.displayName,
+    displayNameLoaded: state.user.displayNameLoaded
   };
 }
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators({signOut}, dispatch)
+    actions: bindActionCreators({signOut, setUsername,loadUsername}, dispatch)
   };
 }
 

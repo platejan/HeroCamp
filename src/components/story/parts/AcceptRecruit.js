@@ -27,7 +27,6 @@ class AcceptRecruit extends React.Component {
   }
 
   acceptRecruitHero(heroKey){
-    console.log(heroKey);
     this.props.actions.acceptRecruitHero(heroKey,this.props.potentialHeroes[heroKey].owner,this.props.storyKey, (error = null)=> {
       if (error == null) {
         toastr.success("ok");
@@ -66,7 +65,7 @@ class AcceptRecruit extends React.Component {
         if(!itemContent.inGame) {
           return (
             <Hero key={itemIndex} accept={this.acceptRecruitHero.bind(this,itemKey)} reject={this.rejectRecruitHero.bind(this,itemKey)} itemKey={itemKey}
-                  itemContent={itemContent} itemSize="col-sm-6 col-lg-4"/>
+                  itemContent={itemContent} canViewDetail={true} itemSize="col-sm-6 col-lg-4"/>
           );
         }
       });

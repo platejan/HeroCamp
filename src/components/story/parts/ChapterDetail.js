@@ -15,12 +15,10 @@ class ChapterDetail extends React.Component {
   }
 
   render() {
-    console.log("chapter detail:");
-    console.log(this.props.chapters);
-    if (Object.keys(this.props.chapters).length > 0 && this.props.chapters && this.props.chapters[this.props.chapter]) {
+    if (this.props.chapter && Object.keys(this.props.chapters).length > 0 && this.props.chapters && this.props.chapters[this.props.chapter]) {
       return (
         <div className="col-xs-12">
-          <h1>Key: {this.props.chapters[this.props.chapter].name}</h1>
+          <h1>Chapter: {this.props.chapters[this.props.chapter].name}</h1>
           <Posts chapterKey={this.props.chapter} chapterContent={this.props.chapters[this.props.chapter]}/>
         </div>
       );

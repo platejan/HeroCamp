@@ -19,6 +19,14 @@ export function updateChapter(storyKey, chapter, chapterKey, callback){
     firebase.database().ref().update(updates, callback);
   };
 }
+export function deleteChapter(storyKey, chapterKey, callback){
+  return (dispatch, getState) => {
+    let owner = getState().auth.currentUserUID;
+    let updates = {};
+    updates['/chapters/'+storyKey+'/'+chapterKey+'/delete'] = true;
+    firebase.database().ref().update(updates, callback);
+  };
+}
 export function loadChapters(storyKey) {
   return (dispatch, getState) => {
     let ref = firebase.database().ref('/chapters/'+storyKey+'/');
@@ -29,7 +37,6 @@ export function loadChapters(storyKey) {
 }
 
 export function chaptersLoadList(chapters) {
-  console.log(chapters);
   return {
     type: types.CHAPTERS_LOAD_SUCCESS, chapters
   };

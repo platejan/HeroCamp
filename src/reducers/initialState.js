@@ -13,7 +13,9 @@ export default {
   routing: {},
   user: {
     isAdmin: undefined,
-    email: "unknown"
+    email: "unknown",
+    displayName: "unknown",
+    displayNameLoaded: false
   },
   auth: {
     isLogged: false,

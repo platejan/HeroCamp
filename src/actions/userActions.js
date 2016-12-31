@@ -1,5 +1,6 @@
 import firebaseApi from '../api/firebase';
 import * as types from './actionTypes';
+import firebase from 'firebase';
 
 import { authLoggedIn } from './authActions';
 import {ajaxCallError, beginAjaxCall} from './ajaxStatusActions';
@@ -61,5 +62,28 @@ export function userLoadedSuccess(user) {
 export function userIsAdminSuccess() {
   return {
     type: types.USER_IS_ADMIN_SUCCESS
+  };
+}
+export function usernameLoaded(username) {
+  return {
+    type: types.USER_DISPLAYNAME_LOADED, name: username
+  };
+}
+
+export function setUsername(username, callback){
+  return (dispatch, getState) => {
+    let user = getState().auth.currentUserUID;
+    let updates = {};
+    updates['/users/'+user+'/displayName'] = username;
+    firebase.database().ref().update(updates, callback);
+  };
+}
+export function loadUsername(){
+  return (dispatch, getState) => {
+    let user = getState().auth.currentUserUID;
+    let ref = firebase.database().ref('/users/'+user+'/displayName');
+    ref.on('value', (snapshot) => {
+      dispatch(usernameLoaded(snapshot.val()));
+    });
   };
 }

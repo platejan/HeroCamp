@@ -1,14 +1,19 @@
 import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {updateHero} from '../../../actions/HeroesActions';
+import {updateHero, deleteHero} from '../../../actions/HeroesActions';
 import HeroEdit from './HeroEdit';
+import HeroDetail from './HeroDetail';
 import Icon from '../../common/Icon';
 import toastr from 'toastr';
 
 class Hero extends React.Component {
   constructor(props, context) {
     super(props, context);
+
+    let deleteProp = false;
+    if(this.props.itemContent.delete)
+      deleteProp = true ;
 
     this.state = {
       hero: {
@@ -21,16 +26,18 @@ class Hero extends React.Component {
           behavior: this.props.itemContent.public.behavior,
           inventory: this.props.itemContent.public.inventory
         },
-        private:{},
+        private: {},
         owner: this.props.ownerID,
-        inGame: this.props.itemContent.inGame
+        inGame: this.props.itemContent.inGame,
+        delete: deleteProp
       },
       heroKey: this.props.itemKey,
       editWindowState: false,
+      detailWindowState: false,
       saveTimeout: null,
-      onlyPublic : true
+      onlyPublic: true
     };
-    if(this.props.itemContent.private !== undefined){
+    if (this.props.itemContent.private !== undefined) {
       this.state.hero.private = {
         icon: this.props.itemContent.public.icon,
         name: this.props.itemContent.private.name,
@@ -46,22 +53,31 @@ class Hero extends React.Component {
 
     this.showEditWindow = this.showEditWindow.bind(this);
     this.hideEditWindow = this.hideEditWindow.bind(this);
+    this.showDetailWindow = this.showDetailWindow.bind(this);
+    this.hideDetailWindow = this.hideDetailWindow.bind(this);
     this.ESCkey = this.ESCkey.bind(this);
     this.onchange = this.onchange.bind(this);
     this.updateHero = this.updateHero.bind(this);
     this.publishChanges = this.publishChanges.bind(this);
     this.rejectChanges = this.rejectChanges.bind(this);
     this.iconchange = this.iconchange.bind(this);
+    this.deleteHero = this.deleteHero.bind(this);
   }
 
   componentDidUpdate() {
-    if(this.state.heroKey!=this.props.itemKey){
-    let newState = this.state;
-    newState.hero.public = this.props.itemContent.public;
-    newState.hero.owner =  this.props.itemContent.owner;
-    newState.hero.inGame = this.props.itemContent.inGame;
-    newState.heroKey = this.props.itemKey;
-    this.setState(newState);}
+    if (this.state.heroKey != this.props.itemKey) {
+      let newState = this.state;
+      let deleteProp = false;
+      if(this.props.itemContent.delete)
+        deleteProp = true ;
+
+      newState.hero.public = this.props.itemContent.public;
+      newState.hero.owner = this.props.itemContent.owner;
+      newState.hero.inGame = this.props.itemContent.inGame;
+      newState.hero.delete = deleteProp;
+      newState.heroKey = this.props.itemKey;
+      this.setState(newState);
+    }
   }
 
   componentDidMount() {
@@ -82,10 +98,26 @@ class Hero extends React.Component {
     }
   }
 
+  showDetailWindow() {
+    let newState = this.state;
+    newState.detailWindowState = true;
+    this.setState(newState);
+  }
+
+  hideDetailWindow() {
+    if (this.state.detailWindowState) {
+      let newState = this.state;
+      newState.detailWindowState = false;
+      this.setState(newState);
+    }
+  }
+
   ESCkey(event) {
     let keyCode = event.keyCode;
-    if (keyCode === 27)
+    if (keyCode === 27){
       this.hideEditWindow();
+      this.hideDetailWindow();
+    }
   }
 
   onchange(event) {
@@ -107,6 +139,18 @@ class Hero extends React.Component {
         toastr.error(error);
       }
     });
+  }
+
+  deleteHero() {
+    if (!this.state.hero.inGame) {
+      this.props.actions.deleteHero(this.state.heroKey, (error = null)=> {
+        if (error == null) {
+          toastr.success("deleted");
+        } else {
+          toastr.error("can't delete hero");
+        }
+      });
+    }
   }
 
   publishChanges() {
@@ -159,40 +203,50 @@ class Hero extends React.Component {
     }
 
     let onClicAction = "";
-    let style= {};
-    if(this.props.onClicAction != undefined){
+    let style = {};
+    if (this.props.onClicAction != undefined) {
       onClicAction = this.props.onClicAction;
       style = {cursor: "pointer"};
     }
 
     let editPart = "";
     let editTool = "";
-    if(!this.state.onlyPublic){
+    let removeTool ="";
+    let detailPart = "";
+    let detailTool = "";
+    if (!this.state.onlyPublic) {
       editPart = (<HeroEdit iconchange={this.iconchange} reject={this.rejectChanges} publish={this.publishChanges}
                             click={this.hideEditWindow}
                             onchange={this.onchange} hero={this.state.hero} display={this.state.editWindowState}/>);
-      editTool =  (<span onClick={this.showEditWindow} className="glyphicon glyphicon-pencil" style={editButtonStyle}></span>);
+      editTool = (
+        <span onClick={this.showEditWindow} className="glyphicon glyphicon-pencil" style={editButtonStyle}></span>);
+      if(!this.state.hero.inGame){
+        removeTool = (
+          <span onClick={this.deleteHero} className="glyphicon glyphicon-trash"></span>);
+      }
+    }else{
+      if(this.props.canViewDetail){
+        editPart = (<HeroDetail click={this.hideDetailWindow} hero={this.state.hero} display={this.state.detailWindowState}/>);
+        detailTool = (<button onClick={this.showDetailWindow} className="btn btn-info btn-sm"><span className="glyphicon glyphicon-eye-open"></span></button>);
+      }
     }
 
+
     let acceptButton = "";
-    if(this.props.accept)
-    {
+    if (this.props.accept) {
       acceptButton = (<button onClick={this.props.accept} className="btn btn-success btn-sm">Accept</button>);
     }
     let rejectButton = "";
-    if(this.props.reject)
-    {
+    if (this.props.reject) {
       rejectButton = (<button onClick={this.props.reject} className="btn btn-danger btn-sm">Reject</button>);
     }
     let fireButton = "";
-    if(this.props.fire)
-    {
+    if (this.props.fire) {
       fireButton = (<button onClick={this.props.fire} className="btn btn-danger btn-sm">Fire</button>);
     }
-    let heroPartSize="hero-part col-xs-12";
-    if(this.props.itemSize)
-    {
-      heroPartSize = heroPartSize+" "+this.props.itemSize;
+    let heroPartSize = "hero-part col-xs-12";
+    if (this.props.itemSize) {
+      heroPartSize = heroPartSize + " " + this.props.itemSize;
     }
     return (
       <div onClick={onClicAction} style={style} className={heroPartSize}>
@@ -204,10 +258,10 @@ class Hero extends React.Component {
           </div>
           {inGame}
           <div onClick={stop} className="hero-bio-tools-part">
-            {acceptButton}{rejectButton}{fireButton}{editTool}
+            {acceptButton}{rejectButton}{fireButton}{removeTool}{editTool}{detailTool}
           </div>
           {editPart}
-
+          {detailPart}
         </div>
 
       </div>
@@ -234,7 +288,7 @@ function mapStateToProps(state, ownProps) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators({updateHero}, dispatch)
+    actions: bindActionCreators({updateHero, deleteHero}, dispatch)
   };
 }
 

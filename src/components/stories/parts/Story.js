@@ -2,6 +2,8 @@ import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {LinkContainer} from 'react-router-bootstrap';
+import {deleteStory} from '../../../actions/StoriesActions';
+import toastr from 'toastr';
 
 class Story extends React.Component {
   constructor(props, context) {
@@ -15,11 +17,32 @@ class Story extends React.Component {
       storyKey: this.props.itemKey,
       me: this.props.ownerID
     };
+
+    this.deleteStory = this.deleteStory.bind(this);
   }
 
+  deleteStory(){
+    if (this.state.me == this.state.story.owner) {
+      this.props.actions.deleteStory(this.state.storyKey, (error = null)=> {
+        if (error == null) {
+          toastr.success("deleted");
+        } else {
+          toastr.error(error);
+        }
+      });
+    }
+  }
 
   render() {
     let linkTo = "/stories/"+this.state.storyKey;
+
+    let removeTool = "";
+    if(this.state.me == this.state.story.owner){
+      removeTool = (
+        <button className="btn btn-danger col-xs-2" style={{marginLeft: "150px",marginTop: "10px"}} onClick={this.deleteStory}>
+          <span className="glyphicon glyphicon-trash"></span>
+        </button>);
+    }
     return (
       <LinkContainer to={linkTo}>
         <div className="story-part col-xs-12 col-lg-6">
@@ -31,6 +54,7 @@ class Story extends React.Component {
               <span className="">{this.state.story.name}</span>
               <span className="info-label">Owner:</span>
               <span className="">{this.state.story.owner}</span>
+              {removeTool}
             </div>
           </div>
         </div>
@@ -56,7 +80,9 @@ function mapStateToProps(state, ownProps) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return {};
+  return {
+    actions: bindActionCreators({deleteStory}, dispatch)
+  };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Story);

@@ -18,7 +18,14 @@ export function addHero(character, callback) {
     dispatch(updateHero(character, newHeroKey, callback));
   };
 }
-
+export function deleteHero(characterKey,callback){
+  return (dispatch, getState) => {
+    let owner = getState().auth.currentUserUID;
+    let updates = {};
+    updates['/heroes/' + owner + '/' + characterKey+'/delete'] = true;
+    firebase.database().ref().update(updates, callback);
+  };
+}
 export function heroesLoadStart() {
   return (dispatch, getState) => {
     let owner = getState().auth.currentUserUID;

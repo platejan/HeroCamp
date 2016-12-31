@@ -10,6 +10,16 @@ export function updateStory(story, storyKey, callback){
     firebase.database().ref().update(updates, callback);
   };
 }
+
+export function deleteStory(storyKey, callback){
+  return (dispatch, getState) => {
+    let owner = getState().auth.currentUserUID;
+    let updates = {};
+    updates['/stories/'+storyKey+'/delete'] = true;
+    firebase.database().ref().update(updates, callback);
+  };
+}
+
 export function addStory(story, callback) {
   // Get a key for a new Post.
   return (dispatch, getState) => {
