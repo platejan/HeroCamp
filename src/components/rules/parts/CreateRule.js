@@ -2,6 +2,8 @@ import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import TextInput from '../../common/TextInput';
+import SelectInput from '../../common/SelectInput';
+import CreatableSelectInput from '../../common/CreatableSelectInput';
 
 class CreateRule extends React.Component {
   constructor(props, context) {
@@ -9,7 +11,12 @@ class CreateRule extends React.Component {
 
     this.initialState = {
       nameOfRule: "",
-      typeOfRuleValue: ""
+      typeOfRuleValue: {
+        value: "string",
+        label: "String"
+      },
+      selectRestrictions: [],
+      hint: ""
     };
     this.state = this.initialState;
 
@@ -26,39 +33,85 @@ class CreateRule extends React.Component {
 
   createRule() {
     this.props.createRule(this.state);
-    return this.setState(this.initialState);
+    this.onchange({target: {name: "nameOfRule", value:""}});
+    this.onchange({target: {name: "hint", value: ""}});
+    this.onchange({target: {name: "selectRestrictions", value: []}});
   }
 
   render() {
     console.log(this.state);
-    return (
-      <div>
-        <form className="col-xs-12 row">
-          <div className="col-xs-12 col-sm-6 row">
-            <TextInput
-              name="nameOfRule"
-              label="name of new rule"
+    let options = [
+      {value: 'number', label: 'Number'},
+      {value: 'string', label: 'String'},
+      {value: 'select', label: 'Select'}
+    ];
+
+    let restrictions = "";
+    if (this.state.typeOfRuleValue.value == "select") {
+      restrictions = (
+        <div className="row">
+          <div className="col-xs-12">
+            <CreatableSelectInput
+              name="selectRestrictions"
+              value={this.state.selectRestrictions}
+              label="type of rule value"
+              options={[]}
               onChange={this.onchange}
-              value={this.state.nameOfRule}
-              className=""
+              multi={true}
             />
           </div>
-          <div className="col-xs-12 col-sm-6">
-            <TextInput
-              name="typeOfRuleValue"
-              label='type of value ("number" or "string")'
-              onChange={this.onchange}
-              value={this.state.typeOfRuleValue}
-              className=""
-            />
+        </div>
+      );
+    }
+
+    return (
+      <div className="panel panel-default">
+        <div className=" panel-body">
+          <form className="col-xs-12 row">
+            <div className="row">
+              <div className="col-xs-12 col-sm-6">
+                <TextInput
+                  name="nameOfRule"
+                  label="name of new rule"
+                  onChange={this.onchange}
+                  value={this.state.nameOfRule}
+                  className=""
+                />
+              </div>
+              <div className="col-xs-12 col-sm-6">
+                <SelectInput
+                  name="typeOfRuleValue"
+                  value={this.state.typeOfRuleValue.value}
+                  label="type of rule value"
+                  options={options}
+                  onChange={this.onchange}
+                />
+              </div>
             </div>
-          <button
-            type="button"
-            onClick={this.createRule}
-            className="btn btn-primary col-xs-12 col-sm-4 col-lg-3">
-            <span className="glyphicon glyphicon-plus"> </span> Create rule
-          </button>
-        </form>
+            {restrictions}
+            <div className="row">
+              <div className="col-xs-12">
+                <TextInput
+                  name="hint"
+                  label="hint"
+                  onChange={this.onchange}
+                  value={this.state.hint}
+                  className=""
+                />
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-xs-12 btn-group">
+                <button
+                  type="button"
+                  onClick={this.createRule}
+                  className="btn btn-primary">
+                  <span className="glyphicon glyphicon-plus"> </span> Create rule
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
       </div>
     );
   }

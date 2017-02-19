@@ -29,6 +29,8 @@ import './styles/StoriesStyle.css'; //Webpack can import CSS files too!
 import './styles/LoginStyle.css'; //Webpack can import CSS files too!
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import '../node_modules/toastr/build/toastr.min.css';
+import '../node_modules/react-select/dist/react-select.css';
+
 
 // store initialization
 const store = configureStore(initialState);

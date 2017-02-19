@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react';
 import Select from 'react-select';
 
-const SelectInput = ({name, label, onChange, defaultOption, value, error, options, multi=false}) => {
+const CreatableSelectInput = ({name, label, onChange, defaultOption, value, error, options, multi=false}) => {
   let onChangeForSelect = function (value) {
     onChange({target: {name: name, value: value}});
   };
@@ -11,7 +11,7 @@ const SelectInput = ({name, label, onChange, defaultOption, value, error, option
       <label htmlFor={name}>{label}</label>
       <div className="field">
         {/* Note, value is set here rather than on the option - docs: https://facebook.github.io/react/docs/forms.html */}
-        <Select
+        <Select.Creatable
           name={name}
           value={value}
           options={options}
@@ -26,14 +26,14 @@ const SelectInput = ({name, label, onChange, defaultOption, value, error, option
   );
 };
 
-SelectInput.propTypes = {
+CreatableSelectInput.propTypes = {
   name: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   defaultOption: PropTypes.string,
-  value: PropTypes.string,
+  value: PropTypes.array,
   error: PropTypes.string,
   options: PropTypes.arrayOf(PropTypes.object)
 };
 
-export default SelectInput;
+export default CreatableSelectInput;

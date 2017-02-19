@@ -42,23 +42,25 @@ class CreateRulesSet extends React.Component {
   }
 
   render() {
-    return(
-      <div>
-      <form>
-        <TextInput
-          name="nameOfRulesSet"
-          label="name of new rules set"
-          onChange={this.onchange}
-          value={this.state.nameOfRulesSet}
-        />
-        < button
-          type="button"
-          onClick={this.createRulesSet}
-          className="btn btn-primary col-xs-12">
-          <span className="glyphicon glyphicon-plus"> </span> Create rules set
-        </button>
-      </form>
+    return (
+      <div className="row panel">
+        <div className="panel-body">
+          <form>
+            <TextInput
+              name="nameOfRulesSet"
+              label="name of new rules set"
+              onChange={this.onchange}
+              value={this.state.nameOfRulesSet}
+            />
+            < button
+              type="button"
+              onClick={this.createRulesSet}
+              className="btn btn-primary col-xs-12">
+              <span className="glyphicon glyphicon-plus"> </span> Create rules set
+            </button>
+          </form>
         </div>
+      </div>
     );
   }
 }

@@ -1,9 +1,10 @@
 import React, {PropTypes} from 'react';
 import Line from '../../common/Line';
 import Icon from '../../common/Icon';
- import TextInput from '../../common/TextInput';
+import TextInput from '../../common/TextInput';
 // import Textarea from 'react-textarea-autosize';
 import TextareaInput from '../../common/TextareaInput';
+import HeroRulesSet from './rules/HeroRulesSet';
 
 class HeroEdit extends React.Component {
   constructor(props, context) {
@@ -11,7 +12,8 @@ class HeroEdit extends React.Component {
     this.state = {
       showBiography: true,
       showBehavior: false,
-      showInventory: false
+      showInventory: false,
+      showRulesSet: false
     };
     this.showTab = this.showTab.bind(this);
     this.activeTabAnchor = this.activeTabAnchor.bind(this);
@@ -23,6 +25,7 @@ class HeroEdit extends React.Component {
     state.showBiography = false;
     state.showBehavior = false;
     state.showInventory = false;
+    state.showRulesSet = false;
     state[event.target.name] = true;
     this.setState(state);
   }
@@ -61,7 +64,7 @@ class HeroEdit extends React.Component {
     }
 
     let closeMe = this.props.click;
-    let close = function(e){
+    let close = function (e) {
       e.stopPropagation();
       closeMe();
     };
@@ -101,20 +104,26 @@ class HeroEdit extends React.Component {
                   <li role="presentation" className={this.activeTabAnchor("showBiography")}><a onClick={this.showTab}
                                                                                                name="showBiography">Biography</a>
                   </li>
+                  <li role="presentation" className={this.activeTabAnchor("showRulesSet")}><a onClick={this.showTab}
+                                                                                               name="showRulesSet">Game rules</a>
+                  </li>
                 </ul>
                 <div style={this.activeTab("showBiography")}>
                   <div className="form-group">
                     <label htmlFor="biography">Biography</label>
                     <div className="field">
-                  <TextareaInput
-                    className="form-control"
-                    name="biography"
-                    label="Biography"
-                    onChange={this.props.onchange}
-                    value={this.props.hero.private.biography}
-                  />
+                      <TextareaInput
+                        className="form-control"
+                        name="biography"
+                        label="Biography"
+                        onChange={this.props.onchange}
+                        value={this.props.hero.private.biography}
+                      />
                     </div>
                   </div>
+                </div>
+                <div style={this.activeTab("showRulesSet")}>
+                  <HeroRulesSet/>
                 </div>
               </form>
             </div>
