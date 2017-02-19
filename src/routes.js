@@ -12,6 +12,8 @@ import {requireAdmin} from './actions/authActions';
 import StoriesPage from './components/stories/StoriesPage';
 import HeroesPage from './components/heroes/HeroesPage';
 import StoryPage from './components/story/StoryPage';
+import RulesPage from './components/rules/RulesPage';
+
 
 export default function Routes(store) {
 
@@ -34,6 +36,7 @@ export default function Routes(store) {
       </Route>
 
       <Route name="Heroes" path="heroes" component={HeroesPage}/>
+      <Route name="Rules Maker" path="rulespage" component={RulesPage}/>
     </Route>
   );
 }

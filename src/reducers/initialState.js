@@ -33,5 +33,9 @@ export default {
     selectedHero: null
   },
   heroes: {},
-  stories: {}
+  stories: {},
+  rules:{
+    current: null,
+    rulesSets:{}
+  }
 };

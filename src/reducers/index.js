@@ -4,6 +4,7 @@ import routesPermissions from './routesPermissionsReducer';
 import auth from './authReducer';
 import chapters from './chaptersReducer';
 import heroes from './heroesReducer';
+import rules from './rulesReducer';
 import stories from './storiesReducer';
 import currentStory from './currentStoryReducer'
 
@@ -20,7 +21,8 @@ const rootReducer = combineReducers({
   chapters,
   stories,
   currentStory,
-  heroes
+  heroes,
+  rules
 });
 
 export default rootReducer;

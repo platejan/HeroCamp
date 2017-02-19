@@ -42,24 +42,29 @@ class UserMenu extends React.Component {
     if (this.props.authenticated) {
       let username = this.props.displayName;
 
+      /*
+       <MenuItem eventKey="1"><span className="glyphicon glyphicon-user"></span> <span>Profile</span></MenuItem>
+       <MenuItem eventKey="2"><span className="glyphicon glyphicon-cog"></span> <span>Settings</span></MenuItem>
+       <MenuItem divider/>
+       <MenuItem eventKey="3"><span className="glyphicon glyphicon-star"></span> <span>Bookmarks</span></MenuItem>
+       */
       return (
         <div className="usermenu-part col-xs-12 col-sm-3 col-md-3 col-lg-3 col-sm-push-9 col-md-push-9 col-lg-push-9">
           <div className="dropdown text-right">
             <DropdownButton title={username} pullRight id="usermenu">
-              <MenuItem eventKey="1"><span className="glyphicon glyphicon-user"></span> <span>Profile</span></MenuItem>
-              <MenuItem eventKey="2"><span className="glyphicon glyphicon-cog"></span> <span>Settings</span></MenuItem>
-              <MenuItem divider/>
+
               <LinkContainer to="/heroes">
                 <MenuItem eventKey="3"><span className="glyphicon glyphicon-tent"></span> <span>Heroes</span></MenuItem>
               </LinkContainer>
               <LinkContainer to="/stories">
-                <MenuItem eventKey="3"><span className="glyphicon glyphicon-book"></span>
-                  <span>Stories</span></MenuItem>
+                <MenuItem eventKey="3"><span className="glyphicon glyphicon-book"></span> <span>Stories</span></MenuItem>
               </LinkContainer>
-              <MenuItem eventKey="3"><span className="glyphicon glyphicon-star"></span>
-                <span>Bookmarks</span></MenuItem>
               <MenuItem divider/>
-              <MenuItem eventKey="4" onClick={this.props.actions.signOut}><span
+              <LinkContainer to="/rulespage">
+              <MenuItem eventKey="4"><span className="glyphicon glyphicon-star"></span> <span>Rules maker</span></MenuItem>
+              </LinkContainer>
+              <MenuItem divider/>
+              <MenuItem eventKey="5" onClick={this.props.actions.signOut}><span
                 className="glyphicon glyphicon-log-out"></span> <span>Log out</span></MenuItem>
             </DropdownButton>
           </div>

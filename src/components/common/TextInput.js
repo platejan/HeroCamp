@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 
-const TextInput = ({type, name, label, onChange, placeholder, value, error}) => {
+const TextInput = ({type, name, label, onChange, placeholder, value, error, className}) => {
 
   let typeOfInput = (type===undefined)? "text": type ;
 
@@ -8,7 +8,7 @@ const TextInput = ({type, name, label, onChange, placeholder, value, error}) => 
   if (error && error.length > 0) {
     wrapperClass += " " + 'has-error';
   }
-
+  let classNameString = "form-control "+className;
   return (
     <div className={wrapperClass}>
       <label htmlFor={name}>{label}</label>
@@ -16,7 +16,7 @@ const TextInput = ({type, name, label, onChange, placeholder, value, error}) => 
         <input
           type={typeOfInput}
           name={name}
-          className="form-control"
+          className={classNameString}
           placeholder={placeholder}
           value={value}
           onChange={onChange}/>
