@@ -20,7 +20,7 @@ class RulesToolbar extends React.Component {
     this.props.actions.switchRulesSet(key);
   }
   delete(key) {
-    if (this.props.rules.rules[key].autor == this.props.currentUID) {
+    if (this.props.rules.rulesSets[key].autor == this.props.currentUID) {
       this.props.actions.deleteRulesSet(key, (error = null)=> {
         if (error == null) {
           toastr.success("deleted");

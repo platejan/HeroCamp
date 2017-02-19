@@ -36,6 +36,7 @@ export default {
   stories: {},
   rules:{
     current: null,
-    rulesSets:{}
+    rulesSets:{},
+    rules: null
   }
 };

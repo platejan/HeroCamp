@@ -9,10 +9,11 @@ class CreateRulesSet extends React.Component {
   constructor(props, context) {
     super(props, context);
 
-    this.state = {
+    this.initialState = {
       nameOfRulesSet: "",
       rules: {}
     };
+    this.state = this.initialState;
 
     this.onchange = this.onchange.bind(this);
     this.createRulesSet = this.createRulesSet.bind(this);
@@ -30,6 +31,7 @@ class CreateRulesSet extends React.Component {
       this.props.actions.createRulesSet(this.state, (error = null)=> {
         if (error == null) {
           toastr.success("rules set added", {timeOut: 250});
+          this.setState(this.initialState);
         } else {
           toastr.error(error);
         }

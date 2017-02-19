@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import CreateRule from './CreateRule';
 import Rule from './Rule';
-import {createRule, deleteRule, updateRule} from '../../../actions/rulesActions';
+import {createRule, deleteRule, updateRule, loadRules} from '../../../actions/rulesActions';
 import toastr from 'toastr';
 
 class RulesSet extends React.Component {
@@ -14,9 +14,9 @@ class RulesSet extends React.Component {
       RulesSetKey: "",
       RulesSet: {
         autor: "",
-        nameOfRulesSet: "",
-        rules: {}
-      }
+        nameOfRulesSet: ""
+      },
+      Rules: null
     };
 
     this.update = this.update.bind(this);
@@ -31,11 +31,18 @@ class RulesSet extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.RulesSetKey != this.state.RulesSetKey || nextProps.RulesSets[nextProps.RulesSetKey] != this.state.RulesSet) {
+    if(nextProps.RulesSetKey != this.state.RulesSetKey && nextProps.RulesSetKey){
       let newState = this.state;
       newState.RulesSetKey = nextProps.RulesSetKey;
+      this.setState(newState);
+      this.props.startLoadingRules(nextProps.RulesSetKey);
+    }
+
+    if (nextProps.RulesSetKey && nextProps.RulesSetKey != this.state.RulesSetKey || nextProps.RulesSets[nextProps.RulesSetKey] != this.state.RulesSet || nextProps.Rules != this.state.Rules) {
+      let newState = this.state;
       if (nextProps.RulesSetKey) {
         newState.RulesSet = nextProps.RulesSets[nextProps.RulesSetKey];
+        newState.Rules = nextProps.Rules;
       }
       this.setState(newState);
     }
@@ -85,30 +92,32 @@ class RulesSet extends React.Component {
     }
     if (this.state.RulesSetKey) {
 
-      const data = this.state.RulesSet.rules;
-      let dataArray = [];
-      if (data) {
-        Object.keys(data).forEach(function (key, index) {
-          dataArray.push({ItemKey: key, ItemContent: data[key]});
-        });
-      }
       let rules = "";
-      if (dataArray.length > 0) {
-        rules = dataArray.map((Item, index) => {
 
-          const itemKey = Item.ItemKey;
-          const itemContent = Item.ItemContent;
-          const ruleKey = "rule" + itemKey;
-          let trash = "";
-          if (!Item.ItemContent.delete) {
-            return (
-              <Rule updateRule={this.update} key={ruleKey} deleteRule={this.delete} autor={this.state.RulesSet.autor}
-                    rule={itemContent} ruleKey={itemKey} rulesSetKey={this.state.RulesSetKey}/>
-            );
-          }
-        });
+      if (this.state.Rules) {
+        const data = this.state.Rules;
+        let dataArray = [];
+        if (data) {
+          Object.keys(data).forEach(function (key, index) {
+            dataArray.push({ItemKey: key, ItemContent: data[key]});
+          });
+        }
+        if (dataArray.length > 0) {
+          rules = dataArray.map((Item, index) => {
+
+            const itemKey = Item.ItemKey;
+            const itemContent = Item.ItemContent;
+            const ruleKey = "rule" + itemKey;
+            let trash = "";
+            if (!Item.ItemContent.delete) {
+              return (
+                <Rule updateRule={this.update} key={ruleKey} deleteRule={this.delete} autor={this.state.RulesSet.autor}
+                      rule={itemContent} ruleKey={itemKey} rulesSetKey={this.state.RulesSetKey}/>
+              );
+            }
+          });
+        }
       }
-
       return (
         <div>
           <h1>{this.state.RulesSet.nameOfRulesSet}</h1>
@@ -117,8 +126,9 @@ class RulesSet extends React.Component {
         </div>
       );
     } else {
-      return (<div></div>)
+      return (<div></div>);
     }
+
   }
 }
 RulesSet.propTypes = {};
@@ -127,15 +137,20 @@ RulesSet.contextTypes = {};
 
 function mapStateToProps(state, ownProps) {
   return {
+
     currentUID: state.auth.currentUserUID,
     RulesSetKey: state.rules.current,
-    RulesSets: state.rules.rulesSets
+    RulesSets: state.rules.rulesSets,
+    Rules: state.rules.rules
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators({createRule, deleteRule, updateRule}, dispatch)
+    startLoadingRules: (key) => {
+      dispatch(loadRules(key));
+    },
+    actions: bindActionCreators({createRule, deleteRule, updateRule, loadRules}, dispatch)
 
   };
 }

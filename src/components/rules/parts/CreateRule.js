@@ -26,10 +26,11 @@ class CreateRule extends React.Component {
 
   createRule() {
     this.props.createRule(this.state);
-    this.setState(this.initialState);
+    return this.setState(this.initialState);
   }
 
   render() {
+    console.log(this.state);
     return (
       <div>
         <form className="col-xs-12 row">
