@@ -109,8 +109,7 @@ class HeroEdit extends React.Component {
                   </li>
                 </ul>
                 <div style={this.activeTab("showBiography")}>
-                  <div className="form-group">
-                    <label htmlFor="biography">Biography</label>
+                  <div className="form-group marginTop15">
                     <div className="field">
                       <TextareaInput
                         className="form-control"
@@ -123,7 +122,7 @@ class HeroEdit extends React.Component {
                   </div>
                 </div>
                 <div style={this.activeTab("showRulesSet")}>
-                  <HeroRulesSet/>
+                  <HeroRulesSet className="marginTop15"/>
                 </div>
               </form>
             </div>

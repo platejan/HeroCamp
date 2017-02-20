@@ -52,7 +52,7 @@ class RulesToolbar extends React.Component {
           if (Item.ItemContent.autor == this.props.currentUID) {
             trash = (
               <button className="btn btn-danger col-xs-2" key={deleteKey} onClick={this.delete.bind(this,itemKey)}>
-                <span className="glyphicon glyphicon-trash"></span>
+                <span className="glyphicon glyphicon-trash noText"></span>
               </button>);
           }
           return (

@@ -39,14 +39,14 @@ class HeroRulesSet extends React.Component {
     ];
 
     return (
-      <div className="">
-          <form className="col-xs-12 row">
+      <div className={this.props.className? this.props.className : ""}>
+          <div className="col-xs-12 row">
             <div className="row">
               <div className="col-xs-12">
                 <SelectInput
                   name="rulesSet"
                   value={this.state.rulesSet}
-                  label="game rules"
+                  label="Game rules"
                   options={rulesSets}
                   onChange={this.onchange}
                 />
@@ -62,7 +62,7 @@ class HeroRulesSet extends React.Component {
                 </button>
               </div>
             </div>
-          </form>
+          </div>
       </div>
     );
   }

@@ -70,7 +70,7 @@ class ChapterToolbar extends React.Component {
   render() {
     const data = this.props.chapters;
     let dataArray = [];
-    if(data) {
+    if (data) {
       Object.keys(data).forEach(function (key, index) {
         // key: the name of the object key
         // index: the ordinal position of the key within the object
@@ -83,24 +83,28 @@ class ChapterToolbar extends React.Component {
 
         const itemKey = chapter.ItemKey;
         const itemContent = chapter.ItemContent;
-        const deleteKey = "delete"+itemKey;
+        const deleteKey = "delete" + itemKey;
+        const chapterKey = "chapter" + itemKey;
         let trash = "";
-        if(!chapter.ItemContent.delete){
-        if (this.props.storyOwner == this.props.currentUID) {
-          trash = (
-            <button className="btn btn-danger col-xs-2" key={deleteKey} onClick={this.deleteChapter.bind(this,itemKey)}>
-              <span className="glyphicon glyphicon-trash"></span>
-            </button>);
-        }
-        return (
-          <div className="col-xs-12">
-            <button onClick={this.switch.bind(this,itemKey)} key={itemKey} type="button"
-                    className="btn btn-success col-xs-10">
-              {itemContent.name}
-            </button>
-            {trash}
-          </div>
-        );
+        if (!chapter.ItemContent.delete) {
+          if (this.props.storyOwner == this.props.currentUID) {
+            trash = (
+              <button className="btn btn-danger col-xs-2" key={deleteKey}
+                      onClick={this.deleteChapter.bind(this,itemKey)}>
+                <span className="glyphicon glyphicon-trash noText"></span>
+              </button>);
+          }
+          return (
+            <div className="row marginTop15" key={chapterKey}>
+              <div className="col-xs-12 btn-group">
+                <button onClick={this.switch.bind(this,itemKey)} key={itemKey} type="button"
+                        className="btn btn-success col-xs-10">
+                  {itemContent.name}
+                </button>
+                {trash}
+              </div>
+            </div>
+          );
         }
       });
     }
@@ -109,27 +113,30 @@ class ChapterToolbar extends React.Component {
 
     if (this.props.storyOwner == this.props.currentUID) {
       createForm = (
-        <form>
-          <TextInput
-            name="name"
-            label="Name"
-            onChange={this.onchange}
-            value={this.state.newChapter.name}
-          />
-          < button
-            type="button"
-            onClick={this.createChapter}
-            className="btn btn-primary col-xs-12">
-            <span className="glyphicon glyphicon-plus"> </span> Create chapter
-          </button>
-        </form>
+        <div className="row panel">
+          <div className="panel-body">
+            <form>
+              <TextInput
+                name="name"
+                label="Name"
+                onChange={this.onchange}
+                value={this.state.newChapter.name}
+              />
+              < button
+                type="button"
+                onClick={this.createChapter}
+                className="btn btn-primary col-xs-12">
+                <span className="glyphicon glyphicon-plus"> </span> Create chapter
+              </button>
+            </form>
+          </div>
+        </div>
       );
     }
 
     return (
       <div>
         {buttonsChapters}
-        <br/>
         {createForm}
       </div>
     );
