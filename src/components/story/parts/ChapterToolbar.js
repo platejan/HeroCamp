@@ -58,6 +58,7 @@ class ChapterToolbar extends React.Component {
           toastr.error(error);
         }
       });
+      
     } else {
       toastr.error("Chapter must have a name.");
     }

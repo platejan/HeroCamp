@@ -28,6 +28,7 @@ export default function rulesReducer(state = initialState.rules, action) {
             newRules.current = Object.keys(newRules.rulesSets)[temp];
           temp++;
         }
+      newRules.rules = initialState.rules.rules;
       return Object.assign({}, initialState.rules, newRules);
     case types.RULES_SET_SWITCH:
       newRules = Object.assign({}, initialState.rules, {});
@@ -40,6 +41,13 @@ export default function rulesReducer(state = initialState.rules, action) {
       newRules.rulesSets = state.rulesSets;
       newRules.current = state.current;
       newRules.rules = action.rules;
+      return Object.assign({}, initialState.rules, newRules);
+    case types.RULES_SET_CREATED:
+      console.log("rules created key: "+action.current);
+      newRules = Object.assign({}, initialState.rules, {});
+      newRules.rulesSets = state.rulesSets;
+      newRules.current = action.current;
+      newRules.rules =  initialState.rules.rules;
       return Object.assign({}, initialState.rules, newRules);
     case types.AUTH_LOGGED_OUT_SUCCESS:
       return initialState.rules;

@@ -12,18 +12,17 @@ class Post extends React.Component {
   }
 
   render() {
-    let style={
-      backgroundColor:"#fafafa"
-    };
     let name = "undefined";
     if(this.props.heroes[this.props.itemContent.autor]){
       name = this.props.heroes[this.props.itemContent.autor].public.name;
     }
     return (
-      <div className="col-xs-12" style={style}>
-        <h1>{name}</h1>
-        <p>{this.props.itemContent.text}</p>
-      </div>
+        <div className=" panel panel-default">
+          <div className="panel-heading">{name}</div>
+          <div className="panel-body">
+            {this.props.itemContent.text}
+          </div>
+        </div>
     );
   }
 }

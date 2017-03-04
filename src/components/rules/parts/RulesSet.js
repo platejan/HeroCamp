@@ -28,6 +28,7 @@ class RulesSet extends React.Component {
     let newState = this.state;
     newState.RulesSetKey = this.props.RulesSetKey;
     this.setState(newState);
+    console.log("RulesSet Created");
   }
 
   componentWillReceiveProps(nextProps) {
@@ -46,6 +47,11 @@ class RulesSet extends React.Component {
       }
       this.setState(newState);
     }
+
+    console.log("current:");
+    console.log(this.state);
+    console.log("next:");
+    console.log(nextProps);
   }
 
   delete(key) {

@@ -31,11 +31,11 @@ class CreateRulesSet extends React.Component {
       this.props.actions.createRulesSet(this.state, (error = null)=> {
         if (error == null) {
           toastr.success("rules set added", {timeOut: 250});
-          this.setState(this.initialState);
         } else {
           toastr.error(error);
         }
       });
+      this.onchange({target: {name: "nameOfRulesSet", value: ""}});
     } else {
       toastr.error("Rules set must have a name.");
     }

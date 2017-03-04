@@ -6,15 +6,18 @@ export function createRulesSet(RulesSet,callback){
   return (dispatch, getState) => {
     RulesSet.autor = getState().auth.currentUserUID;
     let newRulesSet = firebase.database().ref().child('rulesSets').push().key;
-    dispatch(updateRulesSet(RulesSet,newRulesSet,callback));
+    dispatch(updateRulesSet(RulesSet,newRulesSet,callback,true));
   };
 }
 
-export function updateRulesSet(RulesSet,RulesSetKey,callback){
+export function updateRulesSet(RulesSet,RulesSetKey,callback,newSet = false){
   return (dispatch, getState) => {
     let updates = {};
     updates['/rulesSets/'+RulesSetKey] = RulesSet;
     firebase.database().ref().update(updates, callback);
+    if(newSet){
+      dispatch(createRulesSetSuccess(RulesSetKey));
+    }
   };
 }
 
@@ -34,6 +37,11 @@ export function deleteSetActionType() {
 export function switchRulesSet(key) {
   return {
     type: types.RULES_SET_SWITCH, key
+  };
+}
+export function createRulesSetSuccess(key) {
+  return {
+    type: types.RULES_SET_CREATED, current: key
   };
 }
 
