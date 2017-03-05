@@ -20,12 +20,10 @@ class UserMenu extends React.Component {
   componentWillReceiveProps() {
     if(this.props.authenticated){
     let username = this.props.displayName;
-    console.log(this.props.displayName);
     if ((!username || username == "")&& this.props.displayNameLoaded && !this.state.usernameDefined) {
       this.setState({usernameDefined:true});
       while (!username || username == "") {
         username = prompt("Please enter your username", this.props.email);
-        console.log(username);
       }
       this.props.actions.setUsername(username, (error = null)=> {
         if (error == null) {

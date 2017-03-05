@@ -39,7 +39,6 @@ class CreateRule extends React.Component {
   }
 
   render() {
-    console.log(this.state);
     let options = [
       {value: 'number', label: 'Number'},
       {value: 'string', label: 'String'},

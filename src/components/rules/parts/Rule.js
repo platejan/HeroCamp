@@ -13,12 +13,15 @@ class Rule extends React.Component {
       hasChange: false,
       ruleKey: this.props.ruleKey,
       savedState: this.props.rule,
-      currentState: this.props.rule
+      currentState: this.props.rule,
+      detail: false,
     };
 
     this.onchange = this.onchange.bind(this);
     this.deleteRule = this.deleteRule.bind(this);
     this.updateRule = this.updateRule.bind(this);
+    this.toggleDetail = this.toggleDetail.bind(this);
+    this.toggleLeveling = this.toggleLeveling.bind(this);
   }
 
   onchange(event) {
@@ -29,15 +32,32 @@ class Rule extends React.Component {
     return this.setState(state);
   }
 
+  toggleDetail() {
+    let state = this.state;
+    if (state.detail)
+      state.detail = false;
+    else
+      state.detail = true;
+    return this.setState(state);
+  }
+  toggleLeveling() {
+    let state = this.state;
+    if (state.leveling)
+      state.leveling = false;
+    else
+      state.leveling = true;
+    return this.setState(state);
+  }
+
   deleteRule() {
     this.props.deleteRule(this.state.ruleKey);
   }
 
   updateRule() {
-    this.props.updateRule(this.state.ruleKey, this.state.currentState);
     let state = this.state;
     state.hasChange = false;
-    return this.setState(state);
+    this.setState(state);
+    this.props.updateRule(this.state.ruleKey, this.state.currentState);
   }
 
   render() {
@@ -75,6 +95,72 @@ class Rule extends React.Component {
       );
     }
 
+    let detail = "";
+    let readWriteOptions = [
+      {value: 'readOnly', label: 'Read only'},
+      {value: 'readWriteOnce', label: 'Read, once writable'},
+      {value: 'readWrite', label: 'Read, Write'}
+    ];
+    if (this.state.detail) {
+      detail = (
+        <div className="row">
+          <div className="col-xs-12">
+            <SelectInput
+              name="readWrite"
+              value={this.state.currentState.readWrite ? this.state.currentState.readWrite.value : "readWrite"}
+              label="editing rights"
+              options={readWriteOptions}
+              onChange={this.onchange}
+            />
+          </div>
+          <div className="col-xs-12">
+            <TextInput
+              name="showRules"
+              label="show rules for input (must return true/false)"
+              onChange={this.onchange}
+              value={this.state.currentState.showRules ? this.state.currentState.showRules : "true"}
+              className=""
+            />
+            <TextInput
+              name="editRules"
+              label="validate rules for input value (must return true/false)"
+              onChange={this.onchange}
+              value={this.state.currentState.editRules ? this.state.currentState.editRules : "true"}
+              className=""
+            />
+          </div>
+        </div>
+      );
+    }
+    let leveling = "";
+    let levelingOptions = [
+      {value: true, label: 'Yes'},
+      {value: false, label: 'No'}
+    ];
+    if (this.state.leveling) {
+      leveling = (
+        <div className="row">
+          <div className="col-xs-6">
+            <SelectInput
+              name="levelOption"
+              value={this.state.currentState.levelOption ? this.state.currentState.levelOption.value : false}
+              label="have levels"
+              options={levelingOptions}
+              onChange={this.onchange}
+            />
+          </div>
+          <div className="col-xs-6">
+            <TextInput
+              name="levelPointsExpression"
+              label="expresion for next level (must return count of points)"
+              onChange={this.onchange}
+              value={this.state.currentState.levelPointsExpression? this.state.currentState.levelPointsExpression : "6"}
+              className=""
+            />
+          </div>
+        </div>
+      );
+    }
     return (
       <div className="panel panel-default">
         <div className=" panel-body">
@@ -111,6 +197,8 @@ class Rule extends React.Component {
                 />
               </div>
             </div>
+            {detail}
+            {leveling}
             <div className="row">
               <div className="col-xs-12 btn-group">
                 <button
@@ -120,6 +208,18 @@ class Rule extends React.Component {
                   <span className="glyphicon glyphicon-trash"> </span> Delete rule
                 </button>
                 {buttonSave}
+                <button
+                  type="button"
+                  onClick={this.toggleDetail}
+                  className={this.state.detail ? "btn btn-default btn-info" : "btn btn-default"}>
+                  <span className="glyphicon glyphicon-list-alt"> </span> Advance
+                </button>
+                <button
+                  type="button"
+                  onClick={this.toggleLeveling}
+                  className={this.state.leveling ? "btn btn-default btn-info" : "btn btn-default"}>
+                  <span className="glyphicon glyphicon-signal"> </span> Leveling options
+                </button>
               </div>
             </div>
           </form>

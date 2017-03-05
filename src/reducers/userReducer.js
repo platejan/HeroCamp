@@ -10,7 +10,6 @@ export default function userReducer(state = initialState.user, action) {
     case types.AUTH_LOGGED_OUT_SUCCESS:
       return initialState.user;
     case types.USER_DISPLAYNAME_LOADED:
-      console.log(action.name);
       return Object.assign({}, state, {displayName: action.name,displayNameLoaded: true});
     default:
       return state;

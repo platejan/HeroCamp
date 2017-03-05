@@ -3,8 +3,16 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import CreateRule from './CreateRule';
 import Rule from './Rule';
-import {createRule, deleteRule, updateRule, loadRules} from '../../../actions/rulesActions';
+import {
+  createRule,
+  deleteRule,
+  updateRule,
+  loadRules,
+  publishRulesSet,
+  rejectRulesSet
+} from '../../../actions/rulesActions';
 import toastr from 'toastr';
+import {Tab, Tabs, TabList, TabPanel} from 'react-tabs';
 
 class RulesSet extends React.Component {
   constructor(props, context) {
@@ -14,25 +22,32 @@ class RulesSet extends React.Component {
       RulesSetKey: "",
       RulesSet: {
         autor: "",
-        nameOfRulesSet: ""
+        nameOfRulesSet: "",
+        published: false,
+        hasChange: false
       },
-      Rules: null
+      Rules: null,
+      tab: 0
     };
 
     this.update = this.update.bind(this);
     this.delete = this.delete.bind(this);
     this.create = this.create.bind(this);
+    this.publish = this.publish.bind(this);
+    this.reject = this.reject.bind(this);
+    this.tabSwitch = this.tabSwitch.bind(this);
   }
 
   componentWillMount() {
     let newState = this.state;
     newState.RulesSetKey = this.props.RulesSetKey;
+    newState.RulesSet = this.props.RulesSets[this.props.RulesSetKey];
     this.setState(newState);
-    console.log("RulesSet Created");
+    this.props.startLoadingRules(this.props.RulesSetKey);
   }
 
   componentWillReceiveProps(nextProps) {
-    if(nextProps.RulesSetKey != this.state.RulesSetKey && nextProps.RulesSetKey){
+    if (nextProps.RulesSetKey != this.state.RulesSetKey && nextProps.RulesSetKey) {
       let newState = this.state;
       newState.RulesSetKey = nextProps.RulesSetKey;
       this.setState(newState);
@@ -43,22 +58,53 @@ class RulesSet extends React.Component {
       let newState = this.state;
       if (nextProps.RulesSetKey) {
         newState.RulesSet = nextProps.RulesSets[nextProps.RulesSetKey];
-        newState.Rules = nextProps.Rules;
+        newState.Rules = Object.assign({}, nextProps.Rules, {});
       }
       this.setState(newState);
     }
+  }
 
-    console.log("current:");
-    console.log(this.state);
-    console.log("next:");
-    console.log(nextProps);
+  tabSwitch(index, last) {
+    let newState = this.state;
+    newState.tab = index;
+    this.setState(newState);
+  }
+
+  publish() {
+    let newState = this.state;
+    newState.RulesSet.published = true;
+    newState.RulesSet.hasChange = false;
+    this.setState(newState);
+
+    if (this.state.RulesSet.autor == this.props.currentUID) {
+      this.props.actions.publishRulesSet(this.state.RulesSetKey, this.state.RulesSet, this.state.Rules, (error = null)=> {
+        if (error == null) {
+
+          toastr.success("published");
+        } else {
+          toastr.error(error);
+        }
+      });
+    }
+  }
+
+  reject() {
+    if (this.state.RulesSet.autor == this.props.currentUID) {
+      this.props.actions.rejectRulesSet(this.state.RulesSetKey, (error = null)=> {
+        if (error == null) {
+          toastr.success("reverting changes success");
+        } else {
+          toastr.error(error);
+        }
+      });
+    }
   }
 
   delete(key) {
     if (this.state.RulesSet.autor == this.props.currentUID) {
       this.props.actions.deleteRule(this.state.RulesSetKey, key, (error = null)=> {
         if (error == null) {
-          toastr.success("deleted");
+          toastr.success("Rule deleted. Do not forget publish changes.");
         } else {
           toastr.error(error);
         }
@@ -70,7 +116,7 @@ class RulesSet extends React.Component {
     if (this.state.RulesSet.autor == this.props.currentUID) {
       this.props.actions.updateRule(this.state.RulesSetKey, RuleKey, rule, (error = null)=> {
         if (error == null) {
-          toastr.success("saved");
+          toastr.success("Saved to draft. Do not forget publish changes.");
         } else {
           toastr.error(error);
         }
@@ -82,7 +128,7 @@ class RulesSet extends React.Component {
     if (rule.nameOfRule != "" && this.state.RulesSet.autor == this.props.currentUID) {
       this.props.actions.createRule(this.state.RulesSetKey, rule, (error = null)=> {
         if (error == null) {
-          toastr.success("rule added");
+          toastr.success("Rule added. Do not forget publish changes.");
         } else {
           toastr.error(error);
         }
@@ -112,7 +158,7 @@ class RulesSet extends React.Component {
           rules = dataArray.map((Item, index) => {
 
             const itemKey = Item.ItemKey;
-            const itemContent = Item.ItemContent;
+            const itemContent = Object.assign({}, Item.ItemContent, {});
             const ruleKey = "rule" + itemKey;
             let trash = "";
             if (!Item.ItemContent.delete) {
@@ -124,11 +170,39 @@ class RulesSet extends React.Component {
           });
         }
       }
+
+      let hasChangeButtons = "";
+      if (this.state.RulesSet.hasChange) {
+        hasChangeButtons = (
+          <div>
+            <button className="btn btn-default" onClick={this.publish}>Publish</button>
+            <button className="btn btn-danger" onClick={this.reject}>Reject</button>
+          </div>
+        );
+      }
+
+
       return (
         <div>
           <h1>{this.state.RulesSet.nameOfRulesSet}</h1>
-          <CreateRule createRule={this.create}/>
-          {rules}
+          <Tabs
+            onSelect={this.tabSwitch}
+            selectedIndex={this.state.tab}>
+            <TabList>
+              <Tab>Rules set detail</Tab>
+              <Tab>Biography template</Tab>
+              <Tab>Experience points</Tab>
+            </TabList>
+            <TabPanel>
+              {hasChangeButtons}
+            </TabPanel>
+            <TabPanel>
+              <CreateRule createRule={this.create}/>
+              {rules}
+            </TabPanel>
+            <TabPanel>
+            </TabPanel>
+          </Tabs>
         </div>
       );
     } else {
@@ -156,7 +230,14 @@ function mapDispatchToProps(dispatch) {
     startLoadingRules: (key) => {
       dispatch(loadRules(key));
     },
-    actions: bindActionCreators({createRule, deleteRule, updateRule, loadRules}, dispatch)
+    actions: bindActionCreators({
+      createRule,
+      deleteRule,
+      updateRule,
+      loadRules,
+      publishRulesSet,
+      rejectRulesSet
+    }, dispatch)
 
   };
 }

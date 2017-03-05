@@ -4,6 +4,7 @@ import initialState from './initialState';
 export default function rulesReducer(state = initialState.rules, action) {
   let newRules;
   let temp;
+  console.log(action.type);
   switch (action.type) {
     case types.RULES_SETS_LOAD_SUCCESS:
       newRules = Object.assign({}, initialState.rules, {});
@@ -43,7 +44,6 @@ export default function rulesReducer(state = initialState.rules, action) {
       newRules.rules = action.rules;
       return Object.assign({}, initialState.rules, newRules);
     case types.RULES_SET_CREATED:
-      console.log("rules created key: "+action.current);
       newRules = Object.assign({}, initialState.rules, {});
       newRules.rulesSets = state.rulesSets;
       newRules.current = action.current;
