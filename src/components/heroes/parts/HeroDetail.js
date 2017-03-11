@@ -4,36 +4,24 @@ import Icon from '../../common/Icon';
 import TextInput from '../../common/TextInput';
 // import Textarea from 'react-textarea-autosize';
 import TextareaInput from '../../common/TextareaInput';
+import {Tab, Tabs, TabList, TabPanel} from 'react-tabs';
+import HeroRulesSet from './rules/HeroRulesSet';
 
 class HeroDetail extends React.Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
-      showBiography: true,
-      showBehavior: false,
-      showInventory: false
+      tab: 0
     };
-    this.showTab = this.showTab.bind(this);
-    this.activeTabAnchor = this.activeTabAnchor.bind(this);
-    this.activeTab = this.activeTab.bind(this);
+    this.tabSwitch = this.tabSwitch.bind(this);
   }
 
-  showTab(event) {
-    let state = this.state;
-    state.showBiography = false;
-    state.showBehavior = false;
-    state.showInventory = false;
-    state[event.target.name] = true;
-    this.setState(state);
+  tabSwitch(index, last) {
+    let newState = this.state;
+    newState.tab = index;
+    this.setState(newState);
   }
 
-  activeTabAnchor(name) {
-    if (this.state[name])return "active"; else return "";
-  }
-
-  activeTab(name) {
-    if (this.state[name])return {display: 'block'}; else return {display: 'none'};
-  }
 
   render() {
     let stop = function (e) {
@@ -72,19 +60,20 @@ class HeroDetail extends React.Component {
             <Line/>
             <div className="content-block">
               <form>
-                <ul className="nav nav-tabs">
-                  <li role="presentation" className={this.activeTabAnchor("showBiography")}><a onClick={this.showTab}
-                                                                                               name="showBiography">Biography</a>
-                  </li>
-                </ul>
-                <div style={this.activeTab("showBiography")}>
-                  <div className="form-group">
-                    <label htmlFor="biography">Biography</label>
-                    <div className="field">
-                      <p>{this.props.hero.public.biography}</p>
-                    </div>
-                  </div>
-                </div>
+                <Tabs
+                  onSelect={this.tabSwitch}
+                  selectedIndex={this.state.tab}>
+                  <TabList>
+                    <Tab>Biography</Tab>
+                    <Tab>Game rules</Tab>
+                  </TabList>
+                  <TabPanel>
+                    <p className="marginTop15">{this.props.hero.public.biography}</p>
+                  </TabPanel>
+                  <TabPanel>
+                    <HeroRulesSet edit={false} className="marginTop15"/>
+                  </TabPanel>
+                </Tabs>
               </form>
             </div>
           </div>

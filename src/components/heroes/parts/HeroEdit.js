@@ -5,37 +5,22 @@ import TextInput from '../../common/TextInput';
 // import Textarea from 'react-textarea-autosize';
 import TextareaInput from '../../common/TextareaInput';
 import HeroRulesSet from './rules/HeroRulesSet';
+import {Tab, Tabs, TabList, TabPanel} from 'react-tabs';
 
 class HeroEdit extends React.Component {
   constructor(props, context) {
     super(props, context);
+
     this.state = {
-      showBiography: true,
-      showBehavior: false,
-      showInventory: false,
-      showRulesSet: false
+      tab: 0
     };
-    this.showTab = this.showTab.bind(this);
-    this.activeTabAnchor = this.activeTabAnchor.bind(this);
-    this.activeTab = this.activeTab.bind(this);
+    this.tabSwitch = this.tabSwitch.bind(this);
   }
 
-  showTab(event) {
-    let state = this.state;
-    state.showBiography = false;
-    state.showBehavior = false;
-    state.showInventory = false;
-    state.showRulesSet = false;
-    state[event.target.name] = true;
-    this.setState(state);
-  }
-
-  activeTabAnchor(name) {
-    if (this.state[name])return "active"; else return "";
-  }
-
-  activeTab(name) {
-    if (this.state[name])return {display: 'block'}; else return {display: 'none'};
+  tabSwitch(index, last) {
+    let newState = this.state;
+    newState.tab = index;
+    this.setState(newState);
   }
 
   render() {
@@ -100,30 +85,30 @@ class HeroEdit extends React.Component {
             {information}
             <div className="content-block">
               <form>
-                <ul className="nav nav-tabs">
-                  <li role="presentation" className={this.activeTabAnchor("showBiography")}><a onClick={this.showTab}
-                                                                                               name="showBiography">Biography</a>
-                  </li>
-                  <li role="presentation" className={this.activeTabAnchor("showRulesSet")}><a onClick={this.showTab}
-                                                                                               name="showRulesSet">Game rules</a>
-                  </li>
-                </ul>
-                <div style={this.activeTab("showBiography")}>
-                  <div className="form-group marginTop15">
-                    <div className="field">
-                      <TextareaInput
-                        className="form-control"
-                        name="biography"
-                        label="Biography"
-                        onChange={this.props.onchange}
-                        value={this.props.hero.private.biography}
-                      />
+                <Tabs
+                  onSelect={this.tabSwitch}
+                  selectedIndex={this.state.tab}>
+                  <TabList>
+                    <Tab>Biography</Tab>
+                    <Tab>Game rules</Tab>
+                  </TabList>
+                  <TabPanel>
+                    <div className="form-group marginTop15">
+                      <div className="field">
+                        <TextareaInput
+                          className="form-control"
+                          name="biography"
+                          label="Biography"
+                          onChange={this.props.onchange}
+                          value={this.props.hero.private.biography}
+                        />
+                      </div>
                     </div>
-                  </div>
-                </div>
-                <div style={this.activeTab("showRulesSet")}>
-                  <HeroRulesSet className="marginTop15"/>
-                </div>
+                  </TabPanel>
+                  <TabPanel>
+                    <HeroRulesSet edit={true} className="marginTop15"/>
+                  </TabPanel>
+                </Tabs>
               </form>
             </div>
           </div>
