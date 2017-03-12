@@ -106,7 +106,7 @@ class HeroEdit extends React.Component {
                     </div>
                   </TabPanel>
                   <TabPanel>
-                    <HeroRulesSet edit={true} className="marginTop15"/>
+                    <HeroRulesSet onchangeRules={this.props.onchangeRules} edit={true} className="col-xs-12 marginTop15"/>
                   </TabPanel>
                 </Tabs>
               </form>

@@ -12,8 +12,15 @@ class Hero extends React.Component {
     super(props, context);
 
     let deleteProp = false;
-    if(this.props.itemContent.delete)
-      deleteProp = true ;
+    if (this.props.itemContent.delete)
+      deleteProp = true;
+    let publicRules = {};
+    if(this.props.itemContent.public.rules)
+      publicRules = this.props.itemContent.public.rules;
+    let privateRules = {};
+    if(this.props.itemContent.private.rules)
+      privateRules = this.props.itemContent.private.rules;
+
 
     this.state = {
       hero: {
@@ -24,7 +31,8 @@ class Hero extends React.Component {
           species: this.props.itemContent.public.species,
           biography: this.props.itemContent.public.biography,
           behavior: this.props.itemContent.public.behavior,
-          inventory: this.props.itemContent.public.inventory
+          inventory: this.props.itemContent.public.inventory,
+          rules: publicRules
         },
         private: {},
         owner: this.props.ownerID,
@@ -45,7 +53,8 @@ class Hero extends React.Component {
         species: this.props.itemContent.private.species,
         biography: this.props.itemContent.private.biography,
         behavior: this.props.itemContent.private.behavior,
-        inventory: this.props.itemContent.private.inventory
+        inventory: this.props.itemContent.private.inventory,
+        rules: privateRules
       };
       this.state.hero.hasChange = this.props.itemContent.hasChange;
       this.state.onlyPublic = false;
@@ -62,14 +71,15 @@ class Hero extends React.Component {
     this.rejectChanges = this.rejectChanges.bind(this);
     this.iconchange = this.iconchange.bind(this);
     this.deleteHero = this.deleteHero.bind(this);
+    this.onchangeRules = this.onchangeRules.bind(this);
   }
 
   componentDidUpdate() {
     if (this.state.heroKey != this.props.itemKey) {
       let newState = this.state;
       let deleteProp = false;
-      if(this.props.itemContent.delete)
-        deleteProp = true ;
+      if (this.props.itemContent.delete)
+        deleteProp = true;
 
       newState.hero.public = this.props.itemContent.public;
       newState.hero.owner = this.props.itemContent.owner;
@@ -114,7 +124,7 @@ class Hero extends React.Component {
 
   ESCkey(event) {
     let keyCode = event.keyCode;
-    if (keyCode === 27){
+    if (keyCode === 27) {
       this.hideEditWindow();
       this.hideDetailWindow();
     }
@@ -127,6 +137,19 @@ class Hero extends React.Component {
     state.hero.hasChange = true;
     clearTimeout(this.state.saveTimeout);
     state.saveTimeout = setTimeout(this.updateHero, 1000);
+    return this.setState(state);
+  }
+
+  onchangeRules(key, value) {
+    console.log("onchangeRules [key, value]: " + key + ", " + value);
+    let state = this.state;
+    if (!state.hero.private.rules)
+      state.hero.private.rules = {};
+    state.hero.private.rules[key] = value;
+    state.hero.hasChange = true;
+    clearTimeout(this.state.saveTimeout);
+    state.saveTimeout = setTimeout(this.updateHero, 1000);
+    console.log(this.state);
     return this.setState(state);
   }
 
@@ -211,23 +234,26 @@ class Hero extends React.Component {
 
     let editPart = "";
     let editTool = "";
-    let removeTool ="";
+    let removeTool = "";
     let detailPart = "";
     let detailTool = "";
     if (!this.state.onlyPublic) {
       editPart = (<HeroEdit iconchange={this.iconchange} reject={this.rejectChanges} publish={this.publishChanges}
                             click={this.hideEditWindow}
-                            onchange={this.onchange} hero={this.state.hero} display={this.state.editWindowState}/>);
+                            onchange={this.onchange} hero={this.state.hero} display={this.state.editWindowState}
+                            onchangeRules={this.onchangeRules}/>);
       editTool = (
         <span onClick={this.showEditWindow} className="glyphicon glyphicon-pencil" style={editButtonStyle}></span>);
-      if(!this.state.hero.inGame){
+      if (!this.state.hero.inGame) {
         removeTool = (
           <span onClick={this.deleteHero} className="glyphicon glyphicon-trash"></span>);
       }
-    }else{
-      if(this.props.canViewDetail){
-        editPart = (<HeroDetail click={this.hideDetailWindow} hero={this.state.hero} display={this.state.detailWindowState}/>);
-        detailTool = (<button onClick={this.showDetailWindow} className="btn btn-info btn-sm"><span className="glyphicon glyphicon-eye-open"></span></button>);
+    } else {
+      if (this.props.canViewDetail) {
+        editPart = (
+          <HeroDetail click={this.hideDetailWindow} hero={this.state.hero} display={this.state.detailWindowState}/>);
+        detailTool = (<button onClick={this.showDetailWindow} className="btn btn-info btn-sm"><span
+          className="glyphicon glyphicon-eye-open"></span></button>);
       }
     }
 

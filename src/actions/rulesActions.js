@@ -67,7 +67,14 @@ export function loadRules(RulesSetKey) {
     });
   };
 }
-
+export function loadPublicRules(RulesSetKey) {
+  return (dispatch, getState) => {
+    let ref = firebase.database().ref('/rules/public/' + RulesSetKey + '/');
+    ref.on('value', (snapshot) => {
+      dispatch(loadRulesList(snapshot.val()));
+    });
+  };
+}
 export function loadRulesList(rules) {
   return {
     type: types.RULES_LOAD_SUCCESS, rules

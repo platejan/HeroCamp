@@ -17,7 +17,8 @@ class HeroAdd extends React.Component {
           species: "Human",
           biography: "Born, Life, Death",
           behavior: "Alive",
-          inventory: "Empty"
+          inventory: "Empty",
+          rules: {}
         },
         private: {
           icon: "ikonka.jpg",
@@ -26,7 +27,8 @@ class HeroAdd extends React.Component {
           species: "Human",
           biography: "Born, Life, Death",
           behavior: "Alive",
-          inventory: "Empty"
+          inventory: "Empty",
+          rules: {}
         },
         hasChange: false,
         owner: this.props.ownerID,

@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react';
 import Select from 'react-select';
 
-const SelectInput = ({name, label, onChange, defaultOption, value, error, options, multi=false}) => {
+const SelectInput = ({name, label, onChange, defaultOption, value, error, options, multi=false, clearable=false}) => {
   let onChangeForSelect = function (value) {
     onChange({target: {name: name, value: value}});
   };
@@ -18,7 +18,7 @@ const SelectInput = ({name, label, onChange, defaultOption, value, error, option
           onChange={onChangeForSelect}
           className=""
           multi={multi}
-          clearable={false}
+          clearable={clearable}
         />
         {error && <div className="alert alert-danger">{error}</div>}
       </div>
@@ -34,6 +34,7 @@ SelectInput.propTypes = {
   value: PropTypes.oneOfType([PropTypes.string,PropTypes.number,PropTypes.bool]),
   error: PropTypes.string,
   multi:PropTypes.bool,
+  clearable:PropTypes.bool,
   options: PropTypes.arrayOf(PropTypes.object)
 };
 

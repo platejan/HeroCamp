@@ -23,24 +23,30 @@ class HeroRulesSet extends React.Component {
   onchange(event) {
     const field = event.target.name;
     let state = this.state;
-    state.currentState[field] = event.target.value;
+    state[field] = event.target.value;
+    console.log(state);
     return this.setState(state);
   }
 
-  selectRulesSet(key) {
+  selectRulesSet() {
+    let key = this.state.rulesSet;
     console.log("selected RulesSetKey: " +key);
+    this.props.onchangeRules("RulesSet",key);
   }
 
   render() {
-    let rulesSets = [
-      {value: 'number', label: 'Number'},
-      {value: 'string', label: 'String'},
-      {value: 'select', label: 'Select'}
-    ];
-
+    let rulesSets = [];
+    const data = this.props.rules.rulesSets;
+    if(data) {
+      Object.keys(data).forEach(function (key, index) {
+        if(data[key].published && !data[key].delete){
+        rulesSets.push({value: key, label: data[key].nameOfRulesSet});
+        }
+      });
+    }
     return (
       <div className={this.props.className? this.props.className : ""}>
-          <div className="col-xs-12 row">
+          <div className="row">
             <div className="row">
               <div className="col-xs-12">
                 <SelectInput
@@ -49,6 +55,7 @@ class HeroRulesSet extends React.Component {
                   label="Game rules"
                   options={rulesSets}
                   onChange={this.onchange}
+                  clearable={true}
                 />
               </div>
               </div>
@@ -73,7 +80,8 @@ HeroRulesSet.contextTypes = {};
 
 function mapStateToProps(state, ownProps) {
   return {
-    currentUID: state.auth.currentUserUID
+    currentUID: state.auth.currentUserUID,
+    rules: state.rules
   };
 }
 
