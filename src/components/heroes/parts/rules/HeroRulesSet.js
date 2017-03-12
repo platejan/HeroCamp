@@ -3,17 +3,22 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import SelectInput from '../../../common/SelectInput';
 import {loadRulesSets} from '../../../../actions/rulesActions';
+import HeroRulesSetSelect from './HeroRulesSetSelect';
 
 class HeroRulesSet extends React.Component {
   constructor(props, context) {
     super(props, context);
 
+    let rulesSet = null;
+    console.log(this.props.data);
+    if(this.props.data.rulesSet){
+      rulesSet = this.props.data.rulesSet;
+    }
     this.state = {
-      rulesSet: null
+      rulesSet: rulesSet
     };
 
     this.onchange = this.onchange.bind(this);
-    this.selectRulesSet = this.selectRulesSet.bind(this);
   }
 
   componentWillMount() {
@@ -28,48 +33,10 @@ class HeroRulesSet extends React.Component {
     return this.setState(state);
   }
 
-  selectRulesSet() {
-    let key = this.state.rulesSet;
-    console.log("selected RulesSetKey: " +key);
-    this.props.onchangeRules("RulesSet",key);
-  }
-
   render() {
-    let rulesSets = [];
-    const data = this.props.rules.rulesSets;
-    if(data) {
-      Object.keys(data).forEach(function (key, index) {
-        if(data[key].published && !data[key].delete){
-        rulesSets.push({value: key, label: data[key].nameOfRulesSet});
-        }
-      });
-    }
     return (
       <div className={this.props.className? this.props.className : ""}>
-          <div className="row">
-            <div className="row">
-              <div className="col-xs-12">
-                <SelectInput
-                  name="rulesSet"
-                  value={this.state.rulesSet}
-                  label="Game rules"
-                  options={rulesSets}
-                  onChange={this.onchange}
-                  clearable={true}
-                />
-              </div>
-              </div>
-            <div className="row">
-              <div className="col-xs-12 col-sm-6">
-                <button
-                  type="button"
-                  onClick={this.selectRulesSet}
-                  className="btn btn-success">
-                  <span className="glyphicon glyphicon-retweet"> </span> apply selected rules
-                </button>
-              </div>
-            </div>
-          </div>
+          <HeroRulesSetSelect rulesSet={this.state.rulesSet} onchangeRules={this.props.onchangeRules}/>
       </div>
     );
   }
