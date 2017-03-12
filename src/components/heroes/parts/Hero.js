@@ -2,6 +2,7 @@ import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {updateHero, deleteHero} from '../../../actions/HeroesActions';
+import {loadPublicRules} from '../../../actions/rulesActions';
 import HeroEdit from './HeroEdit';
 import HeroDetail from './HeroDetail';
 import Icon from '../../common/Icon';
@@ -11,32 +12,26 @@ class Hero extends React.Component {
   constructor(props, context) {
     super(props, context);
 
+    let itemContent = Object.assign({}, this.props.itemContent);
+
     let deleteProp = false;
-    if (this.props.itemContent.delete)
+    if (itemContent.delete)
       deleteProp = true;
     let publicRules = {};
-    if(this.props.itemContent.public.rules)
-      publicRules = this.props.itemContent.public.rules;
+    if (itemContent.public.rules)
+      publicRules = itemContent.public.rules;
     let privateRules = {};
-    if(this.props.itemContent.private.rules)
-      privateRules = this.props.itemContent.private.rules;
+    if (itemContent.private && itemContent.private.rules)
+      privateRules = itemContent.private.rules;
 
 
+    let publicPrepare = Object.assign({}, itemContent.public, {rules: publicRules});
     this.state = {
       hero: {
-        public: {
-          icon: this.props.itemContent.public.icon,
-          name: this.props.itemContent.public.name,
-          age: this.props.itemContent.public.age,
-          species: this.props.itemContent.public.species,
-          biography: this.props.itemContent.public.biography,
-          behavior: this.props.itemContent.public.behavior,
-          inventory: this.props.itemContent.public.inventory,
-          rules: publicRules
-        },
-        private: {},
+        public: publicPrepare,
+        private: {rules: {}},
         owner: this.props.ownerID,
-        inGame: this.props.itemContent.inGame,
+        inGame: itemContent.inGame,
         delete: deleteProp
       },
       heroKey: this.props.itemKey,
@@ -45,18 +40,10 @@ class Hero extends React.Component {
       saveTimeout: null,
       onlyPublic: true
     };
-    if (this.props.itemContent.private !== undefined) {
-      this.state.hero.private = {
-        icon: this.props.itemContent.public.icon,
-        name: this.props.itemContent.private.name,
-        age: this.props.itemContent.private.age,
-        species: this.props.itemContent.private.species,
-        biography: this.props.itemContent.private.biography,
-        behavior: this.props.itemContent.private.behavior,
-        inventory: this.props.itemContent.private.inventory,
-        rules: privateRules
-      };
-      this.state.hero.hasChange = this.props.itemContent.hasChange;
+    if (itemContent.private !== undefined) {
+      let privatePrepare = Object.assign({}, itemContent.private, {icon: itemContent.public.icon, rules: privateRules});
+      this.state.hero.private = privatePrepare;
+      this.state.hero.hasChange = itemContent.hasChange;
       this.state.onlyPublic = false;
     }
 
@@ -74,6 +61,19 @@ class Hero extends React.Component {
     this.onchangeRules = this.onchangeRules.bind(this);
   }
 
+  componentWillMount() {
+    console.log(this.state);
+    if (this.state.hero.public.rules.rulesSet) {
+      if (!this.props.publicRules[this.state.hero.public.rules.rulesSet.value])
+        this.props.actions.loadPublicRules(this.state.hero.public.rules.rulesSet.value);
+    }
+    if (this.props.itemContent.private !== undefined && this.state.hero.private.rules.rulesSet) {
+      if (!this.props.publicRules[this.state.hero.private.rules.rulesSet.value])
+        this.props.actions.loadPublicRules(this.state.hero.private.rules.rulesSet.value);
+    }
+
+  }
+
   componentDidUpdate() {
     if (this.state.heroKey != this.props.itemKey) {
       let newState = this.state;
@@ -86,6 +86,8 @@ class Hero extends React.Component {
       newState.hero.inGame = this.props.itemContent.inGame;
       newState.hero.delete = deleteProp;
       newState.heroKey = this.props.itemKey;
+      if (newState.hero.public.rules && newState.hero.public.rules.rulesSet.value)
+        this.props.actions.loadPublicRules(newState.hero.public.rules.rulesSet.value);
       this.setState(newState);
     }
   }
@@ -150,6 +152,8 @@ class Hero extends React.Component {
     clearTimeout(this.state.saveTimeout);
     state.saveTimeout = setTimeout(this.updateHero, 1000);
     console.log(this.state);
+    if (key == "rulesSet")
+      this.props.actions.loadPublicRules(value.value);
     return this.setState(state);
   }
 
@@ -238,9 +242,10 @@ class Hero extends React.Component {
     let detailPart = "";
     let detailTool = "";
     if (!this.state.onlyPublic) {
+      let temp = Object.assign({},this.state.hero);
       editPart = (<HeroEdit iconchange={this.iconchange} reject={this.rejectChanges} publish={this.publishChanges}
                             click={this.hideEditWindow}
-                            onchange={this.onchange} hero={this.state.hero} display={this.state.editWindowState}
+                            onchange={this.onchange} hero={temp} display={this.state.editWindowState}
                             onchangeRules={this.onchangeRules}/>);
       editTool = (
         <span onClick={this.showEditWindow} className="glyphicon glyphicon-pencil" style={editButtonStyle}></span>);
@@ -308,13 +313,14 @@ Hero.contextTypes = {
 
 function mapStateToProps(state, ownProps) {
   return {
-    ownerID: state.auth.currentUserUID
+    ownerID: state.auth.currentUserUID,
+    publicRules: state.rules.publicRules
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators({updateHero, deleteHero}, dispatch)
+    actions: bindActionCreators({updateHero, deleteHero, loadPublicRules}, dispatch)
   };
 }
 

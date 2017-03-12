@@ -37,6 +37,7 @@ export default {
   rules:{
     current: null,
     rulesSets:{},
-    rules: null
+    rules: null,
+    publicRules: {}
   }
 };

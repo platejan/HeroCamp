@@ -71,7 +71,7 @@ class HeroDetail extends React.Component {
                     <p className="marginTop15">{this.props.hero.public.biography}</p>
                   </TabPanel>
                   <TabPanel>
-                    <HeroRulesSet edit={false} className="marginTop15"/>
+                    <HeroRulesSet data={this.props.hero.public.rules} edit={false} className="marginTop15"/>
                   </TabPanel>
                 </Tabs>
               </form>
