@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 
-const TextInput = ({type, name, label, onChange, placeholder, value, error, className}) => {
+const TextInput = ({type, name, label, onChange, placeholder, value, error, className, style={}}) => {
 
   let typeOfInput = (type===undefined)? "text": type ;
 
@@ -14,6 +14,7 @@ const TextInput = ({type, name, label, onChange, placeholder, value, error, clas
       <label htmlFor={name}>{label}</label>
       <div className="field">
         <input
+          style={style}
           type={typeOfInput}
           name={name}
           className={classNameString}
@@ -28,6 +29,8 @@ const TextInput = ({type, name, label, onChange, placeholder, value, error, clas
 
 TextInput.propTypes = {
   name: PropTypes.string.isRequired,
+  className: PropTypes.string,
+  style: React.PropTypes.object,
   label: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   placeholder: PropTypes.string,

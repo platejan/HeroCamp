@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react';
 import Select from 'react-select';
 
-const SelectInput = ({name, label, onChange, defaultOption, value, error, options, multi=false, clearable=false}) => {
+const SelectInput = ({name, label, onChange, defaultOption, value, error, options, multi=false, clearable=false,className = "",style={}}) => {
   let onChangeForSelect = function (value) {
     onChange({target: {name: name, value: value}});
   };
@@ -12,11 +12,12 @@ const SelectInput = ({name, label, onChange, defaultOption, value, error, option
       <div className="field">
         {/* Note, value is set here rather than on the option - docs: https://facebook.github.io/react/docs/forms.html */}
         <Select
+          style={style}
           name={name}
           value={value}
           options={options}
           onChange={onChangeForSelect}
-          className=""
+          className={className}
           multi={multi}
           clearable={clearable}
         />
@@ -28,6 +29,8 @@ const SelectInput = ({name, label, onChange, defaultOption, value, error, option
 
 SelectInput.propTypes = {
   name: PropTypes.string.isRequired,
+  className: PropTypes.string,
+  style: React.PropTypes.object,
   label: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   defaultOption: PropTypes.string,

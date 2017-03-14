@@ -9,6 +9,7 @@ class HeroRule extends React.Component {
 
     this.state = {
       state: false,
+      error: false,
       display: false,
       edit: false,
       value: Object.assign({},this.props).value
@@ -35,8 +36,8 @@ class HeroRule extends React.Component {
     }
   }
 
-  validate(value) {
-    if (value) {
+  validate(value, data = this.props.rulesData, validate = this.props.content.editRules) {
+    if (value && (!validate || eval(validate))) {
       let state = this.state;
       state.error = false;
       this.setState(state);
@@ -77,6 +78,7 @@ class HeroRule extends React.Component {
               <div className="row">
                 <div className="col-xs-12">
                   <SelectInput
+                    style={this.state.error? {borderColor : "red"} : {}}
                     options={this.props.content.selectRestrictions}
                     name={this.props.name}
                     label={label}
@@ -91,6 +93,7 @@ class HeroRule extends React.Component {
               <div className="row">
                 <div className="col-xs-12">
                   <TextInput
+                    style={this.state.error? {borderColor : "red"} : {}}
                     name={this.props.name}
                     label={label}
                     onChange={this.onchange}
