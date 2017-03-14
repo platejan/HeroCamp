@@ -10,15 +10,14 @@ class HeroRulesSet extends React.Component {
   constructor(props, context) {
     super(props, context);
 
-    let rulesSet = null;
-    if (this.props.data.rulesSet) {
-      rulesSet = Object.assign({},this.props.data.rulesSet);
+    let data = null;
+    if (this.props.data) {
+      data = Object.assign({}, this.props.data);
     }
     this.state = {
-      rulesSet: rulesSet
+      data: data
     };
 
-    this.onchange = this.onchange.bind(this);
   }
 
   componentWillMount() {
@@ -27,25 +26,37 @@ class HeroRulesSet extends React.Component {
 
   componentWillReceiveProps(nextProps) {
 
-    if (nextProps.data.rulesSet) {
-      this.setState({rulesSet: Object.assign({},nextProps.data.rulesSet)});
+    if (nextProps.data) {
+      this.setState(
+        {
+          data: Object.assign({}, nextProps.data)
+        });
     }
   }
 
-  onchange(event) {
-    const field = event.target.name;
-    let state = this.state;
-    state[field] = event.target.value;
-    return this.setState(state);
-  }
 
   render() {
-    console.log("render...");
     let rules = "";
-    if (this.state.rulesSet && this.props.publicRules[this.state.rulesSet.value]) {
-      console.log("some rules...");
-      const data = this.props.publicRules[this.state.rulesSet.value];
+    if (this.state.data.rulesSet && this.props.publicRules[this.state.data.rulesSet.value]) {
+      let data = Object.assign({}, this.props.publicRules[this.state.data.rulesSet.value]);
+      let userData = Object.assign({}, this.state.data);
+      let dataForEval = [];
       let dataArray = [];
+      if (userData) {
+        Object.keys(data).forEach(function (key, index) {
+          if(userData[key]){
+          switch (data[key].typeOfRuleValue.value) {
+            case "select":
+              dataForEval[key] = userData[key].value ? userData[key].value : false;
+              break;
+            default:
+              dataForEval[key] = userData[key] ? userData[key] : false;
+              break;
+          }}else{
+            dataForEval[key] = false;
+          }
+        });
+      }
       if (data) {
         Object.keys(data).forEach(function (key, index) {
           dataArray.push({ItemKey: key, ItemContent: data[key]});
@@ -59,20 +70,23 @@ class HeroRulesSet extends React.Component {
 
           return (
             <HeroRule key={itemKey}
-                      value={this.props.data[itemKey]? this.props.data[itemKey] : ""}
+                      value={this.state.data[itemKey]?this.state.data[itemKey]:""}
                       name={itemKey}
-                      content={itemContent}
+                      content={Object.assign({},itemContent)}
                       onchange={this.props.onchangeRules}
-                      edit={this.props.edit}/>
+                      edit={this.props.edit}
+                      rulesData={dataForEval}/>
           );
         });
       }
     }
     return (
       <div className={this.props.className? this.props.className : ""}>
-        <HeroRulesSetSelect edit={this.props.edit} rulesSet={this.state.rulesSet}
+        <HeroRulesSetSelect edit={this.props.edit} rulesSet={this.state.data.rulesSet}
                             onchangeRules={this.props.onchangeRules}/>
-        {rules}
+        <div className="marginTop15">
+          {rules}
+        </div>
       </div>
     );
   }

@@ -56,6 +56,7 @@ class HeroEdit extends React.Component {
 
     const styleHelp = {maxWidth: '260px'};
 
+    let rules = Object.assign({},this.props.hero.private.rules);
     return (
       <div onClick={close} className={className}>
         <div className="col-xs-12 clickable">
@@ -106,7 +107,7 @@ class HeroEdit extends React.Component {
                     </div>
                   </TabPanel>
                   <TabPanel>
-                    <HeroRulesSet data={this.props.hero.private.rules} onchangeRules={this.props.onchangeRules} edit={true} className="col-xs-12 marginTop15"/>
+                    <HeroRulesSet data={rules} onchangeRules={this.props.onchangeRules} edit={true} className="col-xs-12 marginTop15"/>
                   </TabPanel>
                 </Tabs>
               </form>

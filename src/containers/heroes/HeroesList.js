@@ -26,7 +26,7 @@ class HeoresList extends Component {
   }
 
   render() {
-    const data = this.props.heroes;
+    const data = Object.assign({},this.props.heroes);
     let dataArray = [];
     Object.keys(data).forEach(function (key, index) {
       // key: the name of the object key
@@ -38,7 +38,7 @@ class HeoresList extends Component {
       listHeores = dataArray.map((hero, index) => {
 
         const itemKey = hero.ItemKey;
-        const itemContent = hero.ItemContent;
+        const itemContent = Object.assign({},hero.ItemContent);
 
         if (!hero.ItemContent.delete) {
           return (

@@ -41,7 +41,7 @@ class RulesSet extends React.Component {
   componentWillMount() {
     let newState = this.state;
     newState.RulesSetKey = this.props.RulesSetKey;
-    newState.RulesSet = Object.assign({}, this.props.RulesSets[this.props.RulesSetKey], {});
+    newState.RulesSet = Object.assign({}, this.props.RulesSets[this.props.RulesSetKey]);
     this.setState(newState);
     this.props.startLoadingRules(this.props.RulesSetKey);
   }
@@ -57,8 +57,8 @@ class RulesSet extends React.Component {
     if (nextProps.RulesSetKey && nextProps.RulesSetKey != this.state.RulesSetKey || nextProps.RulesSets[nextProps.RulesSetKey] != this.state.RulesSet || nextProps.Rules != this.state.Rules) {
       let newState = this.state;
       if (nextProps.RulesSetKey) {
-        newState.RulesSet =  Object.assign({}, nextProps.RulesSets[nextProps.RulesSetKey], {});
-        newState.Rules = Object.assign({}, nextProps.Rules, {});
+        newState.RulesSet =  Object.assign({}, nextProps.RulesSets[nextProps.RulesSetKey]);
+        newState.Rules = Object.assign({}, nextProps.Rules);
       }
       this.setState(newState);
     }

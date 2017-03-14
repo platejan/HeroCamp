@@ -22,7 +22,7 @@ class Hero extends React.Component {
       publicRules = itemContent.public.rules;
     let privateRules = {};
     if (itemContent.private && itemContent.private.rules)
-      privateRules = itemContent.private.rules;
+      privateRules = Object.assign({}, itemContent.private.rules);
 
 
     let publicPrepare = Object.assign({}, itemContent.public, {rules: publicRules});
@@ -62,7 +62,6 @@ class Hero extends React.Component {
   }
 
   componentWillMount() {
-    console.log(this.state);
     if (this.state.hero.public.rules.rulesSet) {
       if (!this.props.publicRules[this.state.hero.public.rules.rulesSet.value])
         this.props.actions.loadPublicRules(this.state.hero.public.rules.rulesSet.value);
@@ -76,14 +75,15 @@ class Hero extends React.Component {
 
   componentDidUpdate() {
     if (this.state.heroKey != this.props.itemKey) {
+      let itemContent = Object.assign({},this.props.itemContent);
       let newState = this.state;
       let deleteProp = false;
-      if (this.props.itemContent.delete)
+      if (itemContent.delete)
         deleteProp = true;
 
-      newState.hero.public = this.props.itemContent.public;
-      newState.hero.owner = this.props.itemContent.owner;
-      newState.hero.inGame = this.props.itemContent.inGame;
+      newState.hero.public = itemContent.public;
+      newState.hero.owner = itemContent.owner;
+      newState.hero.inGame = itemContent.inGame;
       newState.hero.delete = deleteProp;
       newState.heroKey = this.props.itemKey;
       if (newState.hero.public.rules && newState.hero.public.rules.rulesSet.value)
@@ -145,13 +145,10 @@ class Hero extends React.Component {
   onchangeRules(key, value) {
     console.log("onchangeRules [key, value]: " + key + ", " + value);
     let state = this.state;
-    if (!state.hero.private.rules)
-      state.hero.private.rules = {};
-    state.hero.private.rules[key] = value;
+    state.hero.private['rules'][key] = value;
     state.hero.hasChange = true;
     clearTimeout(this.state.saveTimeout);
     state.saveTimeout = setTimeout(this.updateHero, 1000);
-    console.log(this.state);
     if (key == "rulesSet")
       this.props.actions.loadPublicRules(value.value);
     return this.setState(state);

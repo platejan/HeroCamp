@@ -169,7 +169,7 @@ class Rule extends React.Component {
               <div className="col-xs-12 col-sm-6">
                 <TextInput
                   name="nameOfRule"
-                  label="name of new rule"
+                  label={this.state.ruleKey? "name of new rule ("+this.state.ruleKey+")": "name of new rule"}
                   onChange={this.onchange}
                   value={this.state.currentState.nameOfRule}
                   className=""

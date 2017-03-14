@@ -11,11 +11,18 @@ class HeroRule extends React.Component {
       state: false,
       display: false,
       edit: false,
-      value: this.props.value
+      value: Object.assign({},this.props).value
     };
 
     this.onchange = this.onchange.bind(this);
     this.validate = this.validate.bind(this);
+    this.show = this.show.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    let state = this.state;
+    state.value = Object.assign({},nextProps).value;
+    this.setState(state);
   }
 
   onchange(event) {
@@ -24,7 +31,7 @@ class HeroRule extends React.Component {
     this.setState(state);
 
     if (this.validate(event.target.value)) {
-      this.props.onchange(event.target.name,event.target.value);
+      this.props.onchange("" + event.target.name, event.target.value);
     }
   }
 
@@ -43,26 +50,61 @@ class HeroRule extends React.Component {
     }
   }
 
+  show(rule, data = this.props.rulesData) {
+    if (rule) {
+      return (eval(rule));
+    } else {
+      return (true);
+    }
+  }
+
   render() {
     let render = (<div className="row">
-      <div className="col-xs-12 col-sm-4"><span>{this.props.content.nameOfRule? this.props.content.nameOfRule : this.props.name}</span>:</div>
-      <div className="col-xs-12 col-sm-8">{this.state.value}</div>
+      <div className="col-xs-12 col-sm-4">
+        <span>{this.props.content.nameOfRule ? this.props.content.nameOfRule : this.props.name}</span>:
+      </div>
+      <div className="col-xs-12 col-sm-8">{this.state.value.value ? this.state.value.value : this.state.value}</div>
     </div>);
+
     if (this.props.edit) {
-      render = (
-        <div className="row">
-          <div className="col-xs-12">
-            <TextInput
-              name={this.props.name}
-              label={this.props.content.nameOfRule? this.props.content.nameOfRule : this.props.name}
-              onChange={this.onchange}
-              value={this.state.value? this.state.value : ""}
-            />
-          </div>
-        </div>);
+      if (this.show(this.props.content.showRules)) {
+
+        let label = this.props.content.nameOfRule ? this.props.content.nameOfRule : this.props.name;
+        label += this.props.content.hint ? " (" + this.props.content.hint + ")" : "";
+        switch (this.props.content.typeOfRuleValue.value) {
+          case "select":
+            render = (
+              <div className="row">
+                <div className="col-xs-12">
+                  <SelectInput
+                    options={this.props.content.selectRestrictions}
+                    name={this.props.name}
+                    label={label}
+                    onChange={this.onchange}
+                    value={this.state.value.value? this.state.value.value : ""}
+                  />
+                </div>
+              </div>);
+            break;
+          default:
+            render = (
+              <div className="row">
+                <div className="col-xs-12">
+                  <TextInput
+                    name={this.props.name}
+                    label={label}
+                    onChange={this.onchange}
+                    value={this.state.value? this.state.value : ""}
+                  />
+                </div>
+              </div>);
+        }
+      } else {
+        render = "";
+      }
     }
     return (
-      <div>
+      <div className="row">
         {render}
       </div>
     );
