@@ -7,6 +7,7 @@ import {DropdownButton, MenuItem} from 'react-bootstrap';
 import {signOut} from '../../actions/authActions';
 import {setUsername,loadUsername} from  '../../actions/userActions';
 import toastr from 'toastr';
+import {loadNotification} from '../../actions/notificationActions';
 
 class UserMenu extends React.Component {
   constructor(props, context) {
@@ -16,6 +17,11 @@ class UserMenu extends React.Component {
       usernameDefined: false
     }
   }
+  
+  componentWillMount() {
+    this.props.beforeMount();
+  }
+
 
   componentWillReceiveProps() {
     if(this.props.authenticated){
@@ -97,6 +103,9 @@ function mapStateToProps(state, ownProps) {
 }
 function mapDispatchToProps(dispatch) {
   return {
+    beforeMount: () => {
+      dispatch(loadNotification());
+    },
     actions: bindActionCreators({signOut, setUsername,loadUsername}, dispatch)
   };
 }

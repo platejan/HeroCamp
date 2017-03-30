@@ -4,6 +4,7 @@ import {bindActionCreators} from 'redux';
 import toastr from 'toastr';
 import {createPost} from '../../../actions/PostsActions';
 import TextareaInput from '../../common/TextareaInput';
+import {createNotification} from '../../../actions/notificationActions';
 
 
 class CreatePost extends React.Component {
@@ -18,10 +19,22 @@ class CreatePost extends React.Component {
   }
 
 
-  createPost(){
-    this.props.actions.createPost(this.state,this.props.currentHero,this.props.chapterKey, (error = null)=> {
+  createPost() {
+    this.props.actions.createPost(this.state, this.props.currentHero, this.props.chapterKey, (error = null)=> {
       if (error == null) {
         toastr.success("sent");
+
+        let heroes = this.props.heroes;
+        let users = {};
+        console.log("New post in " + this.props.chapterName + " inside " + this.props.storyName + ".");
+        Object.keys(heroes).forEach(function (key) {
+          users[key] = heroes[key].owner;
+        });
+        console.log(users);
+        this.props.actions.createNotification(
+          {text: "New post in " + this.props.chapterName + " inside " + this.props.storyName + "."},
+          users
+        );
       } else {
         toastr.error(error);
       }
@@ -36,8 +49,8 @@ class CreatePost extends React.Component {
   }
 
   render() {
-    let hero= this.props.currentHero;
-    if(hero) {
+    let hero = this.props.currentHero;
+    if (hero) {
       if (this.props.heroes[this.props.currentHero])
         hero = this.props.heroes[this.props.currentHero].public.name;
 
@@ -58,7 +71,7 @@ class CreatePost extends React.Component {
           <button onClick={this.createPost} className="btn btn-success">Send post as {hero}</button>
         </div>
       );
-    }else return(null);
+    } else return (null);
   }
 }
 
@@ -66,8 +79,7 @@ CreatePost.propTypes = {
   userID: PropTypes.string.isRequired
 };
 
-CreatePost.contextTypes = {
-};
+CreatePost.contextTypes = {};
 
 function mapStateToProps(state, ownProps) {
   return {
@@ -79,7 +91,7 @@ function mapStateToProps(state, ownProps) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators({createPost}, dispatch)
+    actions: bindActionCreators({createPost, createNotification}, dispatch)
   };
 }
 

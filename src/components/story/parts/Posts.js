@@ -44,7 +44,7 @@ class Posts extends React.Component {
     }
     return (
       <div className="col-xs-12">
-        <CreatePost chapterKey={this.props.chapterKey}/>
+        <CreatePost chapterName={this.props.chapterContent.name} storyName={this.props.storyName} chapterKey={this.props.chapterKey}/>
         <h1>Posts</h1>
         {listPosts}
       </div>

@@ -45,6 +45,7 @@ export default {
   messages: {
     inbox: {}, outbox: {}, drafts: {}
   },
-  usernames: {}
-  
+  usernames: {},
+  notification: {}
+
 };

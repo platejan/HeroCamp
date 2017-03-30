@@ -1,11 +1,16 @@
 import React from 'react';
-import {Link} from 'react-router';
-import LoginPage from '../login/LoginPage';
 import checkAuth from '../requireAuth';
+import Notification from '../notification/NotificationBlock';
 
 const HomePage = () => {
   return (
-    <p>Dashboard</p>
+    <div className="col-xs-12">
+      <div className="row">
+        <div className="col-xs-12 col-sm-6">
+          <Notification />
+        </div>
+      </div>
+    </div>
   );
 };
 

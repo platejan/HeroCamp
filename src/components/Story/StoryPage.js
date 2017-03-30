@@ -65,7 +65,7 @@ class StoryPage extends React.Component {
               </TabList>
               <TabPanel>
                 <SwitchHero storyKey={this.state.story.id}/>
-                <ChapterDetail chapters={this.props.chapters}/>
+                <ChapterDetail storyName={this.props.stories[this.state.story.id].name} chapters={this.props.chapters}/>
               </TabPanel>
               <TabPanel>
                 <Recruit storyKey={this.state.story.id}/>
@@ -78,6 +78,8 @@ class StoryPage extends React.Component {
           </div>
         </div>
       )
+    }else {
+      return (<div></div>);
     }
   }
 }
@@ -88,7 +90,8 @@ StoryPage.contextTypes = {};
 function mapStateToProps(state, ownProps) {
   return {
     chapters: state.chapters.all,
-    currentUID: state.auth.currentUserUID
+    currentUID: state.auth.currentUserUID,
+    stories: state.stories
   };
 }
 
