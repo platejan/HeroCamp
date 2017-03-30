@@ -23,7 +23,7 @@ class StoryHeroes extends React.Component {
   }
 
   componentWillUnmount() {
-    this.props.actions.CurrentStoryClear();
+    //this.props.actions.CurrentStoryClear();
   }
 
   fireHero(heroKey) {

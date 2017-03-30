@@ -10,7 +10,8 @@ import StoryHeroes from './parts/StoryHeroes';
 import SwitchHero from './parts/SwitchHero';
 import CurrentHero from './parts/CurrentHero';
 import {loadChapters, switchChapter, clearChapters} from '../../actions/ChaptersActions';
-import {getStoryOwner} from '../../actions/StoriesActions';
+import {getStoryOwner,CurrentStoryClear} from '../../actions/StoriesActions';
+import {Tab, Tabs, TabList, TabPanel} from 'react-tabs';
 
 class StoryPage extends React.Component {
   constructor(props, context) {
@@ -42,25 +43,38 @@ class StoryPage extends React.Component {
   render() {
     if (this.state.story.id) {
       let acceptRecruit = "";
-      if(this.state.story.owner==this.props.currentUID){
-        acceptRecruit=(<AcceptRecruit storyKey={this.state.story.id}/>);
+      if (this.state.story.owner == this.props.currentUID) {
+        acceptRecruit = (<AcceptRecruit storyKey={this.state.story.id}/>);
       }
-      
+
       return (
         <div>
           <div className="col-xs-12 col-sm-4 col-lg-3">
             <CurrentHero/>
-          <ChapterToolbar chapters={this.props.chapters} storyOwner={this.state.story.owner}
-                          storyKey={this.state.story.id} switch={this.switchChapter}/>
+            <ChapterToolbar chapters={this.props.chapters} storyOwner={this.state.story.owner}
+                            storyKey={this.state.story.id} switch={this.switchChapter}/>
 
-            </div>
+          </div>
           <div className="col-xs-12 col-sm-8 col-lg-9">
-            <SwitchHero storyKey={this.state.story.id} />
-            <Recruit storyKey={this.state.story.id}/>
-            {acceptRecruit}
-            <StoryHeroes storyKey={this.state.story.id} storyOwner={this.state.story.owner} />
-            
-            <ChapterDetail chapters={this.props.chapters}/>
+            <Tabs>
+              <TabList>
+                <Tab>Chapter Detail</Tab>
+                <Tab>Recruit</Tab>
+                <Tab>Story heroes</Tab>
+                <Tab>Accept Recruits</Tab>
+              </TabList>
+              <TabPanel>
+                <SwitchHero storyKey={this.state.story.id}/>
+                <ChapterDetail chapters={this.props.chapters}/>
+              </TabPanel>
+              <TabPanel>
+                <Recruit storyKey={this.state.story.id}/>
+              </TabPanel>
+              <TabPanel>
+                <StoryHeroes storyKey={this.state.story.id} storyOwner={this.state.story.owner}/>
+              </TabPanel>
+              <TabPanel>{acceptRecruit}</TabPanel>
+            </Tabs>
           </div>
         </div>
       )
@@ -82,6 +96,7 @@ function mapDispatchToProps(dispatch) {
   return {
     beforeMount: (storyKey) => {
       dispatch(clearChapters());
+      dispatch(CurrentStoryClear());
       dispatch(loadChapters(storyKey));
     },
     actions: bindActionCreators({getStoryOwner}, dispatch)

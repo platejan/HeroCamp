@@ -13,6 +13,7 @@ import StoriesPage from './components/stories/StoriesPage';
 import HeroesPage from './components/heroes/HeroesPage';
 import StoryPage from './components/story/StoryPage';
 import RulesPage from './components/rules/RulesPage';
+import MessagesPage from './components/messages/MessagesPage';
 
 
 export default function Routes(store) {
@@ -36,6 +37,7 @@ export default function Routes(store) {
       </Route>
 
       <Route name="Heroes" path="heroes" component={HeroesPage}/>
+      <Route name="Messages" path="messages" component={MessagesPage}/>
       <Route name="Rules Maker" path="rulespage" component={RulesPage}/>
     </Route>
   );

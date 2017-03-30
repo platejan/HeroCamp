@@ -53,7 +53,7 @@ class Story extends React.Component {
               <span className="info-label">Name:</span>
               <span className="">{this.state.story.name}</span>
               <span className="info-label">Owner:</span>
-              <span className="">{this.state.story.owner}</span>
+              <span className="">{this.props.usernames[this.state.story.owner]?this.props.usernames[this.state.story.owner].name : this.state.story.owner}</span>
               {removeTool}
             </div>
           </div>
@@ -75,7 +75,8 @@ Story.contextTypes = {
 
 function mapStateToProps(state, ownProps) {
   return {
-    ownerID: state.auth.currentUserUID
+    ownerID: state.auth.currentUserUID,
+    usernames: state.usernames
   };
 }
 

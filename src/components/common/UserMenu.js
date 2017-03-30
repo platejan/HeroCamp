@@ -51,6 +51,10 @@ class UserMenu extends React.Component {
           <div className="dropdown text-right">
             <DropdownButton title={username} pullRight id="usermenu">
 
+              <LinkContainer to="/messages">
+                <MenuItem eventKey="2"><span className="glyphicon glyphicon-envelope"></span> <span>Messages</span></MenuItem>
+              </LinkContainer>
+              <MenuItem divider/>
               <LinkContainer to="/heroes">
                 <MenuItem eventKey="3"><span className="glyphicon glyphicon-tent"></span> <span>Heroes</span></MenuItem>
               </LinkContainer>

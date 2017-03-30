@@ -4,7 +4,9 @@ export default {
       '/',
       '/admin',
       '/heroes',
-      '/stories'
+      '/stories',
+      '/rulespage',
+      '/messages'
     ],
     routesRequireAdmin: [
       '/admin'
@@ -27,17 +29,22 @@ export default {
     current: null,
     all: {}
   },
-  currentStory:{
+  currentStory: {
     potentialRecruits: {},
-    heroes:{},
+    heroes: {},
     selectedHero: null
   },
   heroes: {},
   stories: {},
-  rules:{
+  rules: {
     current: null,
-    rulesSets:{},
+    rulesSets: {},
     rules: null,
     publicRules: {}
-  }
+  },
+  messages: {
+    inbox: {}, outbox: {}, drafts: {}
+  },
+  usernames: {}
+  
 };

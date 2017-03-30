@@ -75,6 +75,7 @@ export function setUsername(username, callback){
     let user = getState().auth.currentUserUID;
     let updates = {};
     updates['/users/'+user+'/displayName'] = username;
+    updates['/usernames/'+user+'/name'] = username;
     firebase.database().ref().update(updates, callback);
   };
 }
@@ -85,5 +86,20 @@ export function loadUsername(){
     ref.on('value', (snapshot) => {
       dispatch(usernameLoaded(snapshot.val()));
     });
+  };
+}
+
+export function loadUsersNames() {
+  return (dispatch, getState) => {
+    let ref = firebase.database().ref('/usernames/');
+    ref.on('value', (snapshot) => {
+      dispatch(loadUsersNamesList(snapshot.val()));
+    });
+  };
+}
+
+export function loadUsersNamesList(usernames) {
+  return {
+    type: types.USERNAMES_LOAD_SUCCESS, data: usernames
   };
 }

@@ -5,7 +5,7 @@ import * as types from './actionTypes';
 import {push} from 'react-router-redux';
 
 import {ajaxCallError, beginAjaxCall} from './ajaxStatusActions';
-import {userLoadedSuccess, userCreated, userIsAdminSuccess,loadUsername} from './userActions';
+import {userLoadedSuccess, userCreated, userIsAdminSuccess,loadUsername,loadUsersNames} from './userActions';
 
 export function authInitializedDone() {
   return {
@@ -39,6 +39,7 @@ export function authLoggedIn(userUID) {
   return (dispatch) => {
     dispatch(authLoggedInSuccess(userUID));
     dispatch(loadUsername());
+    dispatch(loadUsersNames());
     dispatch(beginAjaxCall());
     firebaseApi.GetChildAddedByKeyOnce('/users', userUID)
       .then(
