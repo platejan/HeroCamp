@@ -4,6 +4,7 @@ import {bindActionCreators} from 'redux';
 import * as PostsActions from '../../../actions/PostsActions';
 import Post from './Post';
 import CreatePost from './CreatePost';
+import CurrentHero from './CurrentHero';
 
 class Posts extends React.Component {
   constructor(props, context) {
@@ -23,28 +24,36 @@ class Posts extends React.Component {
     const data = this.props.chapterContent.posts;
     let dataArray = [];
     let listPosts = "";
-    if(data){
-    Object.keys(data).forEach(function (key, index) {
-      // key: the name of the object key
-      // index: the ordinal position of the key within the object
-      dataArray.push({ItemKey: key, ItemContent: data[key]});
-    });
-    if (dataArray.length > 0) {
-      listPosts = dataArray.map((post, index) => {
-
-        const itemKey = post.ItemKey;
-        const itemContent = post.ItemContent;
-        const itemIndex = index + itemKey;
-
-        return (
-          <Post key={itemIndex} itemKey={itemKey} itemContent={itemContent}/>
-        );
+    if (data) {
+      Object.keys(data).forEach(function (key, index) {
+        // key: the name of the object key
+        // index: the ordinal position of the key within the object
+        dataArray.push({ItemKey: key, ItemContent: data[key]});
       });
-    }
+      if (dataArray.length > 0) {
+        listPosts = dataArray.map((post, index) => {
+
+          const itemKey = post.ItemKey;
+          const itemContent = post.ItemContent;
+          const itemIndex = index + itemKey;
+
+          return (
+            <Post key={itemIndex} itemKey={itemKey} itemContent={itemContent}/>
+          );
+        });
+      }
     }
     return (
       <div className="col-xs-12">
-        <CreatePost chapterName={this.props.chapterContent.name} storyName={this.props.storyName} chapterKey={this.props.chapterKey}/>
+        <div className="row">
+          <div className="col-xs-12 col-sm-4">
+            <CurrentHero showSwitch={this.props.showSwitch}/>
+          </div>
+          <div className="col-xs-12 col-sm-8">
+            <CreatePost chapterName={this.props.chapterContent.name} storyName={this.props.storyName}
+                        chapterKey={this.props.chapterKey}/>
+          </div>
+        </div>
         <h1>Posts</h1>
         {listPosts}
       </div>

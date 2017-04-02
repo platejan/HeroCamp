@@ -20,10 +20,13 @@ class StoryPage extends React.Component {
     this.state = {
       story: {
         id: props.params.storyId
-      }
+      },
+      showSwitchHero: false
     };
 
     this.setOwner = this.setOwner.bind(this);
+    this.showSwitchHero = this.showSwitchHero.bind(this);
+    this.closeSwitchHero = this.closeSwitchHero.bind(this);
   }
 
   componentWillMount() {
@@ -34,6 +37,13 @@ class StoryPage extends React.Component {
     this.props.actions.getStoryOwner(this.state.story.id, this.setOwner);
   }
 
+  showSwitchHero(){
+    this.setState(Object.assign({},this.state,{showSwitchHero:true}));
+  }
+  closeSwitchHero(){
+    this.setState(Object.assign({},this.state,{showSwitchHero:false}));
+  }
+  
   setOwner(owner) {
     let state = this.state;
     state.story.owner = owner;
@@ -50,7 +60,6 @@ class StoryPage extends React.Component {
       return (
         <div>
           <div className="col-xs-12 col-sm-4 col-lg-3">
-            <CurrentHero/>
             <ChapterToolbar chapters={this.props.chapters} storyOwner={this.state.story.owner}
                             storyKey={this.state.story.id} switch={this.switchChapter}/>
 
@@ -64,8 +73,8 @@ class StoryPage extends React.Component {
                 <Tab>Accept Recruits</Tab>
               </TabList>
               <TabPanel>
-                <SwitchHero storyKey={this.state.story.id}/>
-                <ChapterDetail storyName={this.props.stories[this.state.story.id].name} chapters={this.props.chapters}/>
+                <SwitchHero closeSwitch={this.closeSwitchHero} show={this.state.showSwitchHero} storyKey={this.state.story.id}/>
+                <ChapterDetail showSwitch={this.showSwitchHero} storyName={this.props.stories[this.state.story.id].name} chapters={this.props.chapters}/>
               </TabPanel>
               <TabPanel>
                 <Recruit storyKey={this.state.story.id}/>

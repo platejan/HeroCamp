@@ -25,7 +25,7 @@ class CurrentHero extends React.Component {
       return (
         <div className="row">
           <div className="col-xs-12">
-        <Hero itemKey={heroKey} itemContent={this.props.heroes[heroKey]} itemSize=""/>
+        <Hero onClicAction={this.props.showSwitch} itemKey={heroKey} itemContent={this.props.heroes[heroKey]} itemSize=""/>
             </div></div>
       );
     else

@@ -7,14 +7,18 @@ import * as HeroesActions from '../../../actions/HeroesActions';
 import {setHero} from '../../../actions/HeroesActions';
 import {CurrentStoryClear} from '../../../actions/StoriesActions';
 import Hero from '../../../components/heroes/parts/Hero';
+import {Modal} from 'react-bootstrap';
 
 
 class SwitchHero extends React.Component {
   constructor(props, context) {
     super(props, context);
 
-    this.state = {};
+    this.state = {
+      showModal: false
+    };
     this.setHero = this.setHero.bind(this);
+    this.close = this.close.bind(this);
   }
 
   componentWillMount() {
@@ -26,6 +30,10 @@ class SwitchHero extends React.Component {
   componentWillUnmount() {
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.setState(Object.assign({}, this.state, {showModal: nextProps.show}))
+  }
+
   setHero(heroKey) {
     this.props.actions.setHero(heroKey, (error = null)=> {
       if (error == null) {
@@ -34,6 +42,12 @@ class SwitchHero extends React.Component {
         toastr.error(error);
       }
     });
+    this.close();
+  }
+
+  close() {
+    this.setState(Object.assign({}, this.state, {showModal: false}))
+    this.props.closeSwitch();
   }
 
   render() {
@@ -49,7 +63,7 @@ class SwitchHero extends React.Component {
 
         const itemKey = hero.ItemKey;
         const itemContent = hero.ItemContent;
-        const itemIndex = index+itemKey;
+        const itemIndex = index + itemKey;
 
         if (itemContent.owner == this.props.userID) {
           currentHero = itemKey;
@@ -61,12 +75,23 @@ class SwitchHero extends React.Component {
         return;
       });
     }
-    if(currentHero)
-    this.props.actions.setHero(currentHero);
+    if (currentHero)
+      this.props.actions.setHero(currentHero);
     return (
-      <div className="col-xs-12">
-        <h1>Switch Hero</h1>
-        {listHeores}
+      <div>
+        <Modal show={this.state.showModal} onHide={this.close}>
+          <Modal.Header closeButton>
+            <Modal.Title>Switch hero</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <div className="row">
+                {listHeores}
+            </div>
+          </Modal.Body>
+          <Modal.Footer>
+            <button className="btn btn-danger" onClick={this.close}>Close</button>
+          </Modal.Footer>
+        </Modal>
       </div>
     );
   }
