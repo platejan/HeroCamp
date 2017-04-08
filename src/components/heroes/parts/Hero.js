@@ -276,6 +276,18 @@ class Hero extends React.Component {
     if (this.props.itemSize) {
       heroPartSize = heroPartSize + " " + this.props.itemSize;
     }
+
+    if(this.props.justIcon){
+      return(
+        <div onClick={onClicAction} style={{width:"75px",height: this.props.iconSize? this.props.iconSize : "100px"}}>
+          <Icon
+            size={{height: this.props.iconSize? this.props.iconSize : "150px"}}
+            onlyImage={true}
+            icon={this.state.hero.public.icon}
+          />
+        </div>
+      );
+    }else{
     return (
       <div onClick={onClicAction} style={style} className={heroPartSize}>
         <div className="col-xs-12">
@@ -293,7 +305,7 @@ class Hero extends React.Component {
         </div>
 
       </div>
-    );
+    );}
   }
 }
 

@@ -28,7 +28,7 @@ class Posts extends React.Component {
       Object.keys(data).forEach(function (key, index) {
         // key: the name of the object key
         // index: the ordinal position of the key within the object
-        dataArray.push({ItemKey: key, ItemContent: data[key]});
+        dataArray.unshift({ItemKey: key, ItemContent: data[key]});
       });
       if (dataArray.length > 0) {
         listPosts = dataArray.map((post, index) => {
@@ -44,14 +44,16 @@ class Posts extends React.Component {
       }
     }
     return (
-      <div className="col-xs-12">
+      <div className="">
         <div className="row">
-          <div className="col-xs-12 col-sm-4">
-            <CurrentHero showSwitch={this.props.showSwitch}/>
-          </div>
-          <div className="col-xs-12 col-sm-8">
-            <CreatePost chapterName={this.props.chapterContent.name} storyName={this.props.storyName}
-                        chapterKey={this.props.chapterKey}/>
+          <div className="col-xs-12">
+            <div style={{position:"absolute",zIndex:"3"}}>
+              <CurrentHero showSwitch={this.props.showSwitch}/>
+            </div>
+            <div className="row" style={{paddingLeft:"75px"}}>
+              <CreatePost chapterName={this.props.chapterContent.name} storyName={this.props.storyName}
+                          chapterKey={this.props.chapterKey}/>
+            </div>
           </div>
         </div>
         <h1>Posts</h1>

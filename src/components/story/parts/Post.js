@@ -1,6 +1,7 @@
 import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
+import ReactMarkdown from 'react-markdown';
 
 
 class Post extends React.Component {
@@ -20,7 +21,7 @@ class Post extends React.Component {
         <div className=" panel panel-default">
           <div className="panel-heading">{name}</div>
           <div className="panel-body">
-            {this.props.itemContent.text}
+            <ReactMarkdown  source={this.props.itemContent.text} softBreak="br"/>
           </div>
         </div>
     );

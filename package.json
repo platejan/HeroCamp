@@ -61,11 +61,15 @@
     "redux-mock-store": "^1.0.4",
     "style-loader": "^0.13.1",
     "url-loader": "^0.5.7",
+    "json-loader": "^0.5.4",
     "webpack": "^1.13.1",
     "webpack-dev-middleware": "^1.6.1",
     "webpack-hot-middleware": "^2.10.0",
     "react-file-reader-input": "^1.1.0",
-    "react-textarea-autosize": "^4.0.5"
+    "react-textarea-autosize": "^4.0.5",
+    "react-simplemde-editor": "^3.6.10",
+    "react-markdown": "^2.4.6"
+
   },
   "dependencies": {
     "bootstrap": "^3.3.6",

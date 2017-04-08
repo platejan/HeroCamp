@@ -23,6 +23,7 @@ import initialState from './reducers/initialState';
 import configureStore from './store/configureStore'; //eslint-disable-line import/default
 
 // styles
+import './styles/simpleMDE.css'
 import './styles/styles.css'; //Webpack can import CSS files too!
 import './styles/HeroStyle.css'; //Webpack can import CSS files too!
 import './styles/StoriesStyle.css'; //Webpack can import CSS files too!

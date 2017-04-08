@@ -23,10 +23,8 @@ class CurrentHero extends React.Component {
     let heroKey = this.props.hero;
     if (heroKey != null && this.props.heroes[heroKey])
       return (
-        <div className="row">
-          <div className="col-xs-12">
-        <Hero onClicAction={this.props.showSwitch} itemKey={heroKey} itemContent={this.props.heroes[heroKey]} itemSize=""/>
-            </div></div>
+            <Hero justIcon={true} iconSize={"200px"} onClicAction={this.props.showSwitch} itemKey={heroKey}
+                  itemContent={this.props.heroes[heroKey]} itemSize=""/>
       );
     else
       return (

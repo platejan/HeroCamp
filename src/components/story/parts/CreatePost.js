@@ -5,7 +5,7 @@ import toastr from 'toastr';
 import {createPost} from '../../../actions/PostsActions';
 import TextareaInput from '../../common/TextareaInput';
 import {createNotification} from '../../../actions/notificationActions';
-
+import SimpleMDE  from 'react-simplemde-editor';
 
 class CreatePost extends React.Component {
   constructor(props, context) {
@@ -41,10 +41,10 @@ class CreatePost extends React.Component {
     });
   }
 
-  onchange(event) {
-    const field = event.target.name;
+  onchange(text) {
+    console.log(text);
     let state = this.state;
-    state[field] = event.target.value;
+    state.text = text;
     return this.setState(state);
   }
 
@@ -55,19 +55,10 @@ class CreatePost extends React.Component {
         hero = this.props.heroes[this.props.currentHero].public.name;
 
       return (
-        <div className="col-xs-12">
-          <h1>Create post</h1>
-          <form>
-            <div className="form-group">
-              <TextareaInput
-                className="form-control"
-                name="text"
-                label="text"
-                onChange={this.onchange}
-                value={this.state.text}
-              />
-            </div>
-          </form>
+        <div className="col-xs-12 CreatePostSimpleMDE">
+          <SimpleMDE
+            onChange={this.onchange}
+            value={this.state.text}/>
           <button onClick={this.createPost} className="btn btn-success">Send post as {hero}</button>
         </div>
       );
