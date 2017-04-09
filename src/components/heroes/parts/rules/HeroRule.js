@@ -21,13 +21,13 @@ class HeroRule extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    let state = this.state;
+    let state = Object.assign({},this.state);
     state.value = Object.assign({},nextProps).value;
     this.setState(state);
   }
 
   onchange(event) {
-    let state = this.state;
+    let state = Object.assign({},this.state);
     state.value = event.target.value;
     this.setState(state);
 

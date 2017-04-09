@@ -2,10 +2,10 @@ import React, {PropTypes} from 'react';
 import Line from '../../common/Line';
 import Icon from '../../common/Icon';
 import TextInput from '../../common/TextInput';
-// import Textarea from 'react-textarea-autosize';
 import TextareaInput from '../../common/TextareaInput';
 import HeroRulesSet from './rules/HeroRulesSet';
 import {Tab, Tabs, TabList, TabPanel} from 'react-tabs';
+import SimpleMDE  from 'react-simplemde-editor';
 
 class HeroEdit extends React.Component {
   constructor(props, context) {
@@ -15,6 +15,7 @@ class HeroEdit extends React.Component {
       tab: 0
     };
     this.tabSwitch = this.tabSwitch.bind(this);
+    this.biographyEdit = this.biographyEdit.bind(this);
   }
 
   tabSwitch(index, last) {
@@ -23,94 +24,70 @@ class HeroEdit extends React.Component {
     this.setState(newState);
   }
 
+  biographyEdit(text) {
+    let data = {target: {name: "biography", value: text}};
+    this.props.onchange(data);
+  }
+
   render() {
     let stop = function (e) {
       e.stopPropagation();
     };
 
-    let className;
-    if (this.props.display) {
-      className = "hero-detail-part overlay-section-part";
-    } else {
-      className = "hero-detail-part overlay-section-part dont-show";
-    }
+    let className = "";
 
-    let information;
+    let information = false;
     if (this.props.hero.hasChange) {
       information = (
-        <div className="change-block">
-          <span>You update some information. After finish publish changes to world.</span> <a
-          onClick={this.props.reject}>Delete draft</a> <a
-          onClick={this.props.publish}>Publish</a>
+        <div className="row" style={{paddingTop:"15px",paddingBottom:"15px"}}>
+          <div className="col-xs-12">
+            <p>You update some information. After finish publish changes to world.</p>
+            <div className="pull-right btn-group btn-group-xs">
+              <button className="btn btn-default" onClick={this.props.publish}>Publish</button>
+              <button className="btn btn-danger" onClick={this.props.reject}>Delete draft</button>
+            </div>
+          </div>
         </div>
       );
-    } else {
-      information = "";
     }
 
-    let closeMe = this.props.click;
-    let close = function (e) {
-      e.stopPropagation();
-      closeMe();
-    };
-
-    const styleHelp = {maxWidth: '260px'};
-
-    let rules = Object.assign({},this.props.hero.private.rules);
     return (
-      <div onClick={close} className={className}>
-        <div className="col-xs-12 clickable">
-          <div onClick={stop}
-               className="hero-detail-form-part col-xs-12 col-sm-10 col-md-8 col-lg-6 col-sm-push-1 col-md-push-2 col-lg-push-3">
-            <div className="header-block">
-              <Icon icon={this.props.hero.private.icon}/>
-              <div className="edit-general-block">
-                <form>
-                  <TextInput
-                    name="name"
-                    label="Name"
-                    onChange={this.props.onchange}
-                    value={this.props.hero.private.name}
-                  />
-                  <TextInput
-                    type="file"
-                    name="icon"
-                    label="Icon"
-                    onChange={this.props.iconchange}
-                    value=""
-                  />
-                </form>
-              </div>
+      <div className="row">
+        <div className="col-xs-12" onClick={stop}>
+          <div className="row">
+            <div style={{position:"absolute",height:"200px"}}>
+              <Icon icon={this.props.hero.private.icon} withoutMargins withoutRoundCorners/>
             </div>
-            <Line/>
-            {information}
-            <div className="content-block">
-              <form>
-                <Tabs
-                  onSelect={this.tabSwitch}
-                  selectedIndex={this.state.tab}>
-                  <TabList>
-                    <Tab>Biography</Tab>
-                    <Tab>Game rules</Tab>
-                  </TabList>
-                  <TabPanel>
-                    <div className="form-group marginTop15">
-                      <div className="field">
-                        <TextareaInput
-                          className="form-control"
-                          name="biography"
-                          label="Biography"
-                          onChange={this.props.onchange}
-                          value={this.props.hero.private.biography}
-                        />
-                      </div>
-                    </div>
-                  </TabPanel>
-                  <TabPanel>
-                    <HeroRulesSet data={rules} onchangeRules={this.props.onchangeRules} edit={true} className="col-xs-12 marginTop15"/>
-                  </TabPanel>
-                </Tabs>
-              </form>
+            <div className="col-xs-12" style={{paddingLeft:"90px",minHeight:"200px",paddingTop:"15px"}}>
+              <TextInput name="name" label="Name" onChange={this.props.onchange} value={this.props.hero.private.name}/>
+              <TextInput type="file" name="icon" label="Icon" onChange={this.props.iconchange} value=""/>
+            </div>
+          </div>
+          <Line/>
+          {information ? information : ""}
+          {information ? (<Line/>) : ""}
+          <div className="row marginTop15">
+            <div className="col-xs-12">
+              <Tabs
+                onSelect={this.tabSwitch}
+                selectedIndex={this.state.tab}>
+                <TabList>
+                  <Tab>Biography</Tab>
+                  <Tab>Game rules</Tab>
+                </TabList>
+                <TabPanel>
+                  <div className="marginTop15">
+                    <SimpleMDE
+                      onChange={this.biographyEdit}
+                      value={this.props.hero.private.biography}/>
+                  </div>
+                </TabPanel>
+                <TabPanel>
+                  <HeroRulesSet data={Object.assign({},this.props.hero.private.rules)}
+                                onchangeRules={this.props.onchangeRules}
+                                edit={true} className="col-xs-12 marginTop15"/>
+                </TabPanel>
+              </Tabs>
             </div>
           </div>
         </div>
@@ -124,9 +101,7 @@ HeroEdit.propTypes = {
   onchange: PropTypes.func.isRequired,
   iconchange: PropTypes.func.isRequired,
   reject: PropTypes.func.isRequired,
-  publish: PropTypes.func.isRequired,
-  click: PropTypes.func.isRequired,
-  display: PropTypes.bool.isRequired
+  publish: PropTypes.func.isRequired
 };
 
 export default HeroEdit;

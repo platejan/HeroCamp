@@ -1,11 +1,9 @@
 import React, {PropTypes} from 'react';
 import Line from '../../common/Line';
 import Icon from '../../common/Icon';
-import TextInput from '../../common/TextInput';
-// import Textarea from 'react-textarea-autosize';
-import TextareaInput from '../../common/TextareaInput';
 import {Tab, Tabs, TabList, TabPanel} from 'react-tabs';
 import HeroRulesSet from './rules/HeroRulesSet';
+import ReactMarkdown from 'react-markdown';
 
 class HeroDetail extends React.Component {
   constructor(props, context) {
@@ -22,63 +20,45 @@ class HeroDetail extends React.Component {
     this.setState(newState);
   }
 
-
   render() {
     let stop = function (e) {
       e.stopPropagation();
     };
 
-    let className;
-    if (this.props.display) {
-      className = "hero-detail-part overlay-section-part";
-    } else {
-      className = "hero-detail-part overlay-section-part dont-show";
-    }
-
-    let closeMe = this.props.click;
-    let close = function (e) {
-      e.stopPropagation();
-      closeMe();
-    };
-
-    const styleHelp = {maxWidth: '260px'};
-
-    return (
-      <div onClick={close} className={className}>
-        <div className="col-xs-12 clickable">
-          <div onClick={stop}
-               className="hero-detail-form-part col-xs-12 col-sm-10 col-md-8 col-lg-6 col-sm-push-1 col-md-push-2 col-lg-push-3">
-            <div className="header-block">
-              <Icon icon={this.props.hero.public.icon}/>
-              <div className="edit-general-block">
-                <form>
-                  <label>Name:</label>
-                  <span>{this.props.hero.public.name}</span>
-                </form>
-              </div>
-            </div>
-            <Line/>
-            <div className="content-block">
-              <form>
-                <Tabs
-                  onSelect={this.tabSwitch}
-                  selectedIndex={this.state.tab}>
-                  <TabList>
-                    <Tab>Biography</Tab>
-                    <Tab>Game rules</Tab>
-                  </TabList>
-                  <TabPanel>
-                    <p className="marginTop15">{this.props.hero.public.biography}</p>
-                  </TabPanel>
-                  <TabPanel>
-                    <HeroRulesSet data={this.props.hero.public.rules} edit={false} className="marginTop15"/>
-                  </TabPanel>
-                </Tabs>
-              </form>
-            </div>
+    return (      <div className="row">
+      <div className="col-xs-12" onClick={stop}>
+        <div className="row">
+          <div style={{position:"absolute",height:"200px"}}>
+            <Icon icon={this.props.hero.public.icon} withoutMargins withoutRoundCorners/>
+          </div>
+          <div className="col-xs-12" style={{paddingLeft:"90px",minHeight:"200px",paddingTop:"15px"}}>
+            <label>Name:</label>
+            <span>{this.props.hero.public.name}</span>
+          </div>
+        </div>
+        <Line/>
+        <div className="row marginTop15">
+          <div className="col-xs-12">
+            <Tabs
+              onSelect={this.tabSwitch}
+              selectedIndex={this.state.tab}>
+              <TabList>
+                <Tab>Biography</Tab>
+                <Tab>Game rules</Tab>
+              </TabList>
+              <TabPanel>
+                <div className="marginTop15">
+                  <ReactMarkdown source={this.props.hero.public.biography} softBreak="br"/>
+                </div>
+              </TabPanel>
+              <TabPanel>
+                <HeroRulesSet data={this.props.hero.public.rules} edit={false} className="marginTop15"/>
+              </TabPanel>
+            </Tabs>
           </div>
         </div>
       </div>
+    </div>
     );
   }
 }

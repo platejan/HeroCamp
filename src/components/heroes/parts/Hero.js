@@ -7,51 +7,35 @@ import HeroEdit from './HeroEdit';
 import HeroDetail from './HeroDetail';
 import Icon from '../../common/Icon';
 import toastr from 'toastr';
+import {Modal} from 'react-bootstrap';
 
 class Hero extends React.Component {
   constructor(props, context) {
     super(props, context);
 
     let itemContent = Object.assign({}, this.props.itemContent);
-
-    let deleteProp = false;
-    if (itemContent.delete)
-      deleteProp = true;
-    let publicRules = {};
-    if (itemContent.public.rules)
-      publicRules = itemContent.public.rules;
-    let privateRules = {};
-    if (itemContent.private && itemContent.private.rules)
-      privateRules = Object.assign({}, itemContent.private.rules);
-
-
-    let publicPrepare = Object.assign({}, itemContent.public, {rules: publicRules});
     this.state = {
-      hero: {
-        public: publicPrepare,
-        private: {rules: {}},
-        owner: this.props.ownerID,
-        inGame: itemContent.inGame,
-        delete: deleteProp
-      },
+      hero: Object.assign({public: {rules:{}}, private: {rules:{}}}, itemContent ? itemContent : {}),
       heroKey: this.props.itemKey,
-      editWindowState: false,
-      detailWindowState: false,
       saveTimeout: null,
-      onlyPublic: true
+      onlyPublic: itemContent.private ? false : true,
+      showEdit: false,
+      showDetail: false
     };
-    if (itemContent.private !== undefined) {
-      let privatePrepare = Object.assign({}, itemContent.private, {icon: itemContent.public.icon, rules: privateRules});
-      this.state.hero.private = privatePrepare;
-      this.state.hero.hasChange = itemContent.hasChange;
-      this.state.onlyPublic = false;
+    let hero = {};
+
+    hero.public = Object.assign({}, itemContent.public);
+    hero.public.rules = Object.assign({}, itemContent.public.rules);
+    if (itemContent.private) {
+      hero.private = Object.assign({}, itemContent.private);
+      hero.private.rules = Object.assign({}, itemContent.private.rules);
     }
 
-    this.showEditWindow = this.showEditWindow.bind(this);
-    this.hideEditWindow = this.hideEditWindow.bind(this);
-    this.showDetailWindow = this.showDetailWindow.bind(this);
-    this.hideDetailWindow = this.hideDetailWindow.bind(this);
-    this.ESCkey = this.ESCkey.bind(this);
+    this.state.hero = Object.assign({}, this.state.hero, hero);
+
+    this.toggleEdit = this.toggleEdit.bind(this);
+    this.toggleDetail = this.toggleDetail.bind(this);
+
     this.onchange = this.onchange.bind(this);
     this.updateHero = this.updateHero.bind(this);
     this.publishChanges = this.publishChanges.bind(this);
@@ -62,79 +46,42 @@ class Hero extends React.Component {
   }
 
   componentWillMount() {
-    if (this.state.hero.public.rules.rulesSet) {
-      if (!this.props.publicRules[this.state.hero.public.rules.rulesSet.value])
-        this.props.actions.loadPublicRules(this.state.hero.public.rules.rulesSet.value);
+    let publicRulesSet = this.state.hero.public.rules.rulesSet ? this.state.hero.public.rules.rulesSet.value : false;
+    let privateRulesSet = this.state.hero.private.rules.rulesSet ? this.state.hero.private.rules.rulesSet.value : false;
+    if (publicRulesSet) {
+      if (!this.props.publicRules[publicRulesSet])
+        this.props.actions.loadPublicRules(publicRulesSet);
     }
-    if (this.props.itemContent.private !== undefined && this.state.hero.private.rules.rulesSet) {
-      if (!this.props.publicRules[this.state.hero.private.rules.rulesSet.value])
-        this.props.actions.loadPublicRules(this.state.hero.private.rules.rulesSet.value);
-    }
-
-  }
-
-  componentDidUpdate() {
-    if (this.state.heroKey != this.props.itemKey) {
-      let itemContent = Object.assign({}, this.props.itemContent);
-      let newState = this.state;
-      let deleteProp = false;
-      if (itemContent.delete)
-        deleteProp = true;
-
-      newState.hero.public = itemContent.public;
-      newState.hero.owner = itemContent.owner;
-      newState.hero.inGame = itemContent.inGame;
-      newState.hero.delete = deleteProp;
-      newState.heroKey = this.props.itemKey;
-      if (newState.hero.public.rules && newState.hero.public.rules.rulesSet.value)
-        this.props.actions.loadPublicRules(newState.hero.public.rules.rulesSet.value);
-      this.setState(newState);
+    if (privateRulesSet) {
+      if (!this.props.publicRules[privateRulesSet] && publicRulesSet != privateRulesSet)
+        this.props.actions.loadPublicRules(privateRulesSet);
     }
   }
 
-  componentDidMount() {
-    document.addEventListener("keydown", this.ESCkey, false);
-  }
-
-  showEditWindow() {
-    let newState = this.state;
-    newState.editWindowState = true;
-    this.setState(newState);
-  }
-
-  hideEditWindow() {
-    if (this.state.editWindowState) {
-      let newState = this.state;
-      newState.editWindowState = false;
-      this.setState(newState);
+  componentWillReceiveProps(nextProps) {
+    let itemContent = Object.assign({}, nextProps.itemContent);
+    let state = {
+      hero: Object.assign({public: {rules:{}}, private: {rules:{}}}, itemContent ? itemContent : {}),
+      heroKey: nextProps.itemKey,
+      saveTimeout: this.state.saveTimeout,
+      onlyPublic: itemContent.private ? false : true,
+      showEdit: this.state.showEdit,
+      showDetail: this.state.showDetail
+    };
+    let hero = {};
+    hero.public = Object.assign({}, itemContent.public);
+    hero.public.rules = Object.assign({}, itemContent.public.rules);
+    if (itemContent.private) {
+      hero.private = Object.assign({}, itemContent.private);
+      hero.private.rules = Object.assign({}, itemContent.private.rules);
     }
-  }
-
-  showDetailWindow() {
-    let newState = this.state;
-    newState.detailWindowState = true;
-    this.setState(newState);
-  }
-
-  hideDetailWindow() {
-    if (this.state.detailWindowState) {
-      let newState = this.state;
-      newState.detailWindowState = false;
-      this.setState(newState);
-    }
-  }
-
-  ESCkey(event) {
-    let keyCode = event.keyCode;
-    if (keyCode === 27) {
-      this.hideEditWindow();
-      this.hideDetailWindow();
-    }
+    state.hero = Object.assign({}, state.hero, hero);
+    this.setState(state);
   }
 
   onchange(event) {
+    let state = Object.assign({}, this.state);
     const field = event.target.name;
-    let state = this.state;
     state.hero.private[field] = event.target.value;
     state.hero.hasChange = true;
     clearTimeout(this.state.saveTimeout);
@@ -144,7 +91,7 @@ class Hero extends React.Component {
 
   onchangeRules(key, value) {
     console.log("onchangeRules [key, value]: " + key + ", " + value);
-    let state = this.state;
+    let state = Object.assign({}, this.state);
     state.hero.private['rules'][key] = value;
     state.hero.hasChange = true;
     clearTimeout(this.state.saveTimeout);
@@ -179,7 +126,7 @@ class Hero extends React.Component {
 
   publishChanges() {
     let state = this.state;
-    state.hero.public = JSON.parse(JSON.stringify(state.hero.private));
+    state.hero.public = Object.assign({}, state.hero.private);
     state.hero.hasChange = false;
     this.setState(state);
     this.updateHero();
@@ -187,7 +134,7 @@ class Hero extends React.Component {
 
   rejectChanges() {
     let state = this.state;
-    state.hero.private = JSON.parse(JSON.stringify(state.hero.public));
+    state.hero.private = Object.assign({}, state.hero.public);
     state.hero.hasChange = false;
     this.setState(state);
     this.updateHero();
@@ -211,26 +158,22 @@ class Hero extends React.Component {
     }
   }
 
+  toggleDetail() {
+    this.setState(Object.assign(this.state, {showDetail: !this.state.showDetail}));
+  }
+
+  toggleEdit() {
+    this.setState(Object.assign(this.state, {showEdit: !this.state.showEdit}));
+  }
+
   render() {
     let stop = function (e) {
       e.stopPropagation();
     };
-    let editButtonStyle = {};
-    if (this.state.hero.hasChange && !this.state.onlyPublic) {
-      editButtonStyle = {
-        color: 'red'
-      };
-    }
+
     let inGame = "";
     if (this.state.hero.inGame && this.props.showFlag) {
       inGame = (<div className="hero-bio-flag-part"><span>in game</span></div>);
-    }
-
-    let onClicAction = "";
-    let style = {};
-    if (this.props.onClicAction != undefined) {
-      onClicAction = this.props.onClicAction;
-      style = {cursor: "pointer"};
     }
 
     let editPart = "";
@@ -240,50 +183,56 @@ class Hero extends React.Component {
     let detailTool = "";
     if (!this.state.onlyPublic) {
       let temp = Object.assign({}, this.state.hero);
-      editPart = (<HeroEdit iconchange={this.iconchange} reject={this.rejectChanges} publish={this.publishChanges}
-                            click={this.hideEditWindow}
-                            onchange={this.onchange} hero={temp} display={this.state.editWindowState}
-                            onchangeRules={this.onchangeRules}/>);
-      editTool = (
-        <span onClick={this.showEditWindow} className="glyphicon glyphicon-pencil" style={editButtonStyle}></span>);
+      editPart = (
+        <Modal show={this.state.showEdit} onHide={this.toggleEdit}>
+          <Modal.Header closeButton/>
+          <Modal.Body style={{paddingTop:"0",paddingBottom:"0"}}>
+            <HeroEdit iconchange={this.iconchange} reject={this.rejectChanges} publish={this.publishChanges}
+                      onchange={this.onchange} hero={temp}
+                      onchangeRules={this.onchangeRules}/>
+          </Modal.Body>
+        </Modal>
+      );
+      editTool = (<span onClick={this.toggleEdit} className="glyphicon glyphicon-pencil"
+                        style={this.state.hero.hasChange?{color:"red"}:{}}></span>);
       if (!this.state.hero.inGame) {
-        removeTool = (
-          <span onClick={this.deleteHero} className="glyphicon glyphicon-trash"></span>);
+        removeTool = (<span onClick={this.deleteHero} className="glyphicon glyphicon-trash"></span>);
       }
-    } else {
-      if (this.props.canViewDetail) {
-        editPart = (
-          <HeroDetail click={this.hideDetailWindow} hero={this.state.hero} display={this.state.detailWindowState}/>);
-        detailTool = (<button onClick={this.showDetailWindow} className="btn btn-info btn-sm"><span
-          className="glyphicon glyphicon-eye-open"></span></button>);
-      }
+    } else if (this.props.canViewDetail) {
+      editPart = (
+        <Modal show={this.state.showDetail} onHide={this.toggleDetail}>
+          <Modal.Header closeButton/>
+          <Modal.Body>
+            <HeroDetail hero={this.state.hero}/>
+          </Modal.Body>
+        </Modal>
+      );
+      detailTool = (<button onClick={this.toggleDetail} className="btn btn-info btn-sm"><span
+        className="glyphicon glyphicon-eye-open"></span></button>);
     }
 
+    let acceptButton = this.props.accept ? (
+      <button onClick={this.props.accept} className="btn btn-success btn-sm">Accept</button>) : "";
+    let rejectButton = this.props.reject ? (
+      <button onClick={this.props.reject} className="btn btn-danger btn-sm">Reject</button>) : "";
+    let fireButton = this.props.fire ? (
+      <button onClick={this.props.fire} className="btn btn-danger btn-sm">Fire</button>) : "";
+    let heroPartSize = this.props.itemSize ? "hero-part col-xs-12 " + this.props.itemSize : "hero-part col-xs-12";
 
-    let acceptButton = "";
-    if (this.props.accept) {
-      acceptButton = (<button onClick={this.props.accept} className="btn btn-success btn-sm">Accept</button>);
-    }
-    let rejectButton = "";
-    if (this.props.reject) {
-      rejectButton = (<button onClick={this.props.reject} className="btn btn-danger btn-sm">Reject</button>);
-    }
-    let fireButton = "";
-    if (this.props.fire) {
-      fireButton = (<button onClick={this.props.fire} className="btn btn-danger btn-sm">Fire</button>);
-    }
-    let heroPartSize = "hero-part col-xs-12";
-    if (this.props.itemSize) {
-      heroPartSize = heroPartSize + " " + this.props.itemSize;
-    }
     let gameRules = "";
-    if (this.state.hero.public.rules && this.state.hero.public.rules.rulesSet && this.state.hero.public.rules.rulesSet.label) {
+    if (this.state.hero.public.rules.rulesSet && this.state.hero.public.rules.rulesSet.label) {
       gameRules = this.state.hero.public.rules.rulesSet.label;
     }
 
     if (this.props.justIcon) {
       return (
-        <div onClick={onClicAction} style={{width:"75px",height: this.props.iconSize? this.props.iconSize : "100px"}}>
+        <div
+          onClick={this.props.onClicAction? this.props.onClicAction:""}
+          style={{
+              width:"75px",
+              cursor: this.props.onClicAction?"pointer":"default",
+              height: this.props.iconSize? this.props.iconSize : "150px"
+              }}>
           <Icon
             size={{height: this.props.iconSize? this.props.iconSize : "150px"}}
             onlyImage={true}
@@ -293,14 +242,16 @@ class Hero extends React.Component {
       );
     } else {
       return (
-        <div onClick={onClicAction} style={style} className={heroPartSize}>
+        <div onClick={this.props.onClicAction? this.props.onClicAction:""}
+             style={{cursor: this.props.onClicAction?"pointer":"default"}}
+             className={heroPartSize}>
           <div className="col-xs-12">
             <Icon icon={this.state.hero.public.icon}/>
             <div className="hero-bio-part">
               <span className="info-label">Name:</span>
               <span className="">{this.state.hero.public.name}</span>
-              {gameRules? (<span className="info-label">Rules set:</span>):""}
-              {gameRules? (<span className="">{gameRules}</span>):""}
+              {gameRules ? (<span className="info-label">Rules set:</span>) : ""}
+              {gameRules ? (<span className="">{gameRules}</span>) : ""}
             </div>
             {inGame}
             <div onClick={stop} className="hero-bio-tools-part">
@@ -309,7 +260,6 @@ class Hero extends React.Component {
             {editPart}
             {detailPart}
           </div>
-
         </div>
       );
     }
