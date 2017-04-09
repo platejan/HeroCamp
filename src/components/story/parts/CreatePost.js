@@ -20,7 +20,9 @@ class CreatePost extends React.Component {
 
 
   createPost() {
-    this.props.actions.createPost(this.state, this.props.currentHero, this.props.chapterKey, (error = null)=> {
+    let date = new Date();
+    let state = Object.assign({},this.state,{date: date.toJSON()});
+    this.props.actions.createPost(state, this.props.currentHero, this.props.chapterKey, (error = null)=> {
       if (error == null) {
         toastr.success("sent");
 
@@ -35,6 +37,8 @@ class CreatePost extends React.Component {
           {text: "New post in " + this.props.chapterName + " inside " + this.props.storyName + "."},
           users
         );
+
+        this.setState(Object.assign({},this.state,{text:""}));
       } else {
         toastr.error(error);
       }

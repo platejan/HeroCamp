@@ -44,15 +44,16 @@ class HeroRulesSet extends React.Component {
       let dataArray = [];
       if (userData) {
         Object.keys(data).forEach(function (key, index) {
-          if(userData[key]){
-          switch (data[key].typeOfRuleValue.value) {
-            case "select":
-              dataForEval[key] = userData[key].value ? userData[key].value : false;
-              break;
-            default:
-              dataForEval[key] = userData[key] ? userData[key] : false;
-              break;
-          }}else{
+          if (userData[key]) {
+            switch (data[key].typeOfRuleValue.value) {
+              case "select":
+                dataForEval[key] = userData[key].value ? userData[key].value : false;
+                break;
+              default:
+                dataForEval[key] = userData[key] ? userData[key] : false;
+                break;
+            }
+          } else {
             dataForEval[key] = false;
           }
         });
@@ -68,15 +69,17 @@ class HeroRulesSet extends React.Component {
           const itemKey = Item.ItemKey;
           const itemContent = Item.ItemContent;
 
-          return (
-            <HeroRule key={itemKey}
-                      value={this.state.data[itemKey]?this.state.data[itemKey]:""}
-                      name={itemKey}
-                      content={Object.assign({},itemContent)}
-                      onchange={this.props.onchangeRules}
-                      edit={this.props.edit}
-                      rulesData={dataForEval}/>
-          );
+          if (!itemContent.delete) {
+            return (
+              <HeroRule key={itemKey}
+                        value={this.state.data[itemKey]?this.state.data[itemKey]:""}
+                        name={itemKey}
+                        content={Object.assign({},itemContent)}
+                        onchange={this.props.onchangeRules}
+                        edit={this.props.edit}
+                        rulesData={dataForEval}/>
+            );
+          }
         });
       }
     }

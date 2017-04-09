@@ -75,7 +75,7 @@ class Hero extends React.Component {
 
   componentDidUpdate() {
     if (this.state.heroKey != this.props.itemKey) {
-      let itemContent = Object.assign({},this.props.itemContent);
+      let itemContent = Object.assign({}, this.props.itemContent);
       let newState = this.state;
       let deleteProp = false;
       if (itemContent.delete)
@@ -239,7 +239,7 @@ class Hero extends React.Component {
     let detailPart = "";
     let detailTool = "";
     if (!this.state.onlyPublic) {
-      let temp = Object.assign({},this.state.hero);
+      let temp = Object.assign({}, this.state.hero);
       editPart = (<HeroEdit iconchange={this.iconchange} reject={this.rejectChanges} publish={this.publishChanges}
                             click={this.hideEditWindow}
                             onchange={this.onchange} hero={temp} display={this.state.editWindowState}
@@ -276,9 +276,13 @@ class Hero extends React.Component {
     if (this.props.itemSize) {
       heroPartSize = heroPartSize + " " + this.props.itemSize;
     }
+    let gameRules = "";
+    if (this.state.hero.public.rules && this.state.hero.public.rules.rulesSet && this.state.hero.public.rules.rulesSet.label) {
+      gameRules = this.state.hero.public.rules.rulesSet.label;
+    }
 
-    if(this.props.justIcon){
-      return(
+    if (this.props.justIcon) {
+      return (
         <div onClick={onClicAction} style={{width:"75px",height: this.props.iconSize? this.props.iconSize : "100px"}}>
           <Icon
             size={{height: this.props.iconSize? this.props.iconSize : "150px"}}
@@ -287,25 +291,28 @@ class Hero extends React.Component {
           />
         </div>
       );
-    }else{
-    return (
-      <div onClick={onClicAction} style={style} className={heroPartSize}>
-        <div className="col-xs-12">
-          <Icon icon={this.state.hero.public.icon}/>
-          <div className="hero-bio-part">
-            <span className="info-label">Name:</span>
-            <span className="">{this.state.hero.public.name}</span>
+    } else {
+      return (
+        <div onClick={onClicAction} style={style} className={heroPartSize}>
+          <div className="col-xs-12">
+            <Icon icon={this.state.hero.public.icon}/>
+            <div className="hero-bio-part">
+              <span className="info-label">Name:</span>
+              <span className="">{this.state.hero.public.name}</span>
+              {gameRules? (<span className="info-label">Rules set:</span>):""}
+              {gameRules? (<span className="">{gameRules}</span>):""}
+            </div>
+            {inGame}
+            <div onClick={stop} className="hero-bio-tools-part">
+              {acceptButton}{rejectButton}{fireButton}{removeTool}{editTool}{detailTool}
+            </div>
+            {editPart}
+            {detailPart}
           </div>
-          {inGame}
-          <div onClick={stop} className="hero-bio-tools-part">
-            {acceptButton}{rejectButton}{fireButton}{removeTool}{editTool}{detailTool}
-          </div>
-          {editPart}
-          {detailPart}
-        </div>
 
-      </div>
-    );}
+        </div>
+      );
+    }
   }
 }
 

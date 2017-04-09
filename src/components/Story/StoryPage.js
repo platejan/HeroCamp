@@ -43,7 +43,7 @@ class StoryPage extends React.Component {
   closeSwitchHero(){
     this.setState(Object.assign({},this.state,{showSwitchHero:false}));
   }
-  
+
   setOwner(owner) {
     let state = this.state;
     state.story.owner = owner;
@@ -52,7 +52,7 @@ class StoryPage extends React.Component {
 
   render() {
     if (this.state.story.id) {
-      let acceptRecruit = "";
+      let acceptRecruit = false;
       if (this.state.story.owner == this.props.currentUID) {
         acceptRecruit = (<AcceptRecruit storyKey={this.state.story.id}/>);
       }
@@ -70,7 +70,7 @@ class StoryPage extends React.Component {
                 <Tab>Chapter Detail</Tab>
                 <Tab>Recruit</Tab>
                 <Tab>Story heroes</Tab>
-                <Tab>Accept Recruits</Tab>
+                {acceptRecruit? (<Tab>Accept Recruits</Tab>):null}
               </TabList>
               <TabPanel>
                 <SwitchHero closeSwitch={this.closeSwitchHero} show={this.state.showSwitchHero} storyKey={this.state.story.id}/>
@@ -82,7 +82,7 @@ class StoryPage extends React.Component {
               <TabPanel>
                 <StoryHeroes storyKey={this.state.story.id} storyOwner={this.state.story.owner}/>
               </TabPanel>
-              <TabPanel>{acceptRecruit}</TabPanel>
+              {acceptRecruit? (<TabPanel>{acceptRecruit}</TabPanel>):null}
             </Tabs>
           </div>
         </div>
