@@ -11,9 +11,11 @@ import routes from '../routes';
 
 class App extends Component {
   render() {
+
     const { history, store } = this.props;
+    let routerRoutes = routes(store);
     return (
-      <Router routes={routes(store)} history={history} />
+      <Router routes={routerRoutes} history={history} />
     );
   }
 }

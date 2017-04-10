@@ -19,7 +19,7 @@ class ChapterDetail extends React.Component {
       return (
         <div className="col-xs-12">
           <h1>Chapter: {this.props.chapters[this.props.chapter].name}</h1>
-          <Posts showSwitch={this.props.showSwitch} storyName={this.props.storyName} chapterKey={this.props.chapter} chapterContent={this.props.chapters[this.props.chapter]}/>
+          <Posts  storyOwner={this.props.storyOwner} showSwitch={this.props.showSwitch} storyName={this.props.storyName} chapterKey={this.props.chapter} chapterContent={this.props.chapters[this.props.chapter]}/>
         </div>
       );
     }else

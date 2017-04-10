@@ -52,7 +52,6 @@ class SwitchHero extends React.Component {
 
   render() {
     const data = this.props.heroes;
-    let currentHero = null;
     let dataArray = [];
     Object.keys(data).forEach(function (key, index) {
       dataArray.push({ItemKey: key, ItemContent: data[key]});
@@ -66,7 +65,6 @@ class SwitchHero extends React.Component {
         const itemIndex = index + itemKey;
 
         if (itemContent.owner == this.props.userID) {
-          currentHero = itemKey;
           return (
             <Hero key={itemIndex} itemKey={itemKey} onClicAction={this.setHero.bind(this,itemKey)}
                   itemContent={itemContent} itemSize="col-sm-6 col-lg-4"/>
@@ -75,8 +73,6 @@ class SwitchHero extends React.Component {
         return;
       });
     }
-    if (currentHero)
-      this.props.actions.setHero(currentHero);
     return (
       <div>
         <Modal show={this.state.showModal} onHide={this.close}>

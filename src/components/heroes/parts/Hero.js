@@ -202,7 +202,7 @@ class Hero extends React.Component {
       editPart = (
         <Modal show={this.state.showDetail} onHide={this.toggleDetail}>
           <Modal.Header closeButton/>
-          <Modal.Body>
+          <Modal.Body style={{paddingTop:"0",paddingBottom:"0"}}>
             <HeroDetail hero={this.state.hero}/>
           </Modal.Body>
         </Modal>

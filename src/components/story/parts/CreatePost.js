@@ -46,7 +46,6 @@ class CreatePost extends React.Component {
   }
 
   onchange(text) {
-    console.log(text);
     let state = this.state;
     state.text = text;
     return this.setState(state);

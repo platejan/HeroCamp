@@ -18,8 +18,9 @@ class StoryHeroes extends React.Component {
   }
 
   componentWillMount() {
-    if (Object.keys(this.props.storyHeroes).length < 1)
+    if (Object.keys(this.props.storyHeroes).length < 1){
       this.props.onMount(this.props.storyKey);
+    }
   }
 
   componentWillUnmount() {
@@ -38,6 +39,7 @@ class StoryHeroes extends React.Component {
 
   render() {
     const data = this.props.storyHeroes;
+    console.log("story heroes render!");
     let dataArray = [];
     Object.keys(data).forEach(function (key, index) {
       dataArray.push({ItemKey: key, ItemContent: data[key]});

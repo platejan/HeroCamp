@@ -19,6 +19,15 @@ export function updatePost(chapterKey, newPost,newPostKey, callback){
     firebase.database().ref().update(updates, callback);
   };
 }
+
+export function deletePost(chapterKey, PostKey, callback){
+  return (dispatch, getState) => {
+    let updates = {};
+    updates['/posts/'+chapterKey+'/'+PostKey+'/delete/'] = true;
+    firebase.database().ref().update(updates, callback);
+  };
+}
+
 export function loadPosts(chapterKey) {
   return (dispatch, getState) => {
     let ref = firebase.database().ref('/posts/'+chapterKey+'/');

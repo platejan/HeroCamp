@@ -147,6 +147,7 @@ export function requireAuth(nextState, replace) {
 
 export function requireAdmin(nextState, replace, callback) {
   return (dispatch, getState) => {
+    console.log(getState().auth);
     if (getState().auth.isLogged) {
       switch (getState().user.isAdmin) {
         case false:

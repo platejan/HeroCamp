@@ -29,16 +29,15 @@ export default function Routes(store) {
       <Route name="Layout" path="layout" component={Layout}/>
       <Route name="About" path="about" component={AboutPage}/>
       <Route name="Protected" path="protected" component={ProtectedPage}/>
-      <Route name="Admin" path="admin" component={AdminPage} onEnter={checkAdmin}/>
       <Route name="Register" path="register" component={RegistrationPage}/>
       <Route name="Login" path="login" component={LoginPage}/>
       <Route name="Stories" path="stories" component={StoriesPage}>
         <Route name="Story" staticName={true} path=":storyId" component={StoryPage}/>
       </Route>
-
       <Route name="Heroes" path="heroes" component={HeroesPage}/>
       <Route name="Messages" path="messages" component={MessagesPage}/>
       <Route name="Rules Maker" path="rulespage" component={RulesPage}/>
+      <Route name="Admin" path="admin" component={AdminPage} onEnter={checkAdmin}/>
     </Route>
   );
 }

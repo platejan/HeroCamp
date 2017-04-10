@@ -8,9 +8,9 @@ import Recruit from './parts/Recruit';
 import AcceptRecruit from './parts/AcceptRecruit';
 import StoryHeroes from './parts/StoryHeroes';
 import SwitchHero from './parts/SwitchHero';
-import CurrentHero from './parts/CurrentHero';
 import {loadChapters, switchChapter, clearChapters} from '../../actions/ChaptersActions';
 import {getStoryOwner,CurrentStoryClear} from '../../actions/StoriesActions';
+import {LoadStoryHeroes} from '../../actions/HeroesActions';
 import {Tab, Tabs, TabList, TabPanel} from 'react-tabs';
 
 class StoryPage extends React.Component {
@@ -25,8 +25,7 @@ class StoryPage extends React.Component {
     };
 
     this.setOwner = this.setOwner.bind(this);
-    this.showSwitchHero = this.showSwitchHero.bind(this);
-    this.closeSwitchHero = this.closeSwitchHero.bind(this);
+    this.toggleSwitchHero = this.toggleSwitchHero.bind(this);
   }
 
   componentWillMount() {
@@ -37,11 +36,9 @@ class StoryPage extends React.Component {
     this.props.actions.getStoryOwner(this.state.story.id, this.setOwner);
   }
 
-  showSwitchHero(){
-    this.setState(Object.assign({},this.state,{showSwitchHero:true}));
-  }
-  closeSwitchHero(){
-    this.setState(Object.assign({},this.state,{showSwitchHero:false}));
+  toggleSwitchHero(){
+    console.log("toggle!");
+    this.setState(Object.assign({},this.state,{showSwitchHero:!this.state.showSwitchHero}));
   }
 
   setOwner(owner) {
@@ -57,6 +54,7 @@ class StoryPage extends React.Component {
         acceptRecruit = (<AcceptRecruit storyKey={this.state.story.id}/>);
       }
 
+      let storyName = this.props.stories[this.state.story.id]?this.props.stories[this.state.story.id].name:"";
       return (
         <div>
           <div className="col-xs-12 col-sm-4 col-lg-3">
@@ -73,8 +71,8 @@ class StoryPage extends React.Component {
                 {acceptRecruit? (<Tab>Accept Recruits</Tab>):null}
               </TabList>
               <TabPanel>
-                <SwitchHero closeSwitch={this.closeSwitchHero} show={this.state.showSwitchHero} storyKey={this.state.story.id}/>
-                <ChapterDetail showSwitch={this.showSwitchHero} storyName={this.props.stories[this.state.story.id].name} chapters={this.props.chapters}/>
+                <SwitchHero closeSwitch={this.toggleSwitchHero} show={this.state.showSwitchHero} storyKey={this.state.story.id}/>
+                <ChapterDetail showSwitch={this.toggleSwitchHero} storyName={storyName} chapters={this.props.chapters} storyOwner={this.state.story.owner}/>
               </TabPanel>
               <TabPanel>
                 <Recruit storyKey={this.state.story.id}/>
@@ -88,7 +86,7 @@ class StoryPage extends React.Component {
         </div>
       )
     }else {
-      return (<div></div>);
+      return (<div>No story id</div>);
     }
   }
 }
@@ -110,10 +108,11 @@ function mapDispatchToProps(dispatch) {
       dispatch(clearChapters());
       dispatch(CurrentStoryClear());
       dispatch(loadChapters(storyKey));
+      dispatch(LoadStoryHeroes(storyKey));
     },
     actions: bindActionCreators({getStoryOwner}, dispatch)
 
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(StoryPage);
+export default checkAuth(connect(mapStateToProps, mapDispatchToProps)(StoryPage));

@@ -10,9 +10,19 @@ class Post extends React.Component {
     super(props, context);
 
     this.state = {};
+    this.deletePost = this.deletePost.bind(this);
+  }
+
+  deletePost(){
+    console.log("delete me!"+this.props.itemKey);
+    this.props.deletePost(this.props.itemKey);
   }
 
   render() {
+    let deletePostButton = "";
+    if(this.props.storyOwner == this.props.userID){
+      deletePostButton = (<button onClick={this.deletePost} className="btn btn-xs btn-danger pull-right"><span className="glyphicon glyphicon-trash noText"></span></button>);
+    }
     let name = "undefined";
     let hero = false;
     if (this.props.heroes[this.props.itemContent.autor]) {
@@ -27,7 +37,7 @@ class Post extends React.Component {
           </div>
         <div style={{paddingLeft:"75px"}}>
           <div className=" panel panel-default" style={{minHeight:"150px"}}>
-            <div className="panel-heading">{name} {this.props.itemContent.date? (<small className="text-muted">{"("+(new Date(this.props.itemContent.date)).toLocaleString()+")"}</small>): ""}</div>
+            <div className="panel-heading">{name} {this.props.itemContent.date? (<small className="text-muted">{"("+(new Date(this.props.itemContent.date)).toLocaleString()+")"}</small>): ""}{deletePostButton}</div>
             <div className="panel-body">
               <ReactMarkdown source={this.props.itemContent.text} softBreak="br"/>
             </div>

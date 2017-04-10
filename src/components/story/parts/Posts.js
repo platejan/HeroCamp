@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import * as PostsActions from '../../../actions/PostsActions';
+import {loadPosts,deletePost} from '../../../actions/PostsActions';
 import Post from './Post';
 import CreatePost from './CreatePost';
 import CurrentHero from './CurrentHero';
@@ -11,6 +11,7 @@ class Posts extends React.Component {
     super(props, context);
 
     this.state = {};
+    this.deletePost = this.deletePost.bind(this);
   }
 
   componentWillMount() {
@@ -18,6 +19,10 @@ class Posts extends React.Component {
   }
 
   componentWillUnmount() {
+  }
+
+  deletePost(key) {
+    this.props.actions.deletePost(this.props.chapterKey, key);
   }
 
   render() {
@@ -37,9 +42,12 @@ class Posts extends React.Component {
           const itemContent = post.ItemContent;
           const itemIndex = index + itemKey;
 
-          return (
-            <Post key={itemIndex} itemKey={itemKey} itemContent={itemContent}/>
-          );
+          if (!itemContent.delete) {
+            return (
+              <Post deletePost={this.deletePost} storyOwner={this.props.storyOwner} key={itemIndex} itemKey={itemKey}
+                    itemContent={itemContent}/>
+            );
+          }
         });
       }
     }
@@ -56,7 +64,7 @@ class Posts extends React.Component {
             </div>
           </div>
         </div>
-        <h1>Posts</h1>
+        <hr/>
         {listPosts}
       </div>
     );
@@ -78,9 +86,9 @@ function mapStateToProps(state, ownProps) {
 function mapDispatchToProps(dispatch) {
   return {
     onMount: (chapterKey) => {
-      dispatch(PostsActions.loadPosts(chapterKey));
+      dispatch(loadPosts(chapterKey));
     },
-    actions: bindActionCreators({}, dispatch)
+    actions: bindActionCreators({deletePost}, dispatch)
   };
 }
 
