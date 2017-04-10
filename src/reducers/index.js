@@ -10,7 +10,7 @@ import stories from './storiesReducer';
 import currentStory from './currentStoryReducer';
 import messages from './messagesReducer';
 import notification from './notificationReducer';
-
+import library from './libraryReducer';
 import ajaxCallsInProgress from './ajaxStatusReducer';
 import { routerReducer } from 'react-router-redux';
 
@@ -28,7 +28,8 @@ const rootReducer = combineReducers({
   heroes,
   rules,
   messages,
-  notification
+  notification,
+  library
 });
 
 export default rootReducer;

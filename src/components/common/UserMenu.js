@@ -17,7 +17,7 @@ class UserMenu extends React.Component {
       usernameDefined: false
     }
   }
-  
+
   componentWillMount() {
     this.props.beforeMount();
   }
@@ -66,6 +66,9 @@ class UserMenu extends React.Component {
               </LinkContainer>
               <LinkContainer to="/stories">
                 <MenuItem eventKey="3"><span className="glyphicon glyphicon-book"></span> <span>Stories</span></MenuItem>
+              </LinkContainer>
+              <LinkContainer to="/library">
+                <MenuItem eventKey="3"><span className="glyphicon glyphicon-book"></span> <span>Library</span></MenuItem>
               </LinkContainer>
               <MenuItem divider/>
               <LinkContainer to="/rulespage">

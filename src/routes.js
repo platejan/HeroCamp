@@ -14,6 +14,8 @@ import HeroesPage from './components/heroes/HeroesPage';
 import StoryPage from './components/story/StoryPage';
 import RulesPage from './components/rules/RulesPage';
 import MessagesPage from './components/messages/MessagesPage';
+import LibraryPage from './components/library/LibraryPage'
+import LibraryItemPage from './components/library/parts/LibraryItemPage'
 
 
 export default function Routes(store) {
@@ -33,6 +35,9 @@ export default function Routes(store) {
       <Route name="Login" path="login" component={LoginPage}/>
       <Route name="Stories" path="stories" component={StoriesPage}>
         <Route name="Story" staticName={true} path=":storyId" component={StoryPage}/>
+      </Route>
+      <Route name="Library" path="library" component={LibraryPage}>
+        <Route name="Story" staticName={true} path=":itemId" component={LibraryItemPage}/>
       </Route>
       <Route name="Heroes" path="heroes" component={HeroesPage}/>
       <Route name="Messages" path="messages" component={MessagesPage}/>
