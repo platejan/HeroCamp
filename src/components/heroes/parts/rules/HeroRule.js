@@ -12,22 +12,31 @@ class HeroRule extends React.Component {
       error: false,
       display: false,
       edit: false,
-      value: Object.assign({},this.props).value
+      value: Object.assign({}, this.props).value
     };
 
     this.onchange = this.onchange.bind(this);
     this.validate = this.validate.bind(this);
     this.show = this.show.bind(this);
+    this.onchangeRulesPublic = this.onchangeRulesPublic.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
-    let state = Object.assign({},this.state);
-    state.value = Object.assign({},nextProps).value;
+    let state = Object.assign({}, this.state);
+    state.value = Object.assign({}, nextProps).value;
     this.setState(state);
   }
 
+  onchangeRulesPublic(event) {
+    let state = Object.assign({}, this.state);
+    state.value = event.target.value;
+    this.setState(state);
+
+    this.props.onchangeRulesPublic("" + event.target.name, event.target.value);
+  }
+
   onchange(event) {
-    let state = Object.assign({},this.state);
+    let state = Object.assign({}, this.state);
     state.value = event.target.value;
     this.setState(state);
 
@@ -61,13 +70,14 @@ class HeroRule extends React.Component {
 
   render() {
     let render = (<div className="row">
-      <div className="col-xs-12 col-sm-4">
-        <span>{this.props.content.nameOfRule ? this.props.content.nameOfRule : this.props.name}</span>:
-      </div>
-      <div className="col-xs-12 col-sm-8">{this.state.value.value ? this.state.value.value : this.state.value}</div>
+      <div className="col-xs-12">
+        <dl className="dl-horizontal">
+          <dt>{this.props.content.nameOfRule ? this.props.content.nameOfRule : this.props.name}</dt>
+          <dd>{this.state.value.value ? this.state.value.value : this.state.value}</dd>
+        </dl></div>
     </div>);
 
-    if (this.props.edit) {
+    if (this.props.edit || this.props.pj) {
       if (this.show(this.props.content.showRules)) {
 
         let label = this.props.content.nameOfRule ? this.props.content.nameOfRule : this.props.name;
@@ -82,7 +92,7 @@ class HeroRule extends React.Component {
                     options={this.props.content.selectRestrictions}
                     name={this.props.name}
                     label={label}
-                    onChange={this.onchange}
+                    onChange={this.props.edit? this.onchange:this.onchangeRulesPublic}
                     value={this.state.value.value? this.state.value.value : ""}
                   />
                 </div>
@@ -96,7 +106,7 @@ class HeroRule extends React.Component {
                     style={this.state.error? {borderColor : "red"} : {}}
                     name={this.props.name}
                     label={label}
-                    onChange={this.onchange}
+                    onChange={this.props.edit?this.onchange:this.onchangeRulesPublic}
                     value={this.state.value? this.state.value : ""}
                   />
                 </div>

@@ -30,6 +30,7 @@ class HeroEdit extends React.Component {
   }
 
   render() {
+    console.log(this.props.hero.private.rules);
     let stop = function (e) {
       e.stopPropagation();
     };
@@ -84,7 +85,8 @@ class HeroEdit extends React.Component {
                 </TabPanel>
                 <TabPanel>
                   <HeroRulesSet data={Object.assign({},this.props.hero.private.rules)}
-                                onchangeRules={this.props.onchangeRules}
+                                hasChangeRules={this.props.hero.hasChangeRules}
+                                onchangeRules={this.props.onchangeRules} publishRules={this.props.publishRules}
                                 edit={true} className="col-xs-12 marginTop15"/>
                 </TabPanel>
               </Tabs>

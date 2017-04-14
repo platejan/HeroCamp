@@ -68,7 +68,6 @@ class StoryPage extends React.Component {
                 <Tab>Chapter Detail</Tab>
                 <Tab>Recruit</Tab>
                 <Tab>Story heroes</Tab>
-                {acceptRecruit? (<Tab>Accept Recruits</Tab>):null}
               </TabList>
               <TabPanel>
                 <SwitchHero closeSwitch={this.toggleSwitchHero} show={this.state.showSwitchHero} storyKey={this.state.story.id}/>
@@ -78,9 +77,10 @@ class StoryPage extends React.Component {
                 <Recruit storyKey={this.state.story.id}/>
               </TabPanel>
               <TabPanel>
+                {acceptRecruit? acceptRecruit:""}
                 <StoryHeroes storyKey={this.state.story.id} storyOwner={this.state.story.owner}/>
               </TabPanel>
-              {acceptRecruit? (<TabPanel>{acceptRecruit}</TabPanel>):null}
+
             </Tabs>
           </div>
         </div>

@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {updateHero, deleteHero} from '../../../actions/HeroesActions';
+import {updateHero, deleteHero,updateHeroPublicRules} from '../../../actions/HeroesActions';
 import {loadPublicRules} from '../../../actions/rulesActions';
 import HeroEdit from './HeroEdit';
 import HeroDetail from './HeroDetail';
@@ -15,7 +15,7 @@ class Hero extends React.Component {
 
     let itemContent = Object.assign({}, this.props.itemContent);
     this.state = {
-      hero: Object.assign({public: {rules:{}}, private: {rules:{}}}, itemContent ? itemContent : {}),
+      hero: Object.assign({public: {rules: {}}, private: {rules: {}}}, itemContent ? itemContent : {}),
       heroKey: this.props.itemKey,
       saveTimeout: null,
       onlyPublic: itemContent.private ? false : true,
@@ -43,6 +43,8 @@ class Hero extends React.Component {
     this.iconchange = this.iconchange.bind(this);
     this.deleteHero = this.deleteHero.bind(this);
     this.onchangeRules = this.onchangeRules.bind(this);
+    this.publishRulesChanges = this.publishRulesChanges.bind(this);
+    this.onchangeRulesPublic = this.onchangeRulesPublic.bind(this);
   }
 
   componentWillMount() {
@@ -61,7 +63,7 @@ class Hero extends React.Component {
   componentWillReceiveProps(nextProps) {
     let itemContent = Object.assign({}, nextProps.itemContent);
     let state = {
-      hero: Object.assign({public: {rules:{}}, private: {rules:{}}}, itemContent ? itemContent : {}),
+      hero: Object.assign({public: {rules: {}}, private: {rules: {}}}, itemContent ? itemContent : {}),
       heroKey: nextProps.itemKey,
       saveTimeout: this.state.saveTimeout,
       onlyPublic: itemContent.private ? false : true,
@@ -93,12 +95,30 @@ class Hero extends React.Component {
     console.log("onchangeRules [key, value]: " + key + ", " + value);
     let state = Object.assign({}, this.state);
     state.hero.private['rules'][key] = value;
-    state.hero.hasChange = true;
+    state.hero.hasChangeRules = true;
     clearTimeout(this.state.saveTimeout);
-    state.saveTimeout = setTimeout(this.updateHero, 1000);
-    if (key == "rulesSet")
+    if (key != "rulesSet")
+      state.saveTimeout = setTimeout(this.updateHero, 1000);
+    this.setState(state);
+    if (key == "rulesSet") {
+      this.updateHero();
       this.props.actions.loadPublicRules(value.value);
-    return this.setState(state);
+    }
+  }
+
+  onchangeRulesPublic(key, value) {
+    console.log("onchangeRulesPublish [key, value]: " + key + ", " + value);
+    console.log(this.state);
+    let state = Object.assign({}, this.state.hero.public.rules);
+    let userKey = this.state.hero.owner;
+    state[key] = value;
+    this.props.actions.updateHeroPublicRules(state, this.state.heroKey,userKey ,(error = null)=> {
+      if (error == null) {
+        toastr.success("ok");
+      } else {
+        toastr.error(error);
+      }
+    });
   }
 
   updateHero(ok = "saved", error = "Cannot update your Hero") {
@@ -126,8 +146,19 @@ class Hero extends React.Component {
 
   publishChanges() {
     let state = this.state;
+    let publicRules = Object.assign({}, state.hero.public.rules);
     state.hero.public = Object.assign({}, state.hero.private);
+    state.hero.public.rules = publicRules;
     state.hero.hasChange = false;
+    this.setState(state);
+    this.updateHero();
+  }
+
+  publishRulesChanges() {
+    let state = this.state;
+    let privateRules = Object.assign({}, state.hero.private.rules);
+    state.hero.public.rules = privateRules;
+    state.hero.hasChangeRules = false;
     this.setState(state);
     this.updateHero();
   }
@@ -167,6 +198,7 @@ class Hero extends React.Component {
   }
 
   render() {
+    console.log(this.state);
     let stop = function (e) {
       e.stopPropagation();
     };
@@ -187,7 +219,8 @@ class Hero extends React.Component {
         <Modal show={this.state.showEdit} onHide={this.toggleEdit}>
           <Modal.Header closeButton/>
           <Modal.Body style={{paddingTop:"0",paddingBottom:"0"}}>
-            <HeroEdit iconchange={this.iconchange} reject={this.rejectChanges} publish={this.publishChanges}
+            <HeroEdit iconchange={this.iconchange} reject={this.rejectChanges}
+                      publish={this.publishChanges} publishRules={this.publishRulesChanges}
                       onchange={this.onchange} hero={temp}
                       onchangeRules={this.onchangeRules}/>
           </Modal.Body>
@@ -203,12 +236,12 @@ class Hero extends React.Component {
         <Modal show={this.state.showDetail} onHide={this.toggleDetail}>
           <Modal.Header closeButton/>
           <Modal.Body style={{paddingTop:"0",paddingBottom:"0"}}>
-            <HeroDetail hero={this.state.hero}/>
+            <HeroDetail pj={this.props.pj?this.props.pj:false} onchangeRulesPublic={this.onchangeRulesPublic} hero={this.state.hero}/>
           </Modal.Body>
         </Modal>
       );
       detailTool = (<button onClick={this.toggleDetail} className="btn btn-info btn-sm"><span
-        className="glyphicon glyphicon-eye-open"></span></button>);
+        className="glyphicon glyphicon-eye-open noText"></span></button>);
     }
 
     let acceptButton = this.props.accept ? (
@@ -286,7 +319,7 @@ function mapStateToProps(state, ownProps) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators({updateHero, deleteHero, loadPublicRules}, dispatch)
+    actions: bindActionCreators({updateHero, deleteHero,updateHeroPublicRules, loadPublicRules}, dispatch)
   };
 }
 

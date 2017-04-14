@@ -10,6 +10,16 @@ export function updateHero(character, characterKey, callback) {
   };
 
 }
+export function updateHeroPublicRules(rules, characterKey,userKey, callback) {
+  return (dispatch, getState) => {
+    console.log('/heroes/' + userKey + '/' + characterKey+'/public/rules/');
+    console.log(rules);
+    let updates = {};
+    updates['/heroes/' + userKey + '/' + characterKey+'/public/rules/'] = rules;
+    firebase.database().ref().update(updates, callback);
+  };
+
+}
 export function addHero(character, callback) {
   // Get a key for a new Post.
   return (dispatch, getState) => {

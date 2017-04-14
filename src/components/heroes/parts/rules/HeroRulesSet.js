@@ -15,7 +15,8 @@ class HeroRulesSet extends React.Component {
       data = Object.assign({}, this.props.data);
     }
     this.state = {
-      data: data
+      data: data,
+      hasChangeRules: this.props.hasChangeRules
     };
 
   }
@@ -25,11 +26,11 @@ class HeroRulesSet extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-
     if (nextProps.data) {
       this.setState(
         {
-          data: Object.assign({}, nextProps.data)
+          data: Object.assign({}, nextProps.data),
+          hasChangeRules: nextProps.hasChangeRules
         });
     }
   }
@@ -37,6 +38,7 @@ class HeroRulesSet extends React.Component {
 
   render() {
     let rules = "";
+    console.log(this.state.data);
     if (this.state.data.rulesSet && this.props.publicRules[this.state.data.rulesSet.value]) {
       let data = Object.assign({}, this.props.publicRules[this.state.data.rulesSet.value]);
       let userData = Object.assign({}, this.state.data);
@@ -74,6 +76,8 @@ class HeroRulesSet extends React.Component {
               <HeroRule key={itemKey}
                         value={this.state.data[itemKey]?this.state.data[itemKey]:""}
                         name={itemKey}
+                        onchangeRulesPublic={this.props.onchangeRulesPublic?this.props.onchangeRulesPublic:false}
+                        pj={this.props.pj?this.props.pj:false}
                         content={Object.assign({},itemContent)}
                         onchange={this.props.onchangeRules}
                         edit={this.props.edit}
@@ -83,8 +87,14 @@ class HeroRulesSet extends React.Component {
         });
       }
     }
+
+    let publicChanges = "";
+    if (this.props.edit && this.state.hasChangeRules && this.props.publishRules){
+      publicChanges = (<button onClick={this.props.publishRules} style={{marginBottom:"15px"}} className="row btn btn-danger">Change Hero's Life!</button>);
+    }
     return (
       <div className={this.props.className? this.props.className : ""}>
+        {publicChanges}
         <HeroRulesSetSelect edit={this.props.edit} rulesSet={this.state.data.rulesSet}
                             onchangeRules={this.props.onchangeRules}/>
         <div className="marginTop15">

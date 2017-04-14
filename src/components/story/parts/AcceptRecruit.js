@@ -64,16 +64,20 @@ class AcceptRecruit extends React.Component {
 
         if(!itemContent.inGame) {
           return (
-            <Hero key={itemIndex} accept={this.acceptRecruitHero.bind(this,itemKey)} reject={this.rejectRecruitHero.bind(this,itemKey)} itemKey={itemKey}
-                  itemContent={itemContent} canViewDetail={true} itemSize="col-sm-6 col-lg-4"/>
+            <Hero key={itemIndex} accept={this.acceptRecruitHero.bind(this,itemKey)} 
+                  reject={this.rejectRecruitHero.bind(this,itemKey)} 
+                  itemKey={itemKey}
+                  itemContent={itemContent} 
+                  canViewDetail={true} 
+                  itemSize="col-sm-6 col-lg-4"/>
           );
         }
       });
     }
     return (
       <div className="col-xs-12">
-        <h1>Accept Recruit</h1>
-        {listHeores}
+        {listHeores?(<h1>Accept Recruit</h1>):""}
+        {listHeores?listHeores:""}
       </div>
     );
   }

@@ -56,7 +56,7 @@ class StoryHeroes extends React.Component {
           if (this.props.storyOwner == this.props.userID)
             return (
               <Hero key={itemIndex} itemKey={itemKey} fire={this.fireHero.bind(this,itemKey)}
-                    itemContent={itemContent} canViewDetail={true} itemSize="col-sm-6 col-lg-4"/>
+                    itemContent={itemContent} pj canViewDetail={true} itemSize="col-sm-6 col-lg-4"/>
             );
           else
             return (
