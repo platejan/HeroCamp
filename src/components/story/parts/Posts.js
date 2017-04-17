@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {loadPosts,deletePost} from '../../../actions/PostsActions';
+import {loadPosts, deletePost} from '../../../actions/PostsActions';
 import Post from './Post';
 import CreatePost from './CreatePost';
 import CurrentHero from './CurrentHero';
@@ -15,7 +15,17 @@ class Posts extends React.Component {
   }
 
   componentWillMount() {
-    this.props.onMount(this.props.chapterKey);
+    console.log(this.props.chapterContent.posts);
+    if (!this.props.chapterContent.posts) {
+      this.props.onMount(this.props.chapterKey);
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    console.log(nextProps.chapterContent.posts);
+    if (!nextProps.chapterContent.posts) {
+      this.props.onMount(nextProps.chapterKey);
+    }
   }
 
   componentWillUnmount() {
@@ -29,6 +39,7 @@ class Posts extends React.Component {
     const data = this.props.chapterContent.posts;
     let dataArray = [];
     let listPosts = "";
+    console.log(data);
     if (data) {
       Object.keys(data).forEach(function (key, index) {
         // key: the name of the object key
@@ -60,7 +71,8 @@ class Posts extends React.Component {
             </div>
             <div className="row" style={{paddingLeft:"75px"}}>
               <CreatePost chapterName={this.props.chapterContent.name} storyName={this.props.storyName}
-                          chapterKey={this.props.chapterKey}/>
+                          chapterKey={this.props.chapterKey} inventories={this.props.inventories}
+                          storyKey={this.props.storyKey}/>
             </div>
           </div>
         </div>

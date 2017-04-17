@@ -68,7 +68,6 @@ export function loadRules(RulesSetKey) {
   };
 }
 export function loadPublicRules(RulesSetKey) {
-  console.log("Loading public rules for: " + RulesSetKey);
   return (dispatch, getState) => {
     let ref = firebase.database().ref('/rules/public/' + RulesSetKey + '/');
     ref.on('value', (snapshot) => {

@@ -92,7 +92,6 @@ class Hero extends React.Component {
   }
 
   onchangeRules(key, value) {
-    console.log("onchangeRules [key, value]: " + key + ", " + value);
     let state = Object.assign({}, this.state);
     state.hero.private['rules'][key] = value;
     state.hero.hasChangeRules = true;
@@ -107,8 +106,6 @@ class Hero extends React.Component {
   }
 
   onchangeRulesPublic(key, value) {
-    console.log("onchangeRulesPublish [key, value]: " + key + ", " + value);
-    console.log(this.state);
     let state = Object.assign({}, this.state.hero.public.rules);
     let userKey = this.state.hero.owner;
     state[key] = value;
@@ -198,7 +195,6 @@ class Hero extends React.Component {
   }
 
   render() {
-    console.log(this.state);
     let stop = function (e) {
       e.stopPropagation();
     };

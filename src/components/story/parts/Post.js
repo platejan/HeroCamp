@@ -2,26 +2,44 @@ import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import ReactMarkdown from 'react-markdown';
-import Hero from './../../heroes/parts/Hero'
-
+import Hero from './../../heroes/parts/Hero';
+import Inventory from './Inventory';
+import {Modal} from 'react-bootstrap';
 
 class Post extends React.Component {
   constructor(props, context) {
     super(props, context);
 
-    this.state = {};
+    this.state = {
+      showInventory: false
+    };
     this.deletePost = this.deletePost.bind(this);
+    this.toggleInventory = this.toggleInventory.bind(this);
   }
 
-  deletePost(){
-    console.log("delete me!"+this.props.itemKey);
+  toggleInventory() {
+    this.setState(Object.assign({}, this.state, {showInventory: !this.state.showInventory}));
+  }
+
+  deletePost() {
+    console.log("delete me!" + this.props.itemKey);
     this.props.deletePost(this.props.itemKey);
   }
 
   render() {
     let deletePostButton = "";
-    if(this.props.storyOwner == this.props.userID){
-      deletePostButton = (<button onClick={this.deletePost} className="btn btn-xs btn-danger pull-right"><span className="glyphicon glyphicon-trash noText"></span></button>);
+    if (this.props.storyOwner == this.props.userID) {
+      deletePostButton = (<button onClick={this.deletePost} className="btn btn-xs btn-danger"><span
+        className="glyphicon glyphicon-trash noText"></span></button>);
+    }
+    let inventoryButton = false;
+    let inventory = false;
+    if (this.props.storyOwner == this.props.userID || (this.props.heroes[this.props.itemContent.autor] && this.props.heroes[this.props.itemContent.autor].owner == this.props.userID) && this.props.itemContent.inventory) {
+      inventoryButton = (<button onClick={this.toggleInventory} className="btn btn-xs btn-default">
+        <span className="glyphicon glyphicon-briefcase"/> inventory
+      </button>);
+      if(this.state.showInventory)
+      inventory = (<Inventory data={this.props.itemContent.inventory?this.props.itemContent.inventory:false}/>);
     }
     let name = "undefined";
     let hero = false;
@@ -32,17 +50,36 @@ class Post extends React.Component {
     return (
       <div className="">
         <div style={{position:"absolute"}}>
-        {hero ? (<Hero justIcon={true} iconSize={"150px"} itemKey={this.props.itemContent.autor}
-                       itemContent={hero} itemSize=""/>) : ""}
-          </div>
+          {hero ? (<Hero justIcon={true} iconSize={"150px"} itemKey={this.props.itemContent.autor}
+                         itemContent={hero} itemSize=""/>) : ""}
+        </div>
         <div style={{paddingLeft:"75px"}}>
           <div className=" panel panel-default" style={{minHeight:"150px"}}>
-            <div className="panel-heading">{name} {this.props.itemContent.date? (<small className="text-muted">{"("+(new Date(this.props.itemContent.date)).toLocaleString()+")"}</small>): ""}{deletePostButton}</div>
+            <div className="panel-heading">
+              {name}
+              {this.props.itemContent.date ? (<small
+                className="text-muted">{"(" + (new Date(this.props.itemContent.date)).toLocaleString() + ")"}</small>) : ""}
+              <div className="btn-group pull-right">
+                {inventoryButton}
+                {deletePostButton}
+              </div>
+            </div>
             <div className="panel-body">
               <ReactMarkdown source={this.props.itemContent.text} softBreak="br"/>
             </div>
           </div>
         </div>
+        {inventoryButton ? (
+          <Modal show={this.state.showInventory} onHide={this.toggleInventory}>
+            <Modal.Header closeButton>
+              {name}'s inventory
+            </Modal.Header>
+            <Modal.Body>
+              {inventory}
+            </Modal.Body>
+          </Modal>
+        ) : ""}
+
       </div>
     );
   }

@@ -18,14 +18,12 @@ class NotificationBlock extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log(nextProps);
     let state = this.state;
     state.notifications = Object.assign({}, nextProps.notifications);
     this.setState(state);
   }
 
   deleteNotification(key) {
-    console.log("deleting key: "+key);
     this.props.actions.deleteNotification(this.props.currentUID, key, (error = null)=> {
       if (error != null) {
         toastr.error(error);
@@ -34,7 +32,6 @@ class NotificationBlock extends React.Component {
   }
 
   render() {
-    console.log(this.state.notifications);
     let notifications = "";
     let data = this.state.notifications;
     let dataArray = [];
@@ -49,7 +46,6 @@ class NotificationBlock extends React.Component {
         const itemKey = Item.ItemKey;
         const itemContent = Item.ItemContent;
 
-        console.log(itemContent);
         if (!itemContent.delete) {
           return (
             <Notification key={itemKey}

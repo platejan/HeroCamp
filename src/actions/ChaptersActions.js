@@ -52,3 +52,11 @@ export function clearChapters() {
     type: types.CHAPTER_CLEAR_STATE
   };
 }
+
+export function updateInventory(storyKey,chapterKey,heroKey,inventory, callback){
+  return (dispatch, getState) => {
+    let updates = {};
+    updates['/chapters/'+storyKey+'/'+chapterKey+'/inventories/'+heroKey] = inventory;
+    firebase.database().ref().update(updates, callback);
+  };
+}

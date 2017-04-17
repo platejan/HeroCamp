@@ -71,7 +71,7 @@ class StoryPage extends React.Component {
               </TabList>
               <TabPanel>
                 <SwitchHero closeSwitch={this.toggleSwitchHero} show={this.state.showSwitchHero} storyKey={this.state.story.id}/>
-                <ChapterDetail showSwitch={this.toggleSwitchHero} storyName={storyName} chapters={this.props.chapters} storyOwner={this.state.story.owner}/>
+                <ChapterDetail showSwitch={this.toggleSwitchHero} storyName={storyName} storyKey={this.state.story.id} chapters={this.props.chapters} storyOwner={this.state.story.owner}/>
               </TabPanel>
               <TabPanel>
                 <Recruit storyKey={this.state.story.id}/>

@@ -17,7 +17,7 @@ export function deleteStory(storyKey, callback){
     let updates = {};
     updates['/stories/'+storyKey+'/delete'] = true;
     firebase.database().ref().update(updates, callback);
-  };
+  }; 
 }
 
 export function addStory(story, callback) {

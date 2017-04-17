@@ -16,10 +16,16 @@ class ChapterDetail extends React.Component {
 
   render() {
     if (this.props.chapter && Object.keys(this.props.chapters).length > 0 && this.props.chapters && this.props.chapters[this.props.chapter]) {
+
+      let current = this.props.chapters[this.props.chapter];
+      console.log(current);
       return (
         <div className="col-xs-12">
-          <h1>Chapter: {this.props.chapters[this.props.chapter].name}</h1>
-          <Posts  storyOwner={this.props.storyOwner} showSwitch={this.props.showSwitch} storyName={this.props.storyName} chapterKey={this.props.chapter} chapterContent={this.props.chapters[this.props.chapter]}/>
+          <h1>Chapter: {current.name}</h1>
+          <Posts inventories={current.inventories?current.inventories:{}}
+                 storyOwner={this.props.storyOwner} showSwitch={this.props.showSwitch}
+                 storyName={this.props.storyName} storyKey={this.props.storyKey} chapterKey={this.props.chapter}
+                 chapterContent={this.props.chapters[this.props.chapter]}/>
         </div>
       );
     }else
