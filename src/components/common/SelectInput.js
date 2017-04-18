@@ -34,7 +34,7 @@ SelectInput.propTypes = {
   label: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   defaultOption: PropTypes.string,
-  value: PropTypes.oneOfType([PropTypes.string,PropTypes.number,PropTypes.bool,PropTypes.array]),
+  value: PropTypes.oneOfType([PropTypes.string,PropTypes.number,PropTypes.bool,PropTypes.array,PropTypes.object]),
   error: PropTypes.string,
   multi:PropTypes.bool,
   clearable:PropTypes.bool,

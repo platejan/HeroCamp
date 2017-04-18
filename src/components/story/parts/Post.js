@@ -50,7 +50,7 @@ class Post extends React.Component {
         if (this.state.showInventory)
           inventory = (<Inventory data={this.props.itemContent.inventory?this.props.itemContent.inventory:false}/>);
       }
-      let name = this.props.itemContent.storyteller?"storyteller":"undefined";
+      let name = this.props.itemContent.storyteller ? "storyteller" : "undefined";
       let hero = false;
       if (!this.props.itemContent.storyteller && this.props.heroes[this.props.itemContent.autor]) {
         hero = this.props.heroes[this.props.itemContent.autor];
@@ -71,10 +71,42 @@ class Post extends React.Component {
         });
       }
 
-      let color = receivers?"panel-info":"panel-default";
-        if(this.props.itemContent.storyteller){
-          color="panel-success";
+      let color = receivers ? "panel-info" : "panel-default";
+      if (this.props.itemContent.storyteller) {
+        color = "panel-success";
+      }
+
+      let inventoryChanges = false;
+      if (this.props.itemContent.inventory) {
+        let added = this.props.itemContent.inventory.added;
+        let removed = this.props.itemContent.inventory.removed;
+        let dataArray = [];
+
+        if(added){
+        Object.keys(added).forEach(function (key, index) {
+          dataArray.push({ItemKey: key, ItemContent: added[key]});
+        });}
+        if(removed){
+        Object.keys(removed).forEach(function (key, index) {
+          dataArray.push({ItemKey: key, ItemContent: removed[key]});
+        });}
+
+        if (dataArray.length > 0) {
+          inventoryChanges = dataArray.map((data, index) => {
+            const itemKey = data.ItemKey;
+            const itemContent = data.ItemContent;
+            console.log(itemContent);
+            return (
+              <div key={"data" + itemKey} className="col-xs-12 col-sm-6" style={{padding:"7.5px",paddingTop:"15px",paddingBottom:"0"}}>
+              <button style={{cursor:"pointer"}}
+                   className={"col-xs-12 text-left btn btn-xs " + (added?(added[itemKey]? " btn-success":""):"")+(removed?(removed[itemKey]? " btn-danger":""):"")}>
+                <span className="pull-left"><strong>{itemContent.name}</strong> (weight: {itemContent.weight} unit/s per piece)</span>
+                <span className="badge pull-right" style={{marginLeft:"10px",marginTop:"2px"}}>{(added?(added[itemKey]?"+":"-"):"-")+" " + itemContent.count + " ks"}</span>
+              </button></div> );
+          });
         }
+
+      }
       return (
         <div className="">
           <div style={{position:"absolute"}}>
@@ -86,7 +118,8 @@ class Post extends React.Component {
               <div className="panel-heading">
                 {name}
                 {this.props.itemContent.date ? (<small
-                  className="text-muted" style={{paddingLeft:"5px"}}>{"(" + (new Date(this.props.itemContent.date)).toLocaleString() + ")"}</small>) : ""}
+                  className="text-muted"
+                  style={{paddingLeft:"5px"}}>{"(" + (new Date(this.props.itemContent.date)).toLocaleString() + ")"}</small>) : ""}
                 <div className="btn-group pull-right">
                   {inventoryButton}
                   {deletePostButton}
@@ -95,6 +128,7 @@ class Post extends React.Component {
               <div className="panel-body">
                 {receivers ? (<p className="" style={{fontStyle:"italic"}}>Private post for: {receivers}</p>) : ""}
                 <ReactMarkdown source={this.props.itemContent.text} softBreak="br"/>
+                {inventoryChanges ? (<div className="row" style={{padding:"7.5px",paddingTop:"0",paddingBottom:"0"}}>{inventoryChanges}</div>) : false}
               </div>
             </div>
           </div>

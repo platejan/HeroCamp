@@ -61,13 +61,18 @@ class CreatePost extends React.Component {
   }
 
   inventoryChange(item) {
-    let inventory = this.state.inventory;
+    let inventory = {
+      state:Object.assign({},this.state.inventory.state),
+      future:Object.assign({},this.state.inventory.future),
+      added:Object.assign({},this.state.inventory.added),
+      removed:Object.assign({},this.state.inventory.removed),
+    };
     let count = item.type == "add" ? item.count : -1 * item.count;
     count = parseInt(count);
 
     if (!inventory.future[item.key]) {
-      inventory.state[item.key] = {count: 0};
-      inventory.future[item.key] = {count: 0};
+      inventory.state[item.key] = {count: 0, name: item.name, weight: item.weight};
+      inventory.future[item.key] = {count: 0, name: item.name, weight: item.weight};
     }
 
     let totalDelta = count;
@@ -78,12 +83,12 @@ class CreatePost extends React.Component {
     delete inventory.removed[item.key];
 
     if (totalDelta > 0) {
-      inventory.added[item.key] = {count: totalDelta}
+      inventory.added[item.key] = {count: totalDelta, name: item.name, weight: item.weight}
     } else if (totalDelta < 0) {
-      inventory.removed[item.key] = {count: totalDelta * (-1)}
+      inventory.removed[item.key] = {count: totalDelta * (-1), name: item.name, weight: item.weight}
     }
 
-    inventory.future[item.key].count = inventory.state[item.key].count + totalDelta;
+    inventory.future[item.key] = Object.assign({},inventory.future[item.key],{count:inventory.state[item.key].count + totalDelta});
     if (inventory.state[item.key].count == 0 && inventory.future[item.key].count == inventory.state[item.key].count) {
       delete inventory.future[item.key];
       delete inventory.state[item.key];
@@ -203,7 +208,6 @@ class CreatePost extends React.Component {
       if(this.props.storyOwner==this.props.userID){
         storyteller = true;
       }
-      console.log(storyteller);
       return (
         <div className="col-xs-12 CreatePostSimpleMDE">
           <SimpleMDE
