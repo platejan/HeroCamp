@@ -72,7 +72,7 @@ class Posts extends React.Component {
             <div className="row" style={{paddingLeft:"75px"}}>
               <CreatePost chapterName={this.props.chapterContent.name} storyName={this.props.storyName}
                           chapterKey={this.props.chapterKey} inventories={this.props.inventories}
-                          storyKey={this.props.storyKey}/>
+                          storyKey={this.props.storyKey} storyOwner={this.props.storyOwner}/>
             </div>
           </div>
         </div>

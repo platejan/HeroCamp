@@ -47,6 +47,22 @@ export function storiesLoadList(stories) {
   };
 }
 
+export function storyLoadStart(key) {
+  return (dispatch, getState) => {
+    let owner = getState().auth.currentUserUID;
+    let ref = firebase.database().ref('/stories/'+key);
+    ref.on('value', (snapshot) => {
+      dispatch(storyLoaded(key,snapshot.val()));
+    });
+  };
+}
+
+export function storyLoaded(key,story) {
+  return {
+    type: types.STORY_LOAD_SUCCESS, data:story,key:key
+  };
+}
+
 
 export function getStoryOwner(key,callback) {
   return (dispatch, getState) => {

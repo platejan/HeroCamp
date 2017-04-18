@@ -8,6 +8,7 @@ import {createNotification} from '../../../actions/notificationActions';
 import {updateInventory} from './../../../actions/ChaptersActions';
 import SimpleMDE  from 'react-simplemde-editor';
 import Inventory from './Inventory';
+import SelectInput from '../../common/SelectInput';
 import {Modal} from 'react-bootstrap';
 
 class CreatePost extends React.Component {
@@ -22,23 +23,39 @@ class CreatePost extends React.Component {
         added: {},
         removed: {}
       },
+      receivers: [],
       showInventory: false
     };
     this.createPost = this.createPost.bind(this);
+    this.createPostHero = this.createPostHero.bind(this);
+    this.createPostStoryteller = this.createPostStoryteller.bind(this);
     this.onchange = this.onchange.bind(this);
     this.cancel = this.cancel.bind(this);
     this.inventoryChange = this.inventoryChange.bind(this);
     this.toggleInventory = this.toggleInventory.bind(this);
+    this.onchangeReceivers = this.onchangeReceivers.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState(Object.assign({},this.state,{inventory:{
-      state: Object.assign({},nextProps.inventories[nextProps.currentHero] ? nextProps.inventories[nextProps.currentHero] : {}),
-      future: Object.assign({},nextProps.inventories[nextProps.currentHero] ? nextProps.inventories[nextProps.currentHero] : {}),
-      added: {},
-      removed: {}
-    }}));
+    this.setState(Object.assign({}, this.state, {
+      inventory: {
+        state: Object.assign({}, nextProps.inventories[nextProps.currentHero] ? nextProps.inventories[nextProps.currentHero] : {}),
+        future: Object.assign({}, nextProps.inventories[nextProps.currentHero] ? nextProps.inventories[nextProps.currentHero] : {}),
+        added: {},
+        removed: {},
+        receivers: []
+      }
+    }));
   }
+
+  createPostHero() {
+    this.createPost("hero");
+  }
+
+  createPostStoryteller() {
+    this.createPost("storyteller");
+  }
+
   toggleInventory() {
     this.setState(Object.assign({}, this.state, {showInventory: !this.state.showInventory}));
   }
@@ -54,21 +71,20 @@ class CreatePost extends React.Component {
     }
 
     let totalDelta = count;
-    totalDelta += inventory.added[item.key]? inventory.added[item.key].count: 0;
-    totalDelta -= inventory.removed[item.key]? inventory.removed[item.key].count: 0;
+    totalDelta += inventory.added[item.key] ? inventory.added[item.key].count : 0;
+    totalDelta -= inventory.removed[item.key] ? inventory.removed[item.key].count : 0;
 
     delete inventory.added[item.key];
     delete inventory.removed[item.key];
 
-    if(totalDelta>0){
+    if (totalDelta > 0) {
       inventory.added[item.key] = {count: totalDelta}
-    }else if(totalDelta<0){
-      inventory.removed[item.key] = {count: totalDelta*(-1)}
+    } else if (totalDelta < 0) {
+      inventory.removed[item.key] = {count: totalDelta * (-1)}
     }
 
-    inventory.future[item.key].count =inventory.state[item.key].count+totalDelta;
-    if(inventory.state[item.key].count == 0 && inventory.future[item.key].count == inventory.state[item.key].count)
-    {
+    inventory.future[item.key].count = inventory.state[item.key].count + totalDelta;
+    if (inventory.state[item.key].count == 0 && inventory.future[item.key].count == inventory.state[item.key].count) {
       delete inventory.future[item.key];
       delete inventory.state[item.key];
     }
@@ -81,35 +97,57 @@ class CreatePost extends React.Component {
       inventory: {
         state: this.props.inventories[this.props.currentHero] ? this.props.inventories[this.props.currentHero] : {},
         added: {},
-        removed: {}
+        removed: {},
+        receivers: []
       }
     };
     this.setState(Object.assign({}, this.state, state));
   }
 
-  createPost() {
+  createPost(type = "hero") {
     let date = new Date();
     let state = {
       date: date.toJSON(),
       text: this.state.text,
-      inventory: this.state.inventory
+      inventory: this.state.inventory,
+      receivers: [],
+      storyteller: type == "storyteller" ? true : false
     };
 
-    let inventory = this.state.inventory.future?this.state.inventory.future:this.state.inventory.state;
-    this.props.actions.updateInventory(this.props.storyKey,this.props.chapterKey,this.props.currentHero,inventory,()=>{});
+    if (this.state.receivers.length > 0) {
+      let receivers = this.state.receivers;
+      Object.keys(this.state.receivers).forEach(function (key, index) {
+        console.log(index);
+        state.receivers.push(receivers[key].value);
+      });
+    }
 
-    this.props.actions.createPost(state, this.props.currentHero, this.props.chapterKey, (error = null)=> {
+    if (type == "hero") {
+      let inventory = this.state.inventory.future ? this.state.inventory.future : this.state.inventory.state;
+      this.props.actions.updateInventory(this.props.storyKey, this.props.chapterKey, this.props.currentHero, inventory, ()=> {
+      });
+    }
+
+    this.props.actions.createPost(state, type=="hero"?this.props.currentHero:this.props.userID, this.props.chapterKey, (error = null)=> {
       if (error == null) {
         toastr.success("sent");
 
-
         let heroes = this.props.heroes;
         let users = {};
-        console.log("New post in " + this.props.chapterName + " inside " + this.props.storyName + ".");
-        Object.keys(heroes).forEach(function (key) {
-          users[key] = heroes[key].owner;
-        });
-        console.log(users);
+        if (state.receivers.length > 0 && state.receivers.indexOf("all") < 0) {
+          let userID = this.props.userID;
+          Object.keys(state.receivers).forEach(function (key) {
+            if (state.receivers[key] != "storyteller" && state.receivers[key] != "all" && heroes[state.receivers[key]].owner != userID)
+              users[key] = heroes[state.receivers[key]].owner;
+          });
+        } else {
+          let userID = this.props.userID;
+          Object.keys(heroes).forEach(function (key) {
+            if (heroes[key].owner != userID)
+              users[key] = heroes[key].owner;
+          });
+        }
+
         this.props.actions.createNotification(
           {text: "New post in " + this.props.chapterName + " inside " + this.props.storyName + "."},
           users
@@ -122,6 +160,16 @@ class CreatePost extends React.Component {
     });
   }
 
+  onchangeReceivers(event) {
+    let value = event.target.value;
+    if (value.length > 1 && value[0].value == "all") {
+      value.shift();
+    }
+    console.log(value);
+    this.setState(Object.assign({}, this.state, {receivers: value}));
+    console.log(this.state.receivers);
+  }
+
   onchange(text) {
     let state = this.state;
     state.text = text;
@@ -130,30 +178,70 @@ class CreatePost extends React.Component {
 
   render() {
     let hero = this.props.currentHero;
+    let current = this.props.currentHero;
     if (hero) {
       if (this.props.heroes[this.props.currentHero])
         hero = this.props.heroes[this.props.currentHero].public.name;
 
+      let receivers = [];
+      if (this.props.currentHero && this.props.heroes) {
+        const data = this.props.heroes;
+        if (data) {
+          Object.keys(data).forEach(function (key, index) {
+            if (key != current) {
+              receivers.push({value: key, label: data[key].public.name});
+            }
+          });
+        }
+        receivers.push({value: "storyteller", label: "storyteller"});
+      }
+
+      let defaultSelect = [];
+      defaultSelect[0] = {value: "all", label: "all"};
+
+      let storyteller = false;
+      if(this.props.storyOwner==this.props.userID){
+        storyteller = true;
+      }
+      console.log(storyteller);
       return (
         <div className="col-xs-12 CreatePostSimpleMDE">
           <SimpleMDE
             onChange={this.onchange}
             value={this.state.text}/>
-          <div className="btn-group">
-            <button onClick={this.createPost} className="btn btn-success">Send post as {hero}</button>
+          <div className="row" style={{marginTop:"-25px"}}>
+            <div className="col-xs-12">
+              <SelectInput
+                name="receivers"
+                value={this.state.receivers.length>0? this.state.receivers : defaultSelect}
+                label="receivers"
+                options={receivers}
+                onChange={this.onchangeReceivers}
+                clearable={true}
+                multi={true}
+              />
+            </div>
+          </div>
+          <div className="btn-group" style={{paddingRight:"15px"}}>
+            <button onClick={this.createPostHero} className="btn btn-success">Send post as {hero}</button>
             <button onClick={this.toggleInventory} className="btn btn-default">Inventory</button>
           </div>
-          <button onClick={this.cancel} className="btn btn-danger pull-right">reset form & inventory changes</button>
+          {storyteller?(<div className="btn-group">
+            <button onClick={this.createPostStoryteller} className="btn btn-primary">Send post as storyteller</button>
+          </div>):""}
+          <div className="btn-group pull-right">
+            <button onClick={this.cancel} className="btn btn-danger">reset form & inventory changes</button>
+          </div>
           <Modal show={this.state.showInventory} onHide={this.toggleInventory}>
             <Modal.Header closeButton>
               {hero}'s inventory
             </Modal.Header>
             <Modal.Body>
-              {this.state.showInventory?(
+              {this.state.showInventory ? (
                 <Inventory data={this.state.inventory}
                            change={this.inventoryChange}
                            keys={{storyKey:this.props.storyKey,ChapterKey: this.props.chapterKey,heroKey:this.props.currentHero}}/>
-              ):""}
+              ) : ""}
             </Modal.Body>
           </Modal>
         </div>
@@ -178,7 +266,7 @@ function mapStateToProps(state, ownProps) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators({createPost, createNotification,updateInventory}, dispatch)
+    actions: bindActionCreators({createPost, createNotification, updateInventory}, dispatch)
   };
 }
 

@@ -9,7 +9,7 @@ import AcceptRecruit from './parts/AcceptRecruit';
 import StoryHeroes from './parts/StoryHeroes';
 import SwitchHero from './parts/SwitchHero';
 import {loadChapters, switchChapter, clearChapters} from '../../actions/ChaptersActions';
-import {getStoryOwner,CurrentStoryClear} from '../../actions/StoriesActions';
+import {getStoryOwner,CurrentStoryClear,storyLoadStart} from '../../actions/StoriesActions';
 import {LoadStoryHeroes} from '../../actions/HeroesActions';
 import {Tab, Tabs, TabList, TabPanel} from 'react-tabs';
 
@@ -107,6 +107,7 @@ function mapDispatchToProps(dispatch) {
     beforeMount: (storyKey) => {
       dispatch(clearChapters());
       dispatch(CurrentStoryClear());
+      dispatch(storyLoadStart(storyKey));
       dispatch(loadChapters(storyKey));
       dispatch(LoadStoryHeroes(storyKey));
     },
