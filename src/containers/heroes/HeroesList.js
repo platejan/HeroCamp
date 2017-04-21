@@ -31,8 +31,8 @@ class HeoresList extends Component {
     Object.keys(data).forEach(function (key, index) {
       // key: the name of the object key
       // index: the ordinal position of the key within the object
-      dataArray.push({ItemKey: key, ItemContent: data[key]});
-    });
+      dataArray.unshift({ItemKey: key, ItemContent: data[key]});
+    }); 
     let listHeores = "";
     if (dataArray.length > 0) {
       listHeores = dataArray.map((hero, index) => {

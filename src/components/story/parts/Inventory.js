@@ -18,8 +18,11 @@ class Inventory extends React.Component {
     this.onchange = this.onchange.bind(this);
     this.add = this.add.bind(this);
     this.remove = this.remove.bind(this);
+    this.loadValues=this.loadValues.bind(this);
   }
-
+  loadValues(value,label){
+    this.onchange({target:{name:"selected",value:{value:value,label:label}}});
+  }
   onchange(event) {
     const field = event.target.name;
     let state = this.state;
@@ -104,7 +107,7 @@ class Inventory extends React.Component {
             choices.push({value: itemContent.weight, label: itemContent.name});
 
             return (
-              <li key={itemIndex}
+              <li key={itemIndex} onClick={()=>{this.loadValues(itemContent.weight,itemContent.name)}}
                   className={"list-group-item" + (added[itemKey]? " list-group-item-success":"")+(removed[itemKey]? " list-group-item-danger":"")}>
                 <span className="badge" style={{marginLeft:"10px"}}>{future[itemKey].count + " ks"}</span>
                 <strong>{itemContent.name} (weight: {itemContent.weight} unit/s per piece)</strong>

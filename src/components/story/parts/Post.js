@@ -28,11 +28,17 @@ class Post extends React.Component {
 
   render() {
     let render = this.props.itemContent.receivers ? false : true;
+
     if (this.props.itemContent.receivers && ((this.props.currentHero && this.props.itemContent.receivers.indexOf(this.props.currentHero) > -1 ) || (this.props.itemContent.receivers.indexOf("all") > -1))) {
       render = true;
     }
     if (this.props.storyOwner == this.props.userID || (this.props.currentHero && this.props.itemContent.autor && this.props.itemContent.autor == this.props.currentHero)) {
       render = true;
+    }
+
+    if (this.props.itemContent.type) {
+      if (this.props.itemContent.type == "system")
+        render = false;
     }
 
     if (render) {
@@ -82,14 +88,16 @@ class Post extends React.Component {
         let removed = this.props.itemContent.inventory.removed;
         let dataArray = [];
 
-        if(added){
-        Object.keys(added).forEach(function (key, index) {
-          dataArray.push({ItemKey: key, ItemContent: added[key]});
-        });}
-        if(removed){
-        Object.keys(removed).forEach(function (key, index) {
-          dataArray.push({ItemKey: key, ItemContent: removed[key]});
-        });}
+        if (added) {
+          Object.keys(added).forEach(function (key, index) {
+            dataArray.push({ItemKey: key, ItemContent: added[key]});
+          });
+        }
+        if (removed) {
+          Object.keys(removed).forEach(function (key, index) {
+            dataArray.push({ItemKey: key, ItemContent: removed[key]});
+          });
+        }
 
         if (dataArray.length > 0) {
           inventoryChanges = dataArray.map((data, index) => {
@@ -97,15 +105,40 @@ class Post extends React.Component {
             const itemContent = data.ItemContent;
             console.log(itemContent);
             return (
-              <div key={"data" + itemKey} className="col-xs-12 col-sm-6" style={{padding:"7.5px",paddingTop:"15px",paddingBottom:"0"}}>
-              <button style={{cursor:"pointer"}}
-                   className={"col-xs-12 text-left btn btn-xs " + (added?(added[itemKey]? " btn-success":""):"")+(removed?(removed[itemKey]? " btn-danger":""):"")}>
-                <span className="pull-left"><strong>{itemContent.name}</strong> (weight: {itemContent.weight} unit/s per piece)</span>
-                <span className="badge pull-right" style={{marginLeft:"10px",marginTop:"2px"}}>{(added?(added[itemKey]?"+":"-"):"-")+" " + itemContent.count + " ks"}</span>
-              </button></div> );
+              <div key={"data" + itemKey} className="col-xs-12 col-sm-6"
+                   style={{padding:"7.5px",paddingTop:"15px",paddingBottom:"0"}}>
+                <button style={{cursor:"pointer"}}
+                        className={"col-xs-12 text-left btn btn-xs " + (added?(added[itemKey]? " btn-success":""):"")+(removed?(removed[itemKey]? " btn-danger":""):"")}>
+                  <span className="pull-left"><strong>{itemContent.name}</strong> (weight: {itemContent.weight} unit/s per piece)</span>
+                  <span className="badge pull-right"
+                        style={{marginLeft:"10px",marginTop:"2px"}}>{(added ? (added[itemKey] ? "+" : "-") : "-") + " " + itemContent.count + " ks"}</span>
+                </button>
+              </div> );
           });
         }
-
+      }
+      let data = this.props.itemContent?this.props.itemContent.experiences: false;
+      let experiences = [];
+      if (data) {
+        Object.keys(data).forEach(function (key, index) {
+          experiences.push({ItemKey: key, ItemContent: data[key]});
+        });
+        if (experiences.length > 0) {
+          experiences = experiences.map((exp, index) => {
+            if (this.props.currentHero == exp.ItemKey || this.props.storyOwner == this.props.userID) {
+              return (<div key={"data" + exp.ItemKey} className="col-xs-12 col-sm-6"
+                           style={{padding:"7.5px",paddingTop:"15px",paddingBottom:"0"}}>
+                <button style={{cursor:"pointer",color:"white"}}
+                        className={"col-xs-12 text-left btn btn-xs btn-primary"}>
+                  <span className="pull-left"><strong>Experiences</strong> ({this.props.heroes && this.props.heroes[exp.ItemKey]?this.props.heroes[exp.ItemKey].public.name:"undefined"})</span>
+                      <span className="badge pull-right" style={{marginLeft:"10px",marginTop:"2px"}}>
+                        + {exp.ItemContent} {exp.ItemContent>1?"points":"point"}
+                      </span>
+                </button>
+              </div>);
+            }
+          });
+        }
       }
       return (
         <div className="">
@@ -114,9 +147,9 @@ class Post extends React.Component {
                            itemContent={hero} itemSize=""/>) : ""}
           </div>
           <div style={{paddingLeft:"75px"}}>
-            <div className={"panel "+ color} style={{minHeight:"150px"}}>
+            <div className={"panel "+ color} style={this.props.itemContent.storyteller?{}:{minHeight:"150px"}}>
               <div className="panel-heading">
-                {name}
+                {this.props.itemContent.name?this.props.itemContent.name:name}
                 {this.props.itemContent.date ? (<small
                   className="text-muted"
                   style={{paddingLeft:"5px"}}>{"(" + (new Date(this.props.itemContent.date)).toLocaleString() + ")"}</small>) : ""}
@@ -126,9 +159,13 @@ class Post extends React.Component {
                 </div>
               </div>
               <div className="panel-body">
-                {receivers ? (<p className="" style={{fontStyle:"italic"}}>Private post for: {receivers}</p>) : ""}
+                {receivers ? (
+                  <p className="" style={{fontStyle:"italic"}}>Private post for: {receivers}</p>) : ""}
                 <ReactMarkdown source={this.props.itemContent.text} softBreak="br"/>
-                {inventoryChanges ? (<div className="row" style={{padding:"7.5px",paddingTop:"0",paddingBottom:"0"}}>{inventoryChanges}</div>) : false}
+                {inventoryChanges ? (<div className="row"
+                                          style={{padding:"7.5px",paddingTop:"0",paddingBottom:"0",marginTop:"-15px"}}>{inventoryChanges}</div>) : false}
+                {experiences ? (<div className="row"
+                                     style={{padding:"7.5px",paddingTop:"0",paddingBottom:"0",marginTop:"-15px"}}>{experiences}</div>) : false}
               </div>
             </div>
           </div>

@@ -8,8 +8,10 @@ import {createNotification} from '../../../actions/notificationActions';
 import {updateInventory} from './../../../actions/ChaptersActions';
 import SimpleMDE  from 'react-simplemde-editor';
 import Inventory from './Inventory';
+import Experiences from './Experiences';
 import SelectInput from '../../common/SelectInput';
 import {Modal} from 'react-bootstrap';
+import {updateHeroPublicRules} from '../../../actions/HeroesActions';
 
 class CreatePost extends React.Component {
   constructor(props, context) {
@@ -23,8 +25,10 @@ class CreatePost extends React.Component {
         added: {},
         removed: {}
       },
+      experiences: {},
       receivers: [],
-      showInventory: false
+      showInventory: false,
+      showExperiences: false
     };
     this.createPost = this.createPost.bind(this);
     this.createPostHero = this.createPostHero.bind(this);
@@ -32,8 +36,10 @@ class CreatePost extends React.Component {
     this.onchange = this.onchange.bind(this);
     this.cancel = this.cancel.bind(this);
     this.inventoryChange = this.inventoryChange.bind(this);
+    this.experiencesChanges = this.experiencesChanges.bind(this);
     this.toggleInventory = this.toggleInventory.bind(this);
     this.onchangeReceivers = this.onchangeReceivers.bind(this);
+    this.toggleExperiences = this.toggleExperiences.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -53,6 +59,26 @@ class CreatePost extends React.Component {
   }
 
   createPostStoryteller() {
+
+    let data = this.state.experiences;
+    let dataArray = [];
+    if (data) {
+      Object.keys(data).forEach(function (key, index) {
+        dataArray.push({ItemKey: key, ItemContent: data[key]});
+      });
+      if (dataArray.length > 0) {
+        dataArray.forEach((hero, index) => {
+          const itemKey = hero.ItemKey;
+          const itemContent = hero.ItemContent;
+
+          let heroRules = this.props.heroes[itemKey].public.rules ? this.props.heroes[itemKey].public.rules : {};
+          heroRules = Object.assign({}, heroRules);
+          heroRules.experiences = (heroRules && heroRules.experiences) ? heroRules.experiences + itemContent : itemContent;
+          this.props.actions.updateHeroPublicRules(heroRules, itemKey, this.props.heroes[itemKey].owner);
+        });
+      }
+    }
+
     this.createPost("storyteller");
   }
 
@@ -60,12 +86,16 @@ class CreatePost extends React.Component {
     this.setState(Object.assign({}, this.state, {showInventory: !this.state.showInventory}));
   }
 
+  toggleExperiences() {
+    this.setState(Object.assign({}, this.state, {showExperiences: !this.state.showExperiences}));
+  }
+
   inventoryChange(item) {
     let inventory = {
-      state:Object.assign({},this.state.inventory.state),
-      future:Object.assign({},this.state.inventory.future),
-      added:Object.assign({},this.state.inventory.added),
-      removed:Object.assign({},this.state.inventory.removed),
+      state: Object.assign({}, this.state.inventory.state),
+      future: Object.assign({}, this.state.inventory.future),
+      added: Object.assign({}, this.state.inventory.added),
+      removed: Object.assign({}, this.state.inventory.removed),
     };
     let count = item.type == "add" ? item.count : -1 * item.count;
     count = parseInt(count);
@@ -88,7 +118,7 @@ class CreatePost extends React.Component {
       inventory.removed[item.key] = {count: totalDelta * (-1), name: item.name, weight: item.weight}
     }
 
-    inventory.future[item.key] = Object.assign({},inventory.future[item.key],{count:inventory.state[item.key].count + totalDelta});
+    inventory.future[item.key] = Object.assign({}, inventory.future[item.key], {count: inventory.state[item.key].count + totalDelta});
     if (inventory.state[item.key].count == 0 && inventory.future[item.key].count == inventory.state[item.key].count) {
       delete inventory.future[item.key];
       delete inventory.state[item.key];
@@ -97,13 +127,24 @@ class CreatePost extends React.Component {
     this.setState(Object.assign({}, this.state, {inventory: inventory}));
   }
 
+  experiencesChanges(temp) {
+    let exp = Object.assign({}, this.state.experiences);
+    if (temp.count != 0) {
+      exp[temp.heroKey] = temp.count;
+    } else {
+      delete exp[temp.heroKey];
+    }
+    this.setState(Object.assign({}, this.state, {experiences: exp}));
+  }
+
   cancel() {
     let state = {
       inventory: {
         state: this.props.inventories[this.props.currentHero] ? this.props.inventories[this.props.currentHero] : {},
         added: {},
         removed: {},
-        receivers: []
+        receivers: [],
+        experiences: {}
       }
     };
     this.setState(Object.assign({}, this.state, state));
@@ -111,11 +152,19 @@ class CreatePost extends React.Component {
 
   createPost(type = "hero") {
     let date = new Date();
+    let name = false;
+    if (type == "storyteller") {
+      name = "storyteller";
+    } else {
+      name = this.props.heroes[this.props.currentHero] ? this.props.heroes[this.props.currentHero].public.name : "nameless";
+    }
     let state = {
       date: date.toJSON(),
+      name: name,
       text: this.state.text,
       inventory: this.state.inventory,
       receivers: [],
+      experiences: type == "storyteller" ? this.state.experiences : {},
       storyteller: type == "storyteller" ? true : false
     };
 
@@ -133,7 +182,7 @@ class CreatePost extends React.Component {
       });
     }
 
-    this.props.actions.createPost(state, type=="hero"?this.props.currentHero:this.props.userID, this.props.chapterKey, (error = null)=> {
+    this.props.actions.createPost(state, type == "hero" ? this.props.currentHero : this.props.userID, this.props.chapterKey, (error = null)=> {
       if (error == null) {
         toastr.success("sent");
 
@@ -158,7 +207,7 @@ class CreatePost extends React.Component {
           users
         );
 
-        this.setState(Object.assign({}, this.state, {text: ""}));
+        this.setState(Object.assign({}, this.state, {text: "", experiences: {}}));
       } else {
         toastr.error(error);
       }
@@ -184,12 +233,18 @@ class CreatePost extends React.Component {
   render() {
     let hero = this.props.currentHero;
     let current = this.props.currentHero;
-    if (hero) {
-      if (this.props.heroes[this.props.currentHero])
-        hero = this.props.heroes[this.props.currentHero].public.name;
+
+    let storyteller = false;
+    if (this.props.storyOwner == this.props.userID) {
+      storyteller = true;
+    }
+
+    if (hero || storyteller) {
+      if (hero && (this.props.heroes[hero]))
+        hero = this.props.heroes[hero].public.name;
 
       let receivers = [];
-      if (this.props.currentHero && this.props.heroes) {
+      if (hero && this.props.heroes) {
         const data = this.props.heroes;
         if (data) {
           Object.keys(data).forEach(function (key, index) {
@@ -204,10 +259,6 @@ class CreatePost extends React.Component {
       let defaultSelect = [];
       defaultSelect[0] = {value: "all", label: "all"};
 
-      let storyteller = false;
-      if(this.props.storyOwner==this.props.userID){
-        storyteller = true;
-      }
       return (
         <div className="col-xs-12 CreatePostSimpleMDE">
           <SimpleMDE
@@ -226,15 +277,18 @@ class CreatePost extends React.Component {
               />
             </div>
           </div>
-          <div className="btn-group" style={{paddingRight:"15px"}}>
-            <button onClick={this.createPostHero} className="btn btn-success">Send post as {hero}</button>
-            <button onClick={this.toggleInventory} className="btn btn-default">Inventory</button>
-          </div>
-          {storyteller?(<div className="btn-group">
-            <button onClick={this.createPostStoryteller} className="btn btn-primary">Send post as storyteller</button>
-          </div>):""}
+          {current ? (
+            <div className="btn-group" style={{paddingRight:"15px"}}>
+              <button onClick={this.createPostHero} className="btn btn-success">Send as {hero}</button>
+              <button onClick={this.toggleInventory} className="btn btn-default">Inventory</button>
+            </div>) : null}
+          {storyteller ? (<div className="btn-group">
+            <button onClick={this.createPostStoryteller} className="btn btn-primary">Send as storyteller</button>
+            <button onClick={this.toggleExperiences} className="btn btn-default">Experiences</button>
+          </div>) : ""}
           <div className="btn-group pull-right">
-            <button onClick={this.cancel} className="btn btn-danger">reset form & inventory changes</button>
+            <button onClick={this.cancel} className="btn btn-danger"><span
+              className="glyphicon glyphicon-erase noText"></span></button>
           </div>
           <Modal show={this.state.showInventory} onHide={this.toggleInventory}>
             <Modal.Header closeButton>
@@ -248,6 +302,17 @@ class CreatePost extends React.Component {
               ) : ""}
             </Modal.Body>
           </Modal>
+          {storyteller ? (<Modal show={this.state.showExperiences} onHide={this.toggleExperiences}>
+            <Modal.Header closeButton>
+              Experiences
+            </Modal.Header>
+            <Modal.Body>
+              {this.state.showExperiences ? (
+                <Experiences data={this.state.experiences} change={this.experiencesChanges}/>
+              ) : ""}
+            </Modal.Body>
+          </Modal>) : null}
+          <div className="marginTop15"></div>
         </div>
       );
     } else return (null);
@@ -270,7 +335,7 @@ function mapStateToProps(state, ownProps) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators({createPost, createNotification, updateInventory}, dispatch)
+    actions: bindActionCreators({createPost, createNotification, updateInventory, updateHeroPublicRules}, dispatch)
   };
 }
 

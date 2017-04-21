@@ -67,7 +67,7 @@ class SwitchHero extends React.Component {
         if (itemContent.owner == this.props.userID) {
           return (
             <Hero key={itemIndex} itemKey={itemKey} onClicAction={this.setHero.bind(this,itemKey)}
-                  itemContent={itemContent} itemSize="col-sm-6 col-lg-4"/>
+                  itemContent={itemContent} itemSize="col-sm-6"/>
           );
         }
         return;

@@ -18,8 +18,8 @@ export function updateHeroPublicRules(rules, characterKey,userKey, callback) {
     updates['/heroes/' + userKey + '/' + characterKey+'/public/rules/'] = rules;
     firebase.database().ref().update(updates, callback);
   };
-
 }
+
 export function addHero(character, callback) {
   // Get a key for a new Post.
   return (dispatch, getState) => {
