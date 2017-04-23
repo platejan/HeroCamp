@@ -9,6 +9,7 @@ import HeroDetail from './HeroDetail';
 import Icon from '../../common/Icon';
 import toastr from 'toastr';
 import {Modal} from 'react-bootstrap';
+import DeleteButton from './../../common/DeleteButton';
 
 class Hero extends React.Component {
   constructor(props, context) {
@@ -232,7 +233,7 @@ class Hero extends React.Component {
       editTool = (<span onClick={this.toggleEdit} className="glyphicon glyphicon-pencil"
                         style={this.state.hero.hasChange?{color:"red"}:{}}></span>);
       if (!this.state.hero.inGame) {
-        removeTool = (<span onClick={this.deleteHero} className="glyphicon glyphicon-trash"></span>);
+        removeTool = (<DeleteButton glyphicon={"trash"} style={{marginTop:"7px"}} className={"btn btn-danger btn-xs pull-right"} click={this.deleteHero}/>);
       }
     } else if (this.props.canViewDetail) {
       editPart = (

@@ -5,6 +5,7 @@ import ReactMarkdown from 'react-markdown';
 import Hero from './../../heroes/parts/Hero';
 import Inventory from './Inventory';
 import {Modal} from 'react-bootstrap';
+import DeleteButton from './../../common/DeleteButton';
 
 class Post extends React.Component {
   constructor(props, context) {
@@ -43,8 +44,7 @@ class Post extends React.Component {
     if (render) {
       let deletePostButton = "";
       if (this.props.storyOwner == this.props.userID) {
-        deletePostButton = (<button onClick={this.deletePost} className="btn btn-xs btn-danger"><span
-          className="glyphicon glyphicon-trash noText"></span></button>);
+        deletePostButton = (<DeleteButton click={this.deletePost} glyphicon="trash" className="btn btn-xs btn-danger"/>);
       }
       let inventoryButton = false;
       let inventory = false;
@@ -107,6 +107,7 @@ class Post extends React.Component {
                    style={{padding:"7.5px",paddingTop:"15px",paddingBottom:"0"}}>
                 <button style={{cursor:"pointer"}}
                         className={"col-xs-12 text-left btn btn-xs " + (added?(added[itemKey]? " btn-success":""):"")+(removed?(removed[itemKey]? " btn-danger":""):"")}>
+                  <span className="pull-left"><strong>{itemContent.name}</strong> (weight: {itemContent.weight} unit/s per piece)</span>
                   <span className="pull-left"><strong>{itemContent.name}</strong> (weight: {itemContent.weight} unit/s per piece)</span>
                   <span className="badge pull-right"
                         style={{marginLeft:"10px",marginTop:"2px"}}>{(added ? (added[itemKey] ? "+" : "-") : "-") + " " + itemContent.count + " ks"}</span>

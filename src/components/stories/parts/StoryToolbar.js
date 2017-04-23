@@ -5,7 +5,6 @@ import TextInput from '../../common/TextInput';
 import toastr from 'toastr';
 import {addStory} from '../../../actions/StoriesActions';
 
-
 class StoryToolbar extends React.Component {
   constructor(props, context) {
     super(props, context);
@@ -85,16 +84,22 @@ class StoryToolbar extends React.Component {
         </div>
       </div>);
     }
+    console.log(this.props.filters);
     return (
       <div className="row" style={{margin: '-7.5px',marginBottom: '7.5px'}}>
         <div className="">
           <div className="">
             <div className="stories-menu-right col-xs-12 col-sm-6 col-sm-push-6">
               <div className="btn-group">
-                <button type="button" className="btn"><span className="glyphicon glyphicon-user"></span>My stories
+                <button type="button"
+                        onClick={()=>{this.props.toggleFilter("myStories");}}
+                        className={(this.props.filters && this.props.filters.myStories)?"btn" :"btn btn-default"}>
+                  <span className="glyphicon glyphicon-user"></span>My stories
                 </button>
-                <button type="button" className="btn"><span className="glyphicon glyphicon-heart"></span>Favourite
-                  stories
+                <button type="button"
+                        onClick={()=>{this.props.toggleFilter("favouriteStories");}}
+                        className={(this.props.filters && this.props.filters.favouriteStories)?"btn" :"btn btn-default"}>
+                  <span className="glyphicon glyphicon-heart"></span>Favourite stories
                 </button>
               </div>
             </div>
@@ -116,7 +121,6 @@ StoryToolbar.propTypes = {
 };
 
 StoryToolbar.contextTypes = {
-  router: PropTypes.object
 };
 
 function mapStateToProps(state, ownProps) {

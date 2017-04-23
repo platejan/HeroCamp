@@ -6,6 +6,7 @@ import TextInput from '../../common/TextInput';
 import toastr from 'toastr';
 import {addChapter, loadChapters, switchChapter, deleteChapter} from '../../../actions/ChaptersActions';
 import {loadPosts} from '../../../actions/PostsActions';
+import DeleteButton from './../../common/DeleteButton';
 
 
 class ChapterToolbar extends React.Component {
@@ -58,7 +59,7 @@ class ChapterToolbar extends React.Component {
           toastr.error(error);
         }
       });
-      
+
     } else {
       toastr.error("Chapter must have a name.");
     }
@@ -90,10 +91,7 @@ class ChapterToolbar extends React.Component {
         if (!chapter.ItemContent.delete) {
           if (this.props.storyOwner == this.props.currentUID) {
             trash = (
-              <button className="btn btn-danger col-xs-2" key={deleteKey}
-                      onClick={this.deleteChapter.bind(this,itemKey)}>
-                <span className="glyphicon glyphicon-trash noText"></span>
-              </button>);
+              <DeleteButton key={deleteKey} click={()=>{this.deleteChapter(itemKey);}} glyphicon="trash" className="btn btn-danger col-xs-2" />);
           }
           return (
             <div className="row marginTop15" key={chapterKey}>
