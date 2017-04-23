@@ -55,8 +55,6 @@ export function authLoggedIn(userUID) {
 }
 
 export function createUserWithEmailAndPassword(user) {
-  console.log("user:");
-  console.log(user);
   return (dispatch) => {
     dispatch(beginAjaxCall());
     firebaseApi.createUserWithEmailAndPassword(user).then(user => {
@@ -147,7 +145,6 @@ export function requireAuth(nextState, replace) {
 
 export function requireAdmin(nextState, replace, callback) {
   return (dispatch, getState) => {
-    console.log(getState().auth);
     if (getState().auth.isLogged) {
       switch (getState().user.isAdmin) {
         case false:

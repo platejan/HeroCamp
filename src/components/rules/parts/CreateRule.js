@@ -46,7 +46,6 @@ class CreateRule extends React.Component {
     ];
 
     let restrictions = "";
-    console.log(this.state.selectRestrictions);
     if (this.state.typeOfRuleValue.value == "select") {
       restrictions = (
         <div className="row">

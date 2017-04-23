@@ -4,7 +4,6 @@ import initialState from './initialState';
 export default function rulesReducer(state = initialState.rules, action) {
   let newRules;
   let temp;
-  console.log(action.type);
   switch (action.type) {
     case types.RULES_SETS_LOAD_SUCCESS:
       newRules = Object.assign({}, initialState.rules, state);

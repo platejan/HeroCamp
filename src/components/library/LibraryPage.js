@@ -27,7 +27,6 @@ class LibraryPage extends React.Component {
   }
 
   createItem(item) {
-    console.log(item);
     this.props.actions.createItem(item, (error = null)=> {
       if (error == null) {
         toastr.success("Story send");

@@ -105,15 +105,6 @@ class Rule extends React.Component {
       detail = (
         <div className="row">
           <div className="col-xs-12">
-            <SelectInput
-              name="readWrite"
-              value={this.state.currentState.readWrite ? this.state.currentState.readWrite.value : "readWrite"}
-              label="editing rights"
-              options={readWriteOptions}
-              onChange={this.onchange}
-            />
-          </div>
-          <div className="col-xs-12">
             <TextInput
               name="showRules"
               label="show rules for input (must return true/false)"
@@ -214,12 +205,7 @@ class Rule extends React.Component {
                   className={this.state.detail ? "btn btn-default btn-info" : "btn btn-default"}>
                   <span className="glyphicon glyphicon-list-alt"> </span> Advance
                 </button>
-                <button
-                  type="button"
-                  onClick={this.toggleLeveling}
-                  className={this.state.leveling ? "btn btn-default btn-info" : "btn btn-default"}>
-                  <span className="glyphicon glyphicon-signal"> </span> Leveling options
-                </button>
+
               </div>
             </div>
           </form>

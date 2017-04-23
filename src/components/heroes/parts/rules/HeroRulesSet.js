@@ -38,7 +38,6 @@ class HeroRulesSet extends React.Component {
 
   render() {
     let rules = "";
-    console.log(this.state.data);
     if (this.state.data.rulesSet && this.props.publicRules[this.state.data.rulesSet.value]) {
       let data = Object.assign({}, this.props.publicRules[this.state.data.rulesSet.value]);
       let userData = Object.assign({}, this.state.data);
@@ -46,7 +45,7 @@ class HeroRulesSet extends React.Component {
       let dataArray = [];
       if (userData) {
         Object.keys(data).forEach(function (key, index) {
-          if (userData[key]) {
+          if (userData[key] && (key != "abilities" && key != "leveling")) {
             switch (data[key].typeOfRuleValue.value) {
               case "select":
                 dataForEval[key] = userData[key].value ? userData[key].value : false;
@@ -71,7 +70,7 @@ class HeroRulesSet extends React.Component {
           const itemKey = Item.ItemKey;
           const itemContent = Item.ItemContent;
 
-          if (!itemContent.delete) {
+          if (!itemContent.delete && (itemKey != "abilities" && itemKey != "leveling")) {
             return (
               <HeroRule key={itemKey}
                         value={this.state.data[itemKey]?this.state.data[itemKey]:""}

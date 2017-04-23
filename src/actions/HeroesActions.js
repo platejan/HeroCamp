@@ -57,16 +57,17 @@ export function recruitHero(heroKey, storyKey) {
     let owner = getState().auth.currentUserUID;
     let updates = {};
     updates['/heroes/' + owner + '/' + heroKey + '/inGame'] = storyKey;
+    updates['/heroes/' + owner + '/' + heroKey + '/recruit'] = storyKey;
     updates['/crossTables/recruit/' + storyKey + '/' + heroKey] = owner;
     firebase.database().ref().update(updates);
   };
 }
-
 export function acceptRecruitHero(heroKey, heroOwnerKey, storyKey) {
   return (dispatch, getState) => {
     let updates = {};
     firebase.database().ref('/crossTables/recruit/' + storyKey + '/' + heroKey).remove();
     updates['/crossTables/acceptedRecruit/' + storyKey + '/' + heroKey] = heroOwnerKey;
+    updates['/heroes/' + heroOwnerKey + '/' + heroKey + '/recruit'] = false;
     firebase.database().ref().update(updates);
   };
 }
@@ -75,6 +76,7 @@ export function rejectRecruitHero(heroKey, heroOwnerKey, storyKey) {
     let updates = {};
     firebase.database().ref('/crossTables/recruit/' + storyKey + '/' + heroKey).remove();
     updates['/heroes/' + heroOwnerKey + '/' + heroKey + '/inGame'] = false;
+    updates['/heroes/' + heroOwnerKey + '/' + heroKey + '/recruit'] = false;
     firebase.database().ref().update(updates);
   };
 }

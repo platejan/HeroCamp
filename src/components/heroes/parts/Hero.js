@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {updateHero, deleteHero,updateHeroPublicRules} from '../../../actions/HeroesActions';
 import {loadPublicRules} from '../../../actions/rulesActions';
+import {redirectMe} from './../../../actions/redirectAction';
 import HeroEdit from './HeroEdit';
 import HeroDetail from './HeroDetail';
 import Icon from '../../common/Icon';
@@ -45,6 +46,7 @@ class Hero extends React.Component {
     this.onchangeRules = this.onchangeRules.bind(this);
     this.publishRulesChanges = this.publishRulesChanges.bind(this);
     this.onchangeRulesPublic = this.onchangeRulesPublic.bind(this);
+    this.redirectToStory = this.redirectToStory.bind(this);
   }
 
   componentWillMount() {
@@ -110,9 +112,7 @@ class Hero extends React.Component {
     let userKey = this.state.hero.owner;
     state[key] = value;
     this.props.actions.updateHeroPublicRules(state, this.state.heroKey,userKey ,(error = null)=> {
-      if (error == null) {
-        toastr.success("ok");
-      } else {
+      if (error != null) {
         toastr.error(error);
       }
     });
@@ -194,14 +194,21 @@ class Hero extends React.Component {
     this.setState(Object.assign(this.state, {showEdit: !this.state.showEdit}));
   }
 
+  redirectToStory(){
+    this.props.actions.redirectMe("stories/"+this.state.hero.inGame);
+  }
+
   render() {
     let stop = function (e) {
       e.stopPropagation();
     };
 
-    let inGame = "";
+    let statusFlag = "";
     if (this.state.hero.inGame && this.props.showFlag) {
-      inGame = (<div className="hero-bio-flag-part"><span>in game</span></div>);
+      statusFlag = (<div onClick={this.redirectToStory} className="hero-bio-flag-part" style={{cursor:"pointer"}}><span>in game</span></div>);
+    }
+    if (this.state.hero.recruit && this.props.showFlag) {
+      statusFlag = (<div onClick={this.redirectToStory} className="hero-bio-flag-part" style={{cursor:"pointer",backgroundColor:"red"}}><span>recruited</span></div>);
     }
 
     let editPart = "";
@@ -217,8 +224,8 @@ class Hero extends React.Component {
           <Modal.Body style={{paddingTop:"0",paddingBottom:"0"}}>
             <HeroEdit iconchange={this.iconchange} reject={this.rejectChanges}
                       publish={this.publishChanges} publishRules={this.publishRulesChanges}
-                      onchange={this.onchange} hero={temp}
-                      onchangeRules={this.onchangeRules}/>
+                      onchange={this.onchange} hero={temp} heroKey={this.state.heroKey}
+                      onchangeRules={this.onchangeRules} onchangeRulesPublic={this.onchangeRulesPublic}/>
           </Modal.Body>
         </Modal>
       );
@@ -253,6 +260,11 @@ class Hero extends React.Component {
       gameRules = this.state.hero.public.rules.rulesSet.label;
     }
 
+    let level = "";
+    if (this.state.hero.public.rules.level && this.state.hero.public.rules.level) {
+      level = this.state.hero.public.rules.level;
+    }
+
     if (this.props.justIcon) {
       return (
         <div
@@ -281,8 +293,10 @@ class Hero extends React.Component {
               <span className="">{this.state.hero.public.name}</span>
               {gameRules ? (<span className="info-label">Rules set:</span>) : ""}
               {gameRules ? (<span className="">{gameRules}</span>) : ""}
+              {level ? (<span className="info-label">Level:</span>) : ""}
+              {level ? (<span className="">{level}</span>) : ""}
             </div>
-            {inGame}
+            {statusFlag}
             <div onClick={stop} className="hero-bio-tools-part">
               {acceptButton}{rejectButton}{fireButton}{removeTool}{editTool}{detailTool}
             </div>
@@ -315,7 +329,7 @@ function mapStateToProps(state, ownProps) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators({updateHero, deleteHero,updateHeroPublicRules, loadPublicRules}, dispatch)
+    actions: bindActionCreators({updateHero, deleteHero,updateHeroPublicRules, loadPublicRules,redirectMe}, dispatch)
   };
 }
 

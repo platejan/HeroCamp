@@ -22,7 +22,6 @@ class Post extends React.Component {
   }
 
   deletePost() {
-    console.log("delete me!" + this.props.itemKey);
     this.props.deletePost(this.props.itemKey);
   }
 
@@ -103,7 +102,6 @@ class Post extends React.Component {
           inventoryChanges = dataArray.map((data, index) => {
             const itemKey = data.ItemKey;
             const itemContent = data.ItemContent;
-            console.log(itemContent);
             return (
               <div key={"data" + itemKey} className="col-xs-12 col-sm-6"
                    style={{padding:"7.5px",paddingTop:"15px",paddingBottom:"0"}}>

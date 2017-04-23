@@ -15,14 +15,12 @@ class Posts extends React.Component {
   }
 
   componentWillMount() {
-    console.log(this.props.chapterContent.posts);
     if (!this.props.chapterContent.posts) {
       this.props.onMount(this.props.chapterKey);
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log(nextProps.chapterContent.posts);
     if (!nextProps.chapterContent.posts) {
       this.props.onMount(nextProps.chapterKey);
     }
@@ -39,11 +37,8 @@ class Posts extends React.Component {
     const data = this.props.chapterContent.posts;
     let dataArray = [];
     let listPosts = "";
-    console.log(data);
     if (data) {
       Object.keys(data).forEach(function (key, index) {
-        // key: the name of the object key
-        // index: the ordinal position of the key within the object
         dataArray.unshift({ItemKey: key, ItemContent: data[key]});
       });
       if (dataArray.length > 0) {

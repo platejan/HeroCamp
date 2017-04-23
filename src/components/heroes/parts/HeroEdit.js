@@ -6,6 +6,7 @@ import TextareaInput from '../../common/TextareaInput';
 import HeroRulesSet from './rules/HeroRulesSet';
 import {Tab, Tabs, TabList, TabPanel} from 'react-tabs';
 import SimpleMDE  from 'react-simplemde-editor';
+import HeroExperiences from './rules/HeroExperiences';
 
 class HeroEdit extends React.Component {
   constructor(props, context) {
@@ -30,7 +31,6 @@ class HeroEdit extends React.Component {
   }
 
   render() {
-    console.log(this.props.hero.private.rules);
     let stop = function (e) {
       e.stopPropagation();
     };
@@ -74,6 +74,7 @@ class HeroEdit extends React.Component {
                 selectedIndex={this.state.tab}>
                 <TabList>
                   <Tab>Biography</Tab>
+                  <Tab>Experiences</Tab>
                   <Tab>Game rules</Tab>
                 </TabList>
                 <TabPanel>
@@ -81,6 +82,14 @@ class HeroEdit extends React.Component {
                     <SimpleMDE
                       onChange={this.biographyEdit}
                       value={this.props.hero.private.biography}/>
+                  </div>
+                </TabPanel>
+                <TabPanel>
+                  <div className="marginTop15">
+                    <HeroExperiences edit={true}
+                                     heroKey={this.props.heroKey}
+                                     data={this.props.hero.public.rules}
+                                     onchangeRulesPublic={this.props.onchangeRulesPublic}/>
                   </div>
                 </TabPanel>
                 <TabPanel>

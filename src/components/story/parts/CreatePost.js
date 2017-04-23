@@ -142,10 +142,11 @@ class CreatePost extends React.Component {
       inventory: {
         state: this.props.inventories[this.props.currentHero] ? this.props.inventories[this.props.currentHero] : {},
         added: {},
-        removed: {},
-        receivers: [],
-        experiences: {}
-      }
+        removed: {}
+      },
+      receivers: [],
+      experiences: {},
+      text: ""
     };
     this.setState(Object.assign({}, this.state, state));
   }

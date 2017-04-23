@@ -37,7 +37,6 @@ class StoryPage extends React.Component {
   }
 
   toggleSwitchHero(){
-    console.log("toggle!");
     this.setState(Object.assign({},this.state,{showSwitchHero:!this.state.showSwitchHero}));
   }
 

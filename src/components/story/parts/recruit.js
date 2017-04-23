@@ -4,7 +4,7 @@ import {bindActionCreators} from 'redux';
 import checkAuth from '../../requireAuth';
 import toastr from 'toastr';
 import * as HeroesActions from '../../../actions/HeroesActions';
-import {recruitHero} from '../../../actions/HeroesActions';
+import {recruitHero,rejectRecruitHero} from '../../../actions/HeroesActions';
 import Hero from '../../../components/heroes/parts/Hero';
 
 
@@ -29,8 +29,16 @@ class Recruit extends React.Component {
         toastr.error(error);
       }
     });
+  }
 
-
+  rejectHero(heroKey){
+    this.props.actions.rejectRecruitHero(heroKey,this.props.userID,this.props.storyKey, (error = null)=> {
+      if (error == null) {
+        toastr.success("ok");
+      } else {
+        toastr.error(error);
+      }
+    });
   }
   render() {
     const data = this.props.heroes;
@@ -47,10 +55,10 @@ class Recruit extends React.Component {
         const itemKey = hero.ItemKey;
         const itemContent = hero.ItemContent;
 
-        if(!itemContent.inGame && !itemContent.delete) {
+        if(!itemContent.delete && (!itemContent.inGame || itemContent.recruit==this.props.storyKey)) {
           return (
-            <Hero key={index} onClicAction={this.recruitHero.bind(this,itemKey)} itemKey={itemKey}
-                  itemContent={itemContent}  itemSize="col-sm-6 col-lg-4"/>
+            <Hero key={index} onClicAction={!itemContent.recruit?()=>{this.recruitHero(itemKey);}:()=>{this.rejectHero(itemKey);}} itemKey={itemKey}
+                  itemContent={itemContent} showFlag={true} itemSize="col-sm-6 col-lg-4"/>
           );
         }
       });
@@ -83,7 +91,7 @@ function mapDispatchToProps(dispatch) {
     onMount: () => {
       dispatch(HeroesActions.heroesLoadStart());
     },
-    actions: bindActionCreators({recruitHero}, dispatch)
+    actions: bindActionCreators({recruitHero,rejectRecruitHero}, dispatch)
   };
 }
 

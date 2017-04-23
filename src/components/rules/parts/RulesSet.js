@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import CreateRule from './CreateRule';
 import Rule from './Rule';
+import RuleExperiences from './RulesExperiences';
 import {
   createRule,
   deleteRule,
@@ -57,7 +58,7 @@ class RulesSet extends React.Component {
     if (nextProps.RulesSetKey && nextProps.RulesSetKey != this.state.RulesSetKey || nextProps.RulesSets[nextProps.RulesSetKey] != this.state.RulesSet || nextProps.Rules != this.state.Rules) {
       let newState = this.state;
       if (nextProps.RulesSetKey) {
-        newState.RulesSet =  Object.assign({}, nextProps.RulesSets[nextProps.RulesSetKey]);
+        newState.RulesSet = Object.assign({}, nextProps.RulesSets[nextProps.RulesSetKey]);
         newState.Rules = Object.assign({}, nextProps.Rules);
       }
       this.setState(newState);
@@ -114,6 +115,8 @@ class RulesSet extends React.Component {
 
   update(RuleKey, rule) {
     if (this.state.RulesSet.autor == this.props.currentUID) {
+      console.log(RuleKey);
+      console.log(rule);
       this.props.actions.updateRule(this.state.RulesSetKey, RuleKey, rule, (error = null)=> {
         if (error == null) {
           toastr.success("Saved to draft. Do not forget publish changes.");
@@ -161,7 +164,7 @@ class RulesSet extends React.Component {
             const itemContent = Object.assign({}, Item.ItemContent, {});
             const ruleKey = "rule" + itemKey;
             let trash = "";
-            if (!Item.ItemContent.delete) {
+            if (!Item.ItemContent.delete && (itemKey != "abilities" && itemKey != "leveling")) {
               return (
                 <Rule updateRule={this.update} key={ruleKey} deleteRule={this.delete} autor={this.state.RulesSet.autor}
                       rule={itemContent} ruleKey={itemKey} rulesSetKey={this.state.RulesSetKey}/>
@@ -191,7 +194,7 @@ class RulesSet extends React.Component {
             <TabList>
               <Tab>Rules set detail</Tab>
               <Tab>Biography template</Tab>
-              <Tab>Experience points</Tab>
+              <Tab>Experiences & Abilities</Tab>
             </TabList>
             <TabPanel>
               {hasChangeButtons}
@@ -201,6 +204,10 @@ class RulesSet extends React.Component {
               {rules}
             </TabPanel>
             <TabPanel>
+              <RuleExperiences
+                data={(this.state.Rules && this.state.Rules["abilities"])?this.state.Rules["abilities"]:{}}
+                onchange={this.update}
+                leveling={(this.state.Rules && this.state.Rules["leveling"])?this.state.Rules["leveling"]:{}}/>
             </TabPanel>
           </Tabs>
         </div>

@@ -24,7 +24,6 @@ class HeroRulesSetSelect extends React.Component {
     const field = event.target.name;
     let state = this.state;
     state[field] = event.target.value;
-    console.log(state);
     return this.setState(state);
   }
 
@@ -72,7 +71,7 @@ class HeroRulesSetSelect extends React.Component {
           </div>
         </div>);
     } else {
-      render = (<div>{this.state.rulesSet ? this.state.rulesSet.label : "RulesSet isn't selected."}</div>);
+      render = (<div className="row"><h3>{this.state.rulesSet ? this.state.rulesSet.label : "RulesSet isn't selected."}</h3></div>);
     }
 
     return (

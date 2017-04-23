@@ -18,7 +18,6 @@ class ChapterDetail extends React.Component {
     if (this.props.chapter && Object.keys(this.props.chapters).length > 0 && this.props.chapters && this.props.chapters[this.props.chapter]) {
 
       let current = this.props.chapters[this.props.chapter];
-      console.log(current);
       return (
         <div className="col-xs-12">
           <h1>Chapter: {current.name}</h1>
