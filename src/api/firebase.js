@@ -36,6 +36,7 @@ class FirebaseApi {
           let token = result.credential.accessToken;
           // The signed-in user info.
           let user = result.user;
+          console.log(user);
           resolve(result.user);
           // ...
         }).catch(function(error) {
@@ -47,6 +48,7 @@ class FirebaseApi {
           // The firebase.auth.AuthCredential type that was used.
           let credential = error.credential;
           // ...
+          console.log(error);
           reject(error);
         });
       }

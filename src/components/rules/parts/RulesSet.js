@@ -142,9 +142,6 @@ class RulesSet extends React.Component {
   }
 
   render() {
-    if (this.props.RulesSetKey != this.state.RulesSetKey) {
-      this.forceUpdate();
-    }
     if (this.state.RulesSetKey) {
 
       let rules = "";
@@ -187,8 +184,8 @@ class RulesSet extends React.Component {
 
       return (
         <div>
-          <h1>{this.state.RulesSet.nameOfRulesSet}</h1>
-          <Tabs
+          {this.state.RulesSet.autor == this.props.currentUID ? (<h1>{this.state.RulesSet.nameOfRulesSet}</h1>):false}
+          {this.state.RulesSet.autor == this.props.currentUID ? (<Tabs
             onSelect={this.tabSwitch}
             selectedIndex={this.state.tab}>
             <TabList>
@@ -209,7 +206,7 @@ class RulesSet extends React.Component {
                 onchange={this.update}
                 leveling={(this.state.Rules && this.state.Rules["leveling"])?this.state.Rules["leveling"]:{}}/>
             </TabPanel>
-          </Tabs>
+          </Tabs>) : ""}
         </div>
       );
     } else {

@@ -58,8 +58,8 @@ class RulesToolbar extends React.Component {
           return (
             <div className="row marginTop15" key={switchKey}>
               <div className="col-xs-12 btn-group">
-              <button onClick={this.switch.bind(this,itemKey)} type="button"
-                      className="btn btn-success col-xs-10">
+              <button onClick={trash?this.switch.bind(this,itemKey):false} type="button"
+                      className={trash?"btn btn-success col-xs-10":"btn btn-default col-xs-12"}>
                 {itemContent.nameOfRulesSet}
               </button>
               {trash}

@@ -16,8 +16,7 @@ export class RegistrationPage extends React.Component {
     this.state = {
       user: {
         email: "",
-        password: "",
-        username: ""
+        password: ""
       },
       saving: false
     };
@@ -80,8 +79,10 @@ export class RegistrationPage extends React.Component {
           saving={this.state.saving}
           user={this.state.user}
         />
-        <LinkContainer to="/login">
+        <LinkContainer to="/login" >
+          <div className="marginTop15">
           <button className="btn btn-default btn-danger">Have an acount? Login here</button>
+            </div>
         </LinkContainer>
         </div>
       </div>

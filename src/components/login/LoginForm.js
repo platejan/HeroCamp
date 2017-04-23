@@ -10,7 +10,7 @@ const LoginForm = ({user, onSave, onChange, saving, onClickGoogle}) => {
         label="Email"
         onChange={onChange}
         value={user.email}
-        />
+      />
 
       <TextInput
         type="password"
@@ -18,21 +18,15 @@ const LoginForm = ({user, onSave, onChange, saving, onClickGoogle}) => {
         label="Password"
         onChange={onChange}
         value={user.password}
-        />
-      <div className="form-group button-part">
-      <input
-        type="submit"
-        disabled={saving}
-        value={'Login'}
-        className="btn btn-primary"
-        onClick={onSave}/>
-      <input
-        type="submit"
-        disabled={saving}
-        value={'Sign in with your Google Account'}
-        className="btn btn-primary"
-        onClick={onClickGoogle}/>
-        </div>
+      />
+      <div className="btn-group">
+        <button
+          className="btn btn-primary"
+          onClick={onSave}>Login</button>
+        <button
+          className="btn btn-primary"
+          onClick={onClickGoogle}>Sign in with your Google Account</button>
+      </div>
     </form>
   );
 };

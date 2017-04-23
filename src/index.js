@@ -1,4 +1,5 @@
 require('eventsource-polyfill');
+import "babel-polyfill";
 
 // modules
 import {AppContainer} from 'react-hot-loader';

@@ -6,13 +6,6 @@ const RegistrationForm = ({user, onSave, onChange, saving}) => {
     <form>
       <h1>Create account</h1>
       <TextInput
-        name="username"
-        label="Username"
-        onChange={onChange}
-        value={user.username}
-      />
-
-      <TextInput
         name="email"
         label="Email"
         onChange={onChange}
@@ -27,13 +20,10 @@ const RegistrationForm = ({user, onSave, onChange, saving}) => {
         value={user.password}
         />
 
-      <div className="form-group button-part">
-      <input
-        type="submit"
-        disabled={saving}
-        value={saving ? 'Signing up...' : 'Sign Up'}
+      <div className="form-group">
+      <button
         className="btn btn-primary"
-        onClick={onSave}/>
+        onClick={onSave}>{saving ? 'Signing up...' : 'Sign Up'}</button>
         </div>
     </form>
   );

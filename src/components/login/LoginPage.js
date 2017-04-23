@@ -24,13 +24,15 @@ export class RegistrationPage extends React.Component {
     this.googleLogin = this.googleLogin.bind(this);
   }
 
-  googleLogin(event) {
-    event.preventDefault;
+  googleLogin(e) {
+    e.preventDefault();
     this.setState({saving: true});
 
-    this.props.actions2.signInWithGoogle(this.state.user, true)
+    this.props.actions.signInWithGoogle(this.state.user, true)
       .then(function (user) {
-        toastr.success('You are logged in');
+        console.log(user);
+        if (user)
+          toastr.success('You are logged in');
       })
       .catch(error => {
         toastr.error(error.message);
@@ -93,7 +95,9 @@ export class RegistrationPage extends React.Component {
             user={this.state.user}
             onClickGoogle={this.googleLogin}/>
           <LinkContainer to="/register">
-            <button className="btn btn-default btn-danger">Register now</button>
+            <div className="marginTop15">
+              <button className="btn btn-default btn-danger">Register now</button>
+            </div>
           </LinkContainer>
         </div>
       </div>
@@ -115,8 +119,7 @@ function mapStateToProps(state, ownProps) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators({signInWithEmailAndPassword}, dispatch),
-    actions2: bindActionCreators({signInWithGoogle}, dispatch)
+    actions: bindActionCreators({signInWithEmailAndPassword, signInWithGoogle}, dispatch)
   };
 }
 
