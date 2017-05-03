@@ -108,8 +108,7 @@ class Post extends React.Component {
                 <button style={{cursor:"pointer"}}
                         className={"col-xs-12 text-left btn btn-xs " + (added?(added[itemKey]? " btn-success":""):"")+(removed?(removed[itemKey]? " btn-danger":""):"")}>
                   <span className="pull-left"><strong>{itemContent.name}</strong> (weight: {itemContent.weight} unit/s per piece)</span>
-                  <span className="pull-left"><strong>{itemContent.name}</strong> (weight: {itemContent.weight} unit/s per piece)</span>
-                  <span className="badge pull-right"
+                 <span className="badge pull-right"
                         style={{marginLeft:"10px",marginTop:"2px"}}>{(added ? (added[itemKey] ? "+" : "-") : "-") + " " + itemContent.count + " ks"}</span>
                 </button>
               </div> );
