@@ -246,10 +246,11 @@ class CreatePost extends React.Component {
 
       let receivers = [];
       if (hero && this.props.heroes) {
+        console.log(this.props.heroes);
         const data = this.props.heroes;
         if (data) {
           Object.keys(data).forEach(function (key, index) {
-            if (key != current) {
+            if (key != current || storyteller) {
               receivers.push({value: key, label: data[key].public.name});
             }
           });

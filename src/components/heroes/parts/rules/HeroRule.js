@@ -61,6 +61,7 @@ class HeroRule extends React.Component {
   }
 
   show(rule, data = this.props.rulesData) {
+    console.log(data);
     if (rule) {
       return (eval(rule));
     } else {
